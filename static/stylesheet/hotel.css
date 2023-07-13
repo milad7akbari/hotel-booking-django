@@ -1,0 +1,210 @@
+#sorting input[type=radio],
+#pagination input[type=radio],
+#findCityByInpContainer input[type=radio] {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.desc_good_bad p {
+  font-size: 13px !important;
+}
+#finalAmount {
+  outline: none !important;
+}
+#finalAmount:focus {
+  outline: none !important;
+}
+.icon-spinner9 {
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  font-size: 85px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.desc_good p {
+  color: #198754;
+}
+.desc_bad p {
+  color: #dc3545;
+}
+.reviewsContainer .review-container {
+  width: 100%;
+  margin: 2% auto 0;
+  text-align: center;
+}
+.reviewsContainer .star {
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+}
+.reviewsContainer .star .stararea {
+  width: 25px;
+  height: 25px;
+  display: block;
+  position: relative;
+  color: #aaa;
+  font-size: 30px;
+  line-height: 50px;
+  cursor: pointer;
+  z-index: 10;
+  text-align: center;
+}
+.reviewsContainer .star .stararea:before {
+  width: 25px;
+  height: 25px;
+  content: '★';
+  display: inline-block;
+  color: #95a5a6;
+  position: absolute;
+  left: 0;
+  top: -1px;
+  opacity: 0;
+  z-index: -1;
+}
+.reviewsContainer .star .stararea:after {
+  width: 25px;
+  height: 25px;
+  content: '★';
+  display: inline-block;
+  color: #f1c40f;
+  position: absolute;
+  left: 0;
+  top: -1px;
+  opacity: 0;
+  z-index: -2;
+}
+.reviewsContainer .star:hover .stararea {
+  color: #999;
+}
+.reviewsContainer .star.active .stararea {
+  -webkit-animation: starbackground 500ms 1;
+  -moz-animation: starbackground 500ms 1;
+  -o-animation: starbackground 500ms 1;
+  animation: starbackground 500ms 1;
+  animation-delay: 250ms;
+  animation-fill-mode: forwards;
+}
+.reviewsContainer .star.active .stararea:before {
+  -webkit-animation: staranimation 250ms 1;
+  -moz-animation: staranimation 250ms 1;
+  -o-animation: staranimation 250ms 1;
+  animation: staranimation 250ms 1;
+}
+.reviewsContainer .star.active .stararea:after {
+  -webkit-animation: staranimation 350ms 1;
+  -moz-animation: staranimation 500ms 1;
+  -o-animation: staranimation 500ms 1;
+  animation: staranimation 500ms 1;
+  animation-delay: 250ms;
+}
+@-webkit-keyframes staranimation {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+    top: -1px;
+  }
+}
+@-moz-keyframes staranimation {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+    top: -1px;
+  }
+}
+@-o-keyframes staranimation {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+    top: -1px;
+  }
+}
+@keyframes staranimation {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+    top: -1px;
+  }
+}
+@-webkit-keyframes starbackground {
+  0% {
+    color: #aaaaaa;
+  }
+  100% {
+    color: #f1c40f;
+  }
+}
+@-moz-keyframes starbackground {
+  0% {
+    color: #aaaaaa;
+  }
+  100% {
+    color: #f1c40f;
+  }
+}
+@-o-keyframes starbackground {
+  0% {
+    color: #aaaaaa;
+  }
+  100% {
+    color: #f1c40f;
+  }
+}
+@keyframes starbackground {
+  0% {
+    color: #aaaaaa;
+  }
+  100% {
+    color: #f1c40f;
+  }
+}
+/*# sourceMappingURL=hotel.css.map */

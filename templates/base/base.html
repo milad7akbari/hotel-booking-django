@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block meta_desc %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <script type="text/javascript" src="{% static "js/jquery-3.6.3.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/custom.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/login-register.js" %}"></script>
+    {% block js %}{% endblock %}
+
+{#    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>#}
+    {% block sliderHomePage %}{% endblock %}
+    {% block css %}{% endblock %}
+    <link rel="stylesheet" href="{% static "font/style.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/base.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/bootstrap.min.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "font/moon.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/_partial.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/responsive/_partial.css" %}" type="text/css">
+    {% if not user.is_authenticated %}
+        <link rel="stylesheet" href="{% static "stylesheet/responsive/notLoggedIn.css" %}" type="text/css">
+    {% else %}
+        <link rel="stylesheet" href="{% static "stylesheet/responsive/loggedIn.css" %}" type="text/css">
+    {% endif %}
+</head>
+<body>
+    {% include '_partial/header/_header.html' %}
+    <div id="_main" class="w-100 bg-white m-auto">
+        {% block main %}{% endblock %}
+    </div>
+    {% include '_partial/footer.html' %}
+    <div id="_partial">
+    </div>
+
+</body>
+</html>

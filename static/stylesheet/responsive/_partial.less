@@ -1,0 +1,256 @@
+/*
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+
+  /* CSS */
+
+}
+
+/*
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+
+
+
+}
+
+/*
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+
+}
+
+/*
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+
+
+
+}
+
+/*
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+
+}
+
+
+@media (max-width: 767px) {
+  .hotelPageContainer .finalAmountContainer{
+    position: fixed;bottom: 0;z-index: 9;background: #fff;right: 0;left: 0;padding: 8px;margin: 0 !important;box-shadow: 0 -1px 2px #aaa;
+  }
+  #HotelMain{
+    .showBtnFilterHotelList{
+      display: block !important;
+    }
+    .filterContainer{
+      display: none;
+      position: fixed !important;
+      background: #fff;
+      z-index: 9;
+      height: 100%;
+      top: 0;
+    }
+    .closeBtnFilterHotelList{
+      display: block !important;
+    }
+  }
+  .reviewsContainer{
+    width: 100% !important;
+  }
+  #_main .hotelPageContainer{
+    width: 100% !important;
+    .hotel-info{
+      div{
+        &:first-child{
+        flex-wrap: wrap !important;
+        div{
+          width: 100% !important;
+        }
+      }
+      }
+    }
+  }
+  #sorting{
+    ul{
+      display: flex;flex-wrap: wrap;
+      li{
+        width: 150px !important;
+      }
+    }
+  }
+  #roomsListContainer{
+    .roomListContainer{
+      .roomListItem{
+        width: 100% !important;
+      }
+    }
+  }
+  #hotelsListContainer{
+    .hotelListContainer{
+      .hotelListItem{
+        width: 100% !important;
+      }
+    }
+  }
+}
+
+/*
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 300px) and (max-width: 480px) {
+
+  .galleryImagesContainer{
+    .main-cover-hotels-img{
+      height: 245px !important;
+    }
+  }
+  .hotel-page-services{
+    .formReservation {
+      width: 95% !important;
+      .filterSortingRooms{
+        flex-wrap: wrap;
+        .filterRooms{
+          width: 100% !important;
+          .iconFilter{
+            display: flex;
+width: 153px;
+margin: 20px 10px;
+          }
+        }
+      }
+    }
+    .facilityHotels{
+      width: 100% !important;
+      label{
+        margin: 2px !important;
+        span{
+          font-size: 12px !important;
+        }
+      }
+    }
+  }
+  .moreRules{
+    .moreRulesContainer{
+      flex-wrap: wrap;
+      .ruleItems{
+        margin: auto;
+        width: 80% !important;
+      }
+
+    }
+    .descriptionAboutHotel{
+      width: 95% !important;
+    }
+  }
+
+  .mapAndRearLocation{
+
+    > div{
+      flex-wrap: wrap;
+      div{
+        width: 100% !important;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 100px) and (max-width: 992px) {
+  // > sm < xl
+  #_header {
+    .header_bottom_container {
+      display: none;
+      position: absolute;
+      right: 0;
+      width: 100%;
+      top: 115px;
+      background: #fff;
+      z-index: 10;
+      line-height: 3;
+      height: unset !important;
+      box-shadow: 0px 2px 1px #aaa;
+
+      > ul {
+        display: block !important;
+
+        li {
+          width: 100% !important;
+        }
+        li:last-child {margin-top: 10px;
+        }
+      }
+
+    }
+
+    .header_top_container {
+      .btnShowMenuMain {
+        display: flex;
+      }
+
+      li {
+        width: 25%;
+        align-items: center;
+      }
+
+      ul {
+        flex-wrap: wrap;
+      }
+
+      li:last-child {
+        li {
+          width: 25%;
+        }
+
+        width: 100%;
+        justify-content: space-evenly !important;
+        margin-top: 10px;
+      }
+
+      img {
+        width: 85px !important;
+      }
+
+      a {
+        font-size: 13px !important;
+      }
+    }
+
+  }
+}
+
+@media only screen and (min-width: 250px) and (max-width: 450px) {
+}
+
+@media only screen and (min-width: 450px) and (max-width: 650px) {
+}
+
+@media only screen and (min-width: 650px) {
+}
+
+@media only screen and (max-width: 850px) {
+
+}
+
+@media only screen and (min-width: 900px) {
+}
+
+@media only screen and (min-width: 1200px) {
+}

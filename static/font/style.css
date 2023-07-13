@@ -1,0 +1,11 @@
+@font-face {
+  font-family: Vazirmatn;
+  src:  url('Vazir-Medium-FD.eot?i5l0hv');
+	src:  url('Vazir-Medium-FD.eot?i5l0hv#iefix') format('embedded-opentype'),
+	url('Vazir-Medium-FD.ttf?i5l0hv') format('truetype'),
+	url('Vazir-Medium-FD.woff?i5l0hv') format('woff'),
+	url('Vazir-Medium-FD.woff2?i5l0hv') format('woff2');
+    font-weight: 100 ;
+    font-style: normal;
+    font-display: swap;
+}

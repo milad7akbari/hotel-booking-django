@@ -1,0 +1,264 @@
+#_main {
+  background: #000;
+  max-width: 1400px;
+}
+#_header .header_top_container .btnShowMenuMain {
+  display: none;
+}
+#_header .header_top_container li {
+  width: 33%;
+}
+#registerLoginModal {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  z-index: 99;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+}
+#registerLoginModal .inpPhoneNumberOtp {
+  transition: all ease-in-out 0.5s;
+  text-align: left;
+}
+#registerLoginModal #timerOtp {
+  border-radius: 5px 0 0 5px !important;
+  background: #fff;
+  direction: rtl !important;
+  font-size: 13px;
+}
+#registerLoginModal .errOtpReq {
+  position: absolute;
+  z-index: 9;
+  font-size: 11px;
+  bottom: -20px;
+  right: 0;
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+#registerLoginModal .containerOtpReqCheckActive {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  color: #ff7b62;
+}
+#registerLoginModal .border-red-err {
+  border: 1px solid #ff7b62 !important;
+}
+#registerLoginModal .box-shadow-red-err {
+  box-shadow: 0 3px 11px -4px #ff7b62 !important;
+}
+#registerLoginModal .isActiveTransition {
+  top: -10px !important;
+  transition: all ease-in-out 0.5s;
+}
+#registerLoginModal .borderRadiusFPI {
+  border-radius: 0 5px 5px 0 !important;
+}
+#registerLoginModal .otpConfirmationInput {
+  border-radius: 0 5px 5px 0 !important;
+  text-align: center;
+  letter-spacing: 15px;
+  font-weight: bolder;
+}
+#registerLoginModal .labelOtpPhoneNumber {
+  z-index: 9;
+  top: 11px;
+  right: 0;
+  background: #fff;
+  font-size: 13px;
+  border-radius: 15px;
+  padding: 0 10px;
+  transition: all ease-in-out 0.5s;
+}
+.btnCloseModal {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px;
+  transition: all ease-in-out 0.1s;
+}
+.btnCloseModal:hover {
+  color: red;
+  transition: all ease-in 0.1s;
+  cursor: pointer;
+}
+.col-right-pg-login-reset-password {
+  width: 40%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-self: center;
+  background-size: 80% 60% !important;
+  background-position: center !important;
+}
+.col-left-pg-login {
+  padding: 35px;
+  width: 60%;
+  background: transparent;
+  height: 100%;
+  position: relative;
+}
+.col-left-pg-login .tab-bg-login {
+  width: 100%;
+  height: 50px;
+}
+.col-left-pg-login .tab-bg-login ul {
+  display: flex;
+  justify-content: space-around;
+}
+.col-left-pg-login .tab-bg-login ul li {
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  background: black;
+  color: white;
+  transition: all ease-in-out 0.2s;
+  line-height: 3;
+}
+.col-left-pg-login .tab-bg-login ul li:hover {
+  background: rgba(0, 0, 0, 0.8);
+  color: #cccccc;
+  transition: all ease-in-out 0.2s;
+}
+.col-left-pg-login .ulImDirector {
+  width: 100%;
+  display: flex;
+}
+.col-left-pg-login .ulImDirector ul {
+  width: 100%;
+  display: flex;
+}
+.col-left-pg-login .privacyContainer {
+  position: absolute;
+  width: 100%;
+  bottom: 70px;
+}
+.col-left-pg-login .privacyContainer-condition {
+  position: relative;
+  bottom: unset !important;
+  margin-top: 40px !important;
+}
+.col-left-pg-login .privacyContainer-condition p {
+  color: #000 !important;
+}
+#registerLoginModal {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  z-index: 9;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+}
+#registerLoginModal .inpPhoneNumberOtp {
+  transition: all ease-in-out 0.5s;
+  border-radius: 0 5px 5px 0 !important;
+  text-align: left;
+}
+#registerLoginModal #timerOtp {
+  border-radius: 5px 0 0 5px !important;
+  background: #fff;
+  direction: rtl !important;
+  font-size: 13px;
+}
+#registerLoginModal .errOtpReq {
+  position: absolute;
+  z-index: 9;
+  font-size: 11px;
+  bottom: -20px;
+  right: 0;
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+#registerLoginModal .containerOtpReqCheckActive {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  color: #ff7b62;
+}
+#registerLoginModal .border-red-err {
+  border: 1px solid #ff7b62;
+}
+#registerLoginModal .isActiveTransition {
+  top: -13px !important;
+  transition: all ease-in-out 0.5s;
+}
+#registerLoginModal .borderRadiusFPI {
+  border-radius: 0 5px 5px 0 !important;
+}
+#registerLoginModal .otpConfirmationInput {
+  border-radius: 0 5px 5px 0 !important;
+  text-align: center;
+  letter-spacing: 15px;
+  font-weight: bolder;
+}
+#registerLoginModal .labelOtpPhoneNumber {
+  z-index: 9;
+  top: 11px;
+  right: 15px;
+  background: #fff;
+  font-size: 15px;
+  border-radius: 15px;
+  padding: 0 10px;
+  transition: all ease-in-out 0.5s;
+}
+#regLogModal {
+  width: 40%;
+  margin: auto;
+  float: right;
+}
+#regLogModal .regLogModalContainer {
+  width: 100%;
+  margin: auto;
+  background: white;
+  padding: 60px;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
+}
+/*# sourceMappingURL=_partial.css.map */
