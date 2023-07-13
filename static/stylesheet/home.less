@@ -1,0 +1,128 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: blur(0px);
+  -webkit-filter: blur(0px);;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+#flexBoxItemSquare {
+  height: 490px;
+  width: 100%;
+  float: right;
+  padding-top: 10px;
+  margin-top: 3rem;
+}
+
+.cart-container {
+  transition: all ease-in-out .2s;
+  margin: 10px;
+  height: 300px;
+  position: relative;
+  display: grid;
+
+  .cart-content {
+    width: 92%;
+    margin: auto;
+    height: 94%;
+    justify-self: center;
+  }
+
+  .img-container-cart {
+    width: 100%;
+    position: relative;
+
+    .container-favIcon {
+      position: absolute;
+      transition: .3s all ease-in-out;
+      top: 15px;
+      z-index: 2;
+      padding: 7px;
+      border-radius: 10px 0px 0px 10px;
+
+      span {
+        color: red;
+        font-size: 20px;
+        cursor: pointer;
+        display: block;
+        text-align: center;
+      }
+    }
+  }
+}
+
+#flexBoxItemSquareContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  float: right;
+  margin-top: 3.2rem;
+
+  .squareItem {
+    box-shadow: rgba(0, 0, 0, 0.9) 0px 25px 50px -12px;
+    border-radius: 30px;
+    width: 26%;
+    height: 270px;
+    margin: 10px 25px;
+    position: relative;
+    overflow: hidden;
+    transition: all .2s ease-in-out;
+
+    &:hover .bg-img-container {
+      transform: scale(1.1);
+      transition: all .2s ease-in-out;
+      box-shadow: 0 0 10px #000;
+    }
+
+    &:hover {
+      box-shadow: 0 0 15px gray;
+      transition: all .2s ease-in-out;
+    }
+
+    .bg-img-container {
+      width: 100%;
+      z-index: -1;
+      background-size: 100% 100%;
+      background-position: 0;
+      transition: all .2s ease-in-out;
+      height: 100%;
+      display: grid;
+
+      .title-container {
+        transition: all .2s ease-in-out;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        color: white;
+        cursor: pointer;
+        z-index: 10;
+
+        span {
+          display: block;
+          text-align: center;
+          width: 120px;
+          border: 2px solid #fff;
+          padding: 4px;
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+  }
+}

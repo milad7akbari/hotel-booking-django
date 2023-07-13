@@ -1,0 +1,13 @@
+{% extends 'blog/base/base.html' %}
+{% load i18n %}
+{% load static %}
+{% block blog_main %}
+    <div class="w-100 flex-wrap mt-2 border-bottom justify-content-between position-relative display-flex align-items-center fs-13">
+        <h4 class="title text-center">
+            {{ blog.title }}
+        </h4>
+        <div class="desc">
+            {{ blog.desc|safe }}
+        </div>
+    </div>
+{% endblock %}

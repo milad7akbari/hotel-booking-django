@@ -1,0 +1,41 @@
+{% load i18n %}
+{% load static %}
+<header>
+    <div class="header_top_container w-100 ">
+        <ul class="d-flex justify-content-between py-2">
+            <li class="w-25 display-flex btnRegisterLoginPasswd justify-content-center text-center fs-15">
+                <label><span class="px-3 border-bottom cursor-pointer">{% trans 'ورود یا ثبت نام' %}</span></label>
+            </li>
+            <li class="w-25 text-center fs-15"><img style="width: 120px;" src="{% static 'img/logo.png' %}" class="fs-25 fw-bolder"></li>
+            <li class="w-25 display-flex justify-content-center align-items-baseline text-center fs-15">
+                <label class="mx-3"><i class="p-3">{% trans '1402-03-31' %}</i></label>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="">
+                    <button class="border-0 bg-transparent" type="submit" name="language" value="en"><b>EN</b></button>
+                    <button class="border-0 bg-transparent" type="submit" name="language" value="fa"><b>FA</b></button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    <div class="header_bottom_container w-100 pb-2">
+        <ul class="d-flex justify-content-center w-75 m-auto py-2">
+            <li class="w-25 text-center fs-15"><a href="{% url 'home_page' %}" class="px-3 border-bottom cursor-pointer text-success">{% trans 'صفحه اصلی' %}</a></li>
+            <li class="w-25 text-center fs-15 position-relative">
+                <a href="#" class="px-3 border-bottom cursor-pointer">{% trans 'هتل ها' %}</a>
+                <ul class="w-100 d-none flex-wrap mt-2 bg-white display-flex position-absolute" style="z-index: 1;padding: unset;box-shadow: -1px 5px 3px 2px #eee;">
+                    <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
+                    <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
+                    <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
+                    <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
+                    <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
+                    <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
+                    <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
+                </ul>
+            </li>
+            <li class="w-25 text-center fs-15"><a href="#" class="px-3 border-bottom cursor-pointer">{% trans 'بهترین هتل شهرها' %}</a></li>
+            <li class="w-25 text-center fs-15"><a href="#" class="px-3 border-bottom cursor-pointer">{% trans 'وبلاگ' %}</a></li>
+            <li class="w-25 text-center fs-15"><a href="#" class="px-3 border-bottom cursor-pointer">{% trans 'درباره ما' %}</a></li>
+        </ul>
+    </div>
+</header>

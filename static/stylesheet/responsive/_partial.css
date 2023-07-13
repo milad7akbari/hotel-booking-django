@@ -1,0 +1,171 @@
+/*
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+@media (min-width: 1281px) {
+  /* CSS */
+}
+/*
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+/*
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+/*
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+/*
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+@media (max-width: 767px) {
+  .hotelPageContainer .finalAmountContainer {
+    position: fixed;
+    bottom: 0;
+    z-index: 9;
+    background: #fff;
+    right: 0;
+    left: 0;
+    padding: 8px;
+    margin: 0 !important;
+    box-shadow: 0 -1px 2px #aaa;
+  }
+  #HotelMain .showBtnFilterHotelList {
+    display: block !important;
+  }
+  #HotelMain .filterContainer {
+    display: none;
+    position: fixed !important;
+    background: #fff;
+    z-index: 9;
+    height: 100%;
+    top: 0;
+  }
+  #HotelMain .closeBtnFilterHotelList {
+    display: block !important;
+  }
+  .reviewsContainer {
+    width: 100% !important;
+  }
+  #_main .hotelPageContainer {
+    width: 100% !important;
+  }
+  #_main .hotelPageContainer .hotel-info div:first-child {
+    flex-wrap: wrap !important;
+  }
+  #_main .hotelPageContainer .hotel-info div:first-child div {
+    width: 100% !important;
+  }
+  #sorting ul {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  #sorting ul li {
+    width: 150px !important;
+  }
+  #roomsListContainer .roomListContainer .roomListItem {
+    width: 100% !important;
+  }
+  #hotelsListContainer .hotelListContainer .hotelListItem {
+    width: 100% !important;
+  }
+}
+/*
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+@media (min-width: 300px) and (max-width: 480px) {
+  .galleryImagesContainer .main-cover-hotels-img {
+    height: 245px !important;
+  }
+  .hotel-page-services .formReservation {
+    width: 95% !important;
+  }
+  .hotel-page-services .formReservation .filterSortingRooms {
+    flex-wrap: wrap;
+  }
+  .hotel-page-services .formReservation .filterSortingRooms .filterRooms {
+    width: 100% !important;
+  }
+  .hotel-page-services .formReservation .filterSortingRooms .filterRooms .iconFilter {
+    display: flex;
+    width: 153px;
+    margin: 20px 10px;
+  }
+  .hotel-page-services .facilityHotels {
+    width: 100% !important;
+  }
+  .hotel-page-services .facilityHotels label {
+    margin: 2px !important;
+  }
+  .hotel-page-services .facilityHotels label span {
+    font-size: 12px !important;
+  }
+  .moreRules .moreRulesContainer {
+    flex-wrap: wrap;
+  }
+  .moreRules .moreRulesContainer .ruleItems {
+    margin: auto;
+    width: 80% !important;
+  }
+  .moreRules .descriptionAboutHotel {
+    width: 95% !important;
+  }
+  .mapAndRearLocation > div {
+    flex-wrap: wrap;
+  }
+  .mapAndRearLocation > div div {
+    width: 100% !important;
+  }
+}
+@media only screen and (min-width: 100px) and (max-width: 992px) {
+  #_header .header_bottom_container {
+    display: none;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    top: 115px;
+    background: #fff;
+    z-index: 10;
+    line-height: 3;
+    height: unset !important;
+    box-shadow: 0px 2px 1px #aaa;
+  }
+  #_header .header_bottom_container > ul {
+    display: block !important;
+  }
+  #_header .header_bottom_container > ul li {
+    width: 100% !important;
+  }
+  #_header .header_bottom_container > ul li:last-child {
+    margin-top: 10px;
+  }
+  #_header .header_top_container .btnShowMenuMain {
+    display: flex;
+  }
+  #_header .header_top_container li {
+    width: 25%;
+    align-items: center;
+  }
+  #_header .header_top_container ul {
+    flex-wrap: wrap;
+  }
+  #_header .header_top_container li:last-child {
+    width: 100%;
+    justify-content: space-evenly !important;
+    margin-top: 10px;
+  }
+  #_header .header_top_container li:last-child li {
+    width: 25%;
+  }
+  #_header .header_top_container img {
+    width: 85px !important;
+  }
+  #_header .header_top_container a {
+    font-size: 13px !important;
+  }
+}
+/*# sourceMappingURL=_partial.css.map */

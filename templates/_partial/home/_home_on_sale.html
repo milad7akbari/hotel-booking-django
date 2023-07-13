@@ -1,0 +1,42 @@
+{% load i18n %}
+{% load static %}
+<section id="_homeOnSale" class="my-3 p-3 w-100">
+    <p class="mb-3">هتل های تخفیف دار</p>
+    <div class="swiper p-2 _homeOnSaleItems w-100">
+        <div class="swiper-wrapper">
+            {% for i in "x"|rjust:"10" %}
+                <div class="swiper-slide border-radius-15" style="box-shadow: -2px 2px 2px #aaa;height: 375px">
+                    <div class="cart-container">
+                        <div class="cart-content">
+                            <div class="img-container-cart">
+                                <div class="container-favIcon bg-danger">
+                                    <span class="fs-13 text-white">20 درصد</span>
+                                </div>
+                                <div class="imgContainer" style="height:150px">
+                                    <img src="{% static 'img/woman-walking-along-beach.jpg' %}" title="" alt="">
+                                </div>
+                            </div>
+                            <div class="mt-2 text-center align-items-center d-flex justify-content-center w-100 fs-14">
+                                <div style="left: 5px" class="display-flex align-items-center position-absolute">
+                                    <span class="fs-19" style="height: 15px;line-height: 1">5</span>
+                                    <span class="icon-star-full fs-15 text-warning"></span>
+                                </div>
+                                <a href="">هتل پارسیان تهران</a>
+                            </div>
+                            <div class="cart-footer my-2 w-100 flex-wrap display-flex justify-content-between">
+                                <label class="d-flex justify-content-evenly w-100">
+                                    <span style="color: red;text-decoration: line-through">5,000,000</span>
+                                    <span>3,000,000</span>
+                                </label>
+                                <span class="my-1 text-center w-100 fs-14 fw-bolder"> تومان برای هر شب</span>
+                            </div>
+                            <p style="text-align: justify" class="my-1 float-right w-100 fs-14 text-muted">توضیحات
+                                تکمیلی به صورت خلاتوضیحات تکمیلی به صورت خورت خلاتوضیحای به صورت خلاتوضیحات تکمیلی به صورت خورت خلاتوضیحات تکمیلی به صورت خلاصه</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+{#        <div class="swiper-pagination"></div>#}
+    </div>
+</section>

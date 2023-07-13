@@ -1,0 +1,324 @@
+{% extends 'base/base.html' %}
+{% load function %}
+{% load humanize %}
+{% load i18n %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "stylesheet/hotel.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/swiper.min.css" %}" type="text/css">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static "js/swiper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/hotel-page.js" %}"></script>
+{% endblock %}
+{% block main %}
+    <div class="m-auto hotelPageContainer" style="width: 90%">
+        <div class="hotel-info w-100 d-flex flex-wrap m-auto p-2">
+            <div class="w-100 align-items-center d-flex justify-content-between">
+                <div class="w-50 checkAvailability">
+                    <div class="d-flex w-100">
+                        <label class="fs-15 my-1 btn-link cursor-pointer d-flex">{{ hotel.name }}</label>&nbsp;
+                        <sup class="d-flex flex-wrap align-items-center">
+                            {% with ''|center:hotel.stars as range %}
+                                {% for _ in range %}
+                                    <span class="icon-star-full text-warning"></span>
+                                {% endfor %}
+                            {% endwith %}
+                        </sup>
+                    </div>
+                    <address class="fs-13 fst-italic">{{ hotel.address }}</address>
+                </div>
+                <div class="w-25 checkAvailability">
+                    <button type="button" class="btn btnShowRooms fs-14 w-100 m-auto btn-primary" style="width: 95%">
+                        مشاهده اتاق ها
+                    </button>
+                </div>
+            </div>
+            <div class="galleryImagesContainer w-100 d-flex">
+                <div  class="main-cover-hotels-img overflow-hidden  position-relative w-100 my-3" style="height: 335px">
+                    {% if hotel.images_set.count > 0 %}
+                        <span  data-get="l" data-ref="{{ hotel.reference }}" class="icon-images btnShowImages bg-white text-muted border-radius-50 p-3  fs-25 position-absolute"
+                              style="bottom: 15px;left: 20px;z-index: 2"></span>
+                    {% endif %}
+                    <img class="position-absolute top-0 bottom-0 w-100 m-auto"
+                         src="/media/{{ hotel.default_cover.file }}">
+                </div>
+            </div>
+        </div>
+        <div class="hotel-page-services  mt-4">
+            <h1 class="fs-18 mx-4">{% trans 'امکانات هتل' %}</h1>
+            <div class="facilityHotels flex-wrap py-1 mt-3 m-auto d-flex" style="width: 85%">
+                {% for f in facility %}
+                    <label style="min-width: 150px;box-shadow: -2px 3px 2px #0d6efd;" class="border-radius-5 m-4 p-3">
+                        <span class="w-100 d-block text-center fs-14">{{ f.title }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="hotel-page-services  mt-4">
+            <h1 class="fs-18 mx-4">{% trans 'لیست اتاق ها' %}</h1>
+            <div class="formReservation flex-wrap py-1 mt-3 m-auto d-flex" style="width: 85%">
+                <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3">
+                    <div class="d-flex w-100 filterRooms align-items-center justify-content-center border-radius-25 px-3 py-3"
+                         style="border-bottom: 1px solid #ccc">
+                        <div class="w-50 position-relative mx-1">
+                            <label class="w-100 text-center position-absolute my-1 fs-13"
+                                   style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تعداد
+                                افراد</label>
+                            <div class="d-flex justify-content-evenly">
+                                <input type="text" class="w-100 fs-13 border-radius-25 text-center" placeholder=""
+                                       readonly value="انتخاب کنید">
+                                {% comment %}<label class="fs-13">بزرگسال: <span>2</span></label>
+                                <label class="fs-13">کودک: <span>1</span></label>{% endcomment %}
+                            </div>
+                        </div>
+                        <div class="w-50 position-relative mx-1">
+                            <label class="w-100 text-center position-absolute my-1 fs-13"
+                                   style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ
+                                ورود</label>
+                            <input type="date" class="w-100 fs-13 border-radius-25 text-center" placeholder="" readonly
+                                   value="0">
+                        </div>
+                        <div class="w-50 position-relative mx-1">
+                            <label class="w-100 text-center position-absolute my-1 fs-13"
+                                   style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ
+                                خروج</label>
+                            <input type="date" class="w-100 fs-13 border-radius-25 text-center" placeholder="" readonly
+                                   value="0">
+                        </div>
+                    </div>
+                    {% comment %}<div class="filterRooms w-50 justify-content-center d-flex align-items-center">
+                        <div class="iconFilter">
+                            <span class="icon-filter"></span>
+                            <label class="fs-14">فیلتر اتاق ها: </label>
+                        </div>
+                        <div class="facilityHotels flex-wrap d-flex">
+                            <label style="min-width: 70px;"
+                                   class="border-radius-5 border-radius-25 bg-primary border m-1 py-1 px-2">
+                                <span class="w-100 d-block text-white text-center fs-13">فقط سه تخته</span>
+                            </label>
+                            <label style="min-width: 70px;"
+                                   class="border-radius-5 border-radius-25 border m-1 py-1 px-2">
+                                <span class="w-100 d-block text-center fs-13">فقط سه تخته</span>
+                            </label>
+                        </div>
+                    </div>{% endcomment %}
+                </div>
+                <div class="roomsListHotel" id="roomsListContainer">
+                    <div class="p-0 d-flex flex-wrap m-0">
+                        {% for r in room %}
+                            <div class="w-100 my-3 roomListContainer border-bottom pb-1 d-flex flex-wrap"
+                                 style="min-height: 150px">
+                                <div  class="imgCover roomListItem overflow-hidden  border-radius-5 position-relative w-25">
+                                    {% if r.room_images__count > 0 %}
+                                        <span  data-get="r" data-ref="{{ r.pk }}" class="icon-images btnShowImages fs-25  position-absolute text-white " style="top: 10px;right: 10px"></span>
+                                    {% endif %}
+                                    <img class="w-100 h-100" src="/media/{{ r.default_cover.file }}">
+                                </div>
+                                <div class="hotel-info roomListItem py-1 px-2 w-50" style="border-left: 1px solid #eee">
+                                    <label class="fs-17 my-1">{{ r.title }}</label>
+                                    <div class="facilityHotels flex-wrap border-bottom py-1 mt-1 d-flex">
+                                        <label style="min-width: 50px;"
+                                               class="border-radius-5 d-flex align-items-center d-flex bg-muted m-1 p-3">
+                                            <span class="icon-man-woman px-1 fs-18"></span>
+                                            <span class="w-100 d-block px-1 text-center fs-13"> {{ r.capacity }} {% trans 'نفره' %} </span>
+                                        </label>
+                                        <label style="min-width: 50px;"
+                                               class="border-radius-5 d-flex align-items-center d-flex bg-muted m-1 p-3">
+                                            <span class="icon-filter px-1 icon-users fs-18"></span>
+                                            <span class="w-100 d-block px-1 text-center fs-13">{{ r.extra_person }} {% trans 'افراد اضافه' %} </span>
+                                        </label>
+                                    </div>
+                                    <div class="facilityHotels flex-wrap py-1 mt-1 d-flex">
+                                        {% for f in r.room_facility_set.all %}
+                                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
+                                                <span class="w-100 d-block text-center fs-12">{{ f.title }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="noteHotels mt-3 d-flex">
+                                        <p class="fs-12 text-muted" style="line-height: 2">{{ r.note }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="hotelPricing roomListItem d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center" style="width: 195px">
+                                    {% if r.room_discount.all.count > 0 %}
+                                        <div class="position-relative align-items-center d-flex justify-content-center w-100" style="height: 55px">
+                                            <div style="width: 55px;height: 55px;left: 0;top: 1px" class="position-absolute">
+                                                {% with r|getDiscount as discount %}
+                                                    {% if discount.reduction_type == 1 %}
+                                                        <span class="w-100 border-radius-5 d-flex bg-black" style="height: 5px;"></span>
+                                                        <div class="d-flex align-items-center justify-content-center mx-auto text-white fs-20 m-auto" style="height: 50px;background: #ff5b6b;width: 95%;left: 0;right: 0;top: 5px">
+                                                            {{ discount.reduction|floatformat:"0"|intcomma }}%
+                                                        </div>
+                                                    {% else %}
+                                                            <span style="color: #ff5b6b;text-decoration: line-through">{{ discount.reduction|floatformat:"0"|intcomma }}  </span>
+                                                    {% endif %}
+                                                {% endwith %}
+                                            </div>
+                                            <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
+                                                <p class="fs-18 w-100 text-center my-2 d-flex align-items-center justify-content-center">
+                                                    <span style="text-decoration: line-through;color: #ff5b6b" class="w-100 " >{{ r.price|floatformat:"0"|intcomma }}</span>&nbsp;
+                                                </p>
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                    <div class="w-100 flex-wrap d-flex justify-content-center">
+                                    </div>
+                                    <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
+                                        <p class="fs-25 w-100 text-center my-2 d-flex align-items-center justify-content-center">
+                                            <span>{{ r.price|calcPrice:r|floatformat:"0"|intcomma }}</span>&nbsp;
+                                            <span class="text-muted fs-12">{% trans 'تومان' %}</span>
+                                        </p>
+                                        <span class="w-100 text-center text-muted my-2 fs-14">{% trans 'هر شب' %}</span>
+                                    </label>
+                                    <div class="w-100 text-center d-flex justify-content-between">
+                                        <select data-price="{{ r.price|calcPrice:r }}" data-price-lang="{% trans 'تومان' %}"  class="form-select countOrderRoomPerson w-25 mx-auto text-center form-select-sm">
+                                            <option value="0">0</option>
+                                            {% with ''|center:r.capacity as range %}
+                                                {% for i in range %}
+                                                    <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                                                {% endfor %}
+                                            {% endwith %}
+                                        </select>
+                                        <button type="button" class="btn fs-14 w-50 m-auto btn-primary"
+                                                style="width: 95%">افزودن
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="w-100 my-3 finalAmountContainer">
+                        <div class="display-flex align-items-center flex-wrap  justify-content-center p-3   " style="box-shadow: 0px 4px 3px #0d6efd;border-radius: 50px;">
+                            <input type="text" id="finalAmount" readonly class="w-100 bg-white border-0 text-center fs-20" value="0 تومان ">
+                            <a href="{% url 'cart' %}" class="btn fs-15 btn-primary d-none text-white" style="width: 150px" type="button">{% trans 'ادامه و رزرو' %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-100 moreRules">
+            <div class="w-100 d-flex moreRulesContainer justify-content-around">
+                <div class="ruleItems w-25">
+                    <div class="footer-left h-100 w-100 d-flex flex-wrap">
+                        <ul class="d-flex p-0 w-100 flex-wrap align-items-center justify-content-between text-right fs-13">
+                            <li style="padding: 15px" class="border-bottom w-100 text-center">
+                                <b class="text-primary">{% trans 'قوانین کنسلی' %}</b>
+                            </li>
+                        </ul>
+                        <div class="w-100 h-75">
+                            <div class="w-100 d-flex align-items-center" style="height: 100px">
+                                <p class="fs-14 text-justify">{{ hotel.rule_cancelable|default:'بدون قانون خاصی' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ruleItems w-25">
+                    <div class="footer-left h-100 w-100 d-flex flex-wrap">
+                        <ul class="d-flex p-0 w-100 flex-wrap align-items-center justify-content-between text-right fs-13">
+                            <li style="padding: 15px" class="border-bottom w-100 text-center"><b
+                                    class="text-primary">{% trans 'قابل توجه رزرو کنندکان' %}</b></li>
+                        </ul>
+                        <div class="w-100 h-75">
+                            <div class="w-100 d-flex align-items-center" style="height: 100px">
+                                <p class="fs-14 text-justify">{{ hotel.note|default:'بدون نوت' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ruleItems w-25">
+                    <div class="footer-left h-100 w-100 d-flex flex-wrap">
+                        <ul class="d-flex p-0 w-100 flex-wrap align-items-center justify-content-between text-right fs-13">
+                            <li style="padding: 15px" class="border-bottom w-100 text-center"><b
+                                    class="text-primary">{% trans 'ورود و خروج' %}</b></li>
+                        </ul>
+                        <div class="w-100 h-75">
+                            <div class="w-100 d-flex align-items-center" style="height: 100px">
+                                <p class="fs-14 text-justify">{{ hotel.rule_enter|default:'بدون قانون خاصی' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-75 descriptionAboutHotel m-auto display-flex my-2 p-3 align-items-center justify-content-center"
+                 style="border-top: 1px solid #cccccc;line-height: 2">
+                <p class="fs-14  pb-0 text-justify">{{ hotel.long_desc }}</p>
+            </div>
+        </div>
+
+
+        <div class="hotel-page-services my-4">
+            <h1 class="fs-18 mx-4">{% trans 'لوکیشن و مراکز نزدیک آن' %}</h1>
+            <div class="w-100 d-flex align-items-center mapAndRearLocation justify-content-around">
+                <div class="w-100 d-flex align-items-center justify-content-around" style="min-height: 250px">
+                    <div class="map-location-hotel h-100" style="width: 40%;">
+                        <iframe class="w-100 h-100"
+                                src="//maps.google.com/maps?q={{ hotel.latitude }},{{ hotel.longitude }}&z=15&output=embed"></iframe>
+                    </div>
+                    <div class="w-50 h-100 nearLocation overflow-auto">
+                        <ul class="p-0">
+                            {% for i in close_spots %}
+                                <li class="d-flex justify-content-between align-items-center"
+                                    style="padding: 5px;margin: 10px auto;width: 90%;border-bottom: 1px solid #ccc;">
+                                    <div>
+                                        <span class="icon-location2 mx-3"></span>
+                                        <label class="fs-14">{{ i.short_desc }}</label>
+                                    </div>
+                                    <span class="icon-arrow-right2"></span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="review" class="review-area ptb_100">
+            <h1 class="fs-18 mx-4">{% trans 'نظرات' %}</h1>
+                <div class="container display-flex flex-wrap">
+                {% if user.is_authenticated %}
+                    <div class="w-100 display-flex justify-content-end">
+                        <button type="button" class="btn btnAddReviews btn-primary m-2" style="width: 150px">{% trans 'ثبت نظر' %}</button>
+                    </div>
+                    <div class="w-50 reviewsContainer mx-auto mb-3 border border-radius-15 p-3 display-flex justify-content-end">
+
+                    <form id="reviewsSubmit" action="{% url 'reviewsSubmit' %}" method="post" class="row g-3 dir-rtl">{% csrf_token %}
+                        <input type="hidden" name="hotel_ref" value="{{ hotel.reference }}">
+                        <p class="alert-danger alert errMsg d-none" ></p>
+                        <div class="col-md-12">
+                            <div class="review-container" id="id_star_container">
+                              <label data-val="1" class="star"><span class="stararea">★</span></label>
+                              <label data-val="2" class="star"><span class="stararea">★</span></label>
+                              <label data-val="3" class="star"><span class="stararea">★</span></label>
+                              <label data-val="4" class="star"><span class="stararea">★</span></label>
+                              <label data-val="5" class="star"><span class="stararea">★</span></label>
+                            </div>
+                        </div>
+                        {% for field in form %}
+                            {% if field.auto_id == 'id_stars' %}
+                                {{ field }}
+                            {% elif field.auto_id == 'id_short_desc' %}
+                                <div class="col-md-12">
+                                    <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                            {% else %}
+                                <div class="col-md-6">
+                                    <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="col-md-6">
+                             <button type="submit" class="btn w-100 btn-primary">{% trans 'ثبت نظر' %}</button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+                {% include '_partial/_reviews.html' with reviews=reviews %}
+                </div>
+        </div>
+    </div>
+{% endblock %}

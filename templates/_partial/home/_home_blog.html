@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load static %}
+<section id="_homeBlog" class="my-3 p-3 w-100 bg-light" >
+    <p class="mb-3">تازه های وبلاگ</p>
+    <div class="swiper _homeBlogItems p-2" style="height: 350px;width: 90%;">
+        <div class="swiper-wrapper">
+            {% for b in blogs_related %}
+                <div class="swiper-slide border-radius-15" style="box-shadow: rgb(170, 170, 170) -2px 2px 2px;">
+                    <div class="w-100 p-2" style="height: 150px;">
+                        <img class="w-100" src="/media/{{ b.default_image__file|default:'media/logo-w-text.png' }}">
+                    </div>
+                    <div class="w-100 p-2 mt-2">
+                        <a href="{% url 'blogPage' b.pk b.title.split|join:"_"|default:'no_subject'  %}" class="fs-13 d-block textRight my-2 w-100">{{ b.title|truncatewords:3 }}</a>
+                        <p class="textRight fs-13">{{ b.desc|truncatewords:28 }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>

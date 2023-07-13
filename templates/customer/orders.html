@@ -1,0 +1,59 @@
+{% extends 'customer/base/base.html' %}
+{% load i18n %}
+{% load static %}
+{% block customer_main %}
+<div class="d-flex justify-content-between flex-wrap">
+    <div class="headerOrders w-100">
+        <ul class="py-3 bg-muted w-100 mb-2 p-0 d-flex justify-content-between">
+            <li style="width: 10%" class="fs-13 text-center">#</li>
+            <li style="width: 25%" class="fs-13 text-center">هتل</li>
+            <li style="width: 25%" class="fs-13 text-center">نام هتل</li>
+            <li style="width: 10%" class="fs-13 text-center">وضعیت</li>
+            <li style="width: 25%" class="fs-13 text-center">تاریخ ایجاد</li>
+        </ul>
+        {% for i in "x"|rjust:"5" %}
+            <ul class="p-0 cursor-pointer w-100 align-items-center my-2 d-flex justify-content-between">
+                <li style="width: 10%" class="text-center fs-13">334234</li>
+                <li style="width: 25%;height: 100px" class="text-center fs-13">
+                    <img src="{% static 'img/woman-walking-along-beach.jpg' %}" class="h-100">
+                </li>
+                <li style="width: 25%" class="text-center fs-13">هتل اسپیناس پالاس</li>
+                <li style="width: 10%" class="text-center fs-13">انجام شده</li>
+                <li style="width: 25%" class="text-center fs-13">142-05-05</li>
+            </ul>
+            {% if  forloop.counter == 2 %}
+                <ul class="p-0 flex-wrap cursor-pointer w-75 mx-auto align-items-center my-4 border-radius-5 d-flex justify-content-between">
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">هتل</label>
+                        <label class="fs-14" style="width: 150px">اسپیناس پالاس</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">قیمت پرداخت شده</label>
+                        <label class="fs-14" style="width: 150px">154,000 تومان</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">ورود</label>
+                        <label class="fs-14" style="width: 150px">42-05-05</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">خروج</label>
+                        <label class="fs-14" style="width: 150px">42-05-05</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">وورد زود هنگام</label>
+                        <label class="fs-14" style="width: 150px">دارد</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">خروج دیرهنگام</label>
+                        <label class="fs-14" style="width: 150px">دارد</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">قیمت پرداخت شده</label>
+                        <label class="fs-14" style="width: 150px">154,000 تومان</label>
+                    </li>
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
