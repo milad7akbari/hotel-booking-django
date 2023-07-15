@@ -105,12 +105,14 @@
                     </div>{% endcomment %}
                 </div>
                 <div class="roomsListHotel" id="roomsListContainer">
-                    <div class="p-0 d-flex flex-wrap m-0">
+                    <form method="post" id="frmAddToCart" action="{% url 'addToCart' hotel.reference %}" class="p-0 d-flex flex-wrap m-0">
+                        {% csrf_token %}
                         {% for r in room %}
+                            <input type="hidden" value="{{ r.pk }}" name="room[]">
                             <div class="w-100 my-3 roomListContainer border-bottom pb-1 d-flex flex-wrap"
                                  style="min-height: 150px">
                                 <div  class="imgCover roomListItem overflow-hidden  border-radius-5 position-relative w-25">
-                                    {% if r.room_images__count > 0 %}
+                                    {% if r.room_images_set.all.count > 0 %}
                                         <span  data-get="r" data-ref="{{ r.pk }}" class="icon-images btnShowImages fs-25  position-absolute text-white " style="top: 10px;right: 10px"></span>
                                     {% endif %}
                                     <img class="w-100 h-100" src="/media/{{ r.default_cover.file }}">
@@ -173,7 +175,8 @@
                                         <span class="w-100 text-center text-muted my-2 fs-14">{% trans 'هر شب' %}</span>
                                     </label>
                                     <div class="w-100 text-center d-flex justify-content-between">
-                                        <select data-price="{{ r.price|calcPrice:r }}" data-price-lang="{% trans 'تومان' %}"  class="form-select countOrderRoomPerson w-25 mx-auto text-center form-select-sm">
+                                        <label class="fs-14 m-auto">{% trans 'تعداد' %}</label>
+                                        <select name="qty[]" data-price="{{ r.price|calcPrice:r }}" data-price-lang="{% trans 'تومان' %}"  class="form-select countOrderRoomPerson w-50 mx-auto text-center form-select-sm">
                                             <option value="0">0</option>
                                             {% with ''|center:r.capacity as range %}
                                                 {% for i in range %}
@@ -181,20 +184,17 @@
                                                 {% endfor %}
                                             {% endwith %}
                                         </select>
-                                        <button type="button" class="btn fs-14 w-50 m-auto btn-primary"
-                                                style="width: 95%">افزودن
-                                        </button>
                                     </div>
                                 </div>
                             </div>
                         {% endfor %}
-                    </div>
-                    <div class="w-100 my-3 finalAmountContainer">
-                        <div class="display-flex align-items-center flex-wrap  justify-content-center p-3   " style="box-shadow: 0px 4px 3px #0d6efd;border-radius: 50px;">
-                            <input type="text" id="finalAmount" readonly class="w-100 bg-white border-0 text-center fs-20" value="0 تومان ">
-                            <a href="{% url 'cart' %}" class="btn fs-15 btn-primary d-none text-white" style="width: 150px" type="button">{% trans 'ادامه و رزرو' %}</a>
+                        <div class="w-100 my-3 finalAmountContainer">
+                            <div class="display-flex align-items-center flex-wrap  justify-content-center p-3   " style="box-shadow: 0px 4px 3px #0d6efd;border-radius: 50px;">
+                                <input type="text" id="finalAmount" readonly class="w-100 bg-white border-0 text-center fs-20" value="0 تومان ">
+                                <button class="btn fs-15 btn-primary d-none text-white" style="width: 150px" type="submit">{% trans 'ادامه و رزرو' %}</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

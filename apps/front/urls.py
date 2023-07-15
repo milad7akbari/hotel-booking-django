@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.urls import path
 
-from apps.front.views import cart
+from apps.front.views import cart, addToCart
 
 urlpatterns = [
-    path('get', cart, name='cart'),
-]
+    path('get/<str:ref>', cart, name='cart'),
+    path('addToCart/<str:ref>', addToCart, name='addToCart'),
 
+]

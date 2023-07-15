@@ -1,15 +1,6 @@
 $(document).ready(function () {
 
-    function modalImages(ref, get) {
-        $.ajax({
-            type: "GET",
-            data: {'get': get},
-            url: "/hotel-l/images/" + ref,
-            success: function (data) {
-                $('#_partial').empty().html(data);
-            }
-        });
-    }
+
 
     $('#id_star_container .star').click(function (e) {
         $('#id_stars').val($(this).attr('data-val'));
@@ -47,6 +38,16 @@ $(document).ready(function () {
     $(document).on('click', '.btnHideImages', function () {
         $('#_partial').empty();
     });
+    function modalImages(ref, get) {
+        $.ajax({
+            type: "GET",
+            data: {'get': get},
+            url: "/hotel-l/images/" + ref,
+            success: function (data) {
+                $('#_partial').empty().html(data);
+            }
+        });
+    }
 
     $(document).on('submit', '#registerNewCustomers', function (e) {
         $('.errMsg').removeClass('d-block').addClass('d-none')

@@ -2,70 +2,57 @@
 {% load function %}
 {% load i18n %}
 {% load static %}
-
+{% block css %}
+    <link rel="stylesheet" href="{% static "stylesheet/swiper.min.css" %}" type="text/css">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static "js/swiper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/hotel-page.js" %}"></script>
+{% endblock %}
 {% block main %}
     <div id="_cartContainer" class=" overflow-hidden">
-        <div class="row p-2 justify-content-evenly">
-            <div class="col-xl-3 col-md-3">
-                <div class="hotel-category-content bg-white my-2 p-2 border-radius-5">
-                    <div class="mt-2">
-                        <label>خلاصه رزرو و پرداخت</label>
-                        <a>ویرایش</a>
-                    </div>
-                    <div class="display-flex bg-white p-4 pb-2 justify-content-evenly flex-wrap w-100 m-auto " style=" ">
-                        <div class="imgCover w-100 overflow-hidden border-radius-5 position-relative">
-                            <span class="icon-images fs-25 position-absolute text-white " style="top: 10px;right: 10px"></span>
-                            <img class="w-100 h-100" src="https://img.freepik.com/free-photo/comfortable-pillow-bed_74190-6276.jpg?size=626&amp;ext=jpg&amp;uid=R102099051&amp;ga=GA1.2.1206123025.1673342393&amp;semt=ais">
-                        </div>
-                        <label class="fs-13 d-flex">هتل اسپناس پلاس</label>
-                    </div>
-                    <div class="display-flex bg-white p-4 pb-2 justify-content-evenly  w-100 m-auto " style=" ">
-                        <div class="inputContainer d-flex flex-wrap justify-content-center w-50">
-                            <label class="w-100 fs-13 text-center">ورود</label>
-                            <span class="fs-13 text-muted">1356/65/65 12:12</span>
-                        </div>
-                        <div class="inputContainer d-flex flex-wrap justify-content-center w-50 ">
-                            <label class="fs-13 w-100 text-center">خروج</label>
-                            <span class="fs-13 text-muted">1356/65/65 12:12</span>
-                        </div>
-                    </div>
-                    <div class="display-flex bg-white px-4 py-2 justify-content-evenly  w-100 m-auto " style=" ">
-                        <div class="inputContainer d-flex flex-wrap justify-content-center w-100">
-                            <label class="w-100 fs-13 text-center">خلاصه</label>
-                            <span class="fs-13  text-muted">2 بزرگسال، 1 کودک، 2 اتاق</span>
-                        </div>
-                    </div>
-                    <div class="display-flex bg-white p-4 pb-2 justify-content-evenly  w-100 m-auto " style=" ">
-                        <div class="inputContainer d-flex flex-wrap justify-content-center w-50">
-                            <label class="w-100 fs-13 text-center">قیمت کل</label>
-                            <span class="fs-15 text-muted">350,000 تومان</span>
-                        </div>
-                    </div>
-                    <div class="border-top bg-white px-1 pt-3  w-100 m-auto " style=" ">
-                        <div class="inputContainer my-2 d-flex flex-wrap w-100">
-                            <label class="fs-13 mb-2 w-100">قوانین کنسلی:</label>
-                            <span class="fs-12  text-muted">بدون قانون خاصی تا دو روز میتوانید کنسلاصی تا دو روز میتوانید کنسل کنید</span>
-                        </div>
-                    </div>
-                    <div class="border-top bg-white px-1 pt-3  w-100 m-auto " style=" ">
-                        <div class="inputContainer my-2 d-flex flex-wrap w-100">
-                            <label class="fs-13 mb-2 text-center w-100">قابل پرداخت</label>
-                            <span class="fs-18 bg-primary text-white w-100 py-2 px-3 border-radius-25 text-center">360,000 تومان</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-9 col-md-9">
+
+{#                    <div class="display-flex bg-white p-4 pb-2 justify-content-evenly  w-100 m-auto " style=" ">#}
+{#                        <div class="inputContainer d-flex flex-wrap justify-content-center w-50">#}
+{#                            <label class="w-100 fs-13 text-center">قیمت کل</label>#}
+{#                            <span class="fs-15 text-muted">350,000 تومان</span>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="border-top bg-white px-1 pt-3  w-100 m-auto " style=" ">#}
+{#                        <div class="inputContainer my-2 d-flex flex-wrap w-100">#}
+{#                            <label class="fs-13 mb-2 text-center w-100">قابل پرداخت</label>#}
+{#                            <span class="fs-18 bg-primary text-white w-100 py-2 px-3 border-radius-25 text-center">360,000 تومان</span>#}
+{#                        </div>#}
+{#                    </div>#}
+            <div class="w-75 m-auto">
                 <div class="w-100 my-2 bg-white py-2">
-                    <p class="fs-13 p-1">چنانچه عضو سایت هستید برای تسریع در فرایند رزرو <span class="btn-link btnRegisterLoginPasswd ">لاگین</span> کنید.</p>
+                    <p class="fs-15 text-center p-1">چنانچه عضو سایت هستید برای تسریع در فرایند رزرو <span class="btn-link btnRegisterLoginPasswd ">لاگین</span> کنید.</p>
+                </div>
+                <div class="w-100 my-2 bg-white py-2">
+                    <p class="fs-25 text-center p-1">{% trans 'خلاصه رزرو شما به شرح زیر می باشد.' %}</p>
+                </div>
+                <div class="w-100 my-2 bg-white py-2">
+                    <p class="fs-17 text-center p-1">هتل اسپیناس پالاس</p>
+                </div>
+                <div class="display-flex bg-white p-4 justify-content-evenly  w-100 m-auto " style="border-top: 1px solid #aaa;border-bottom: 1px solid #aaa">
+                    <div class="inputContainer d-flex flex-wrap justify-content-center w-50">
+                        <label class="w-100 fs-15 text-center">{% trans 'ورود' %}</label>
+                        <span class="fs-14 text-muted">1356/65/65 12:12</span>
+                    </div>
+                    <div class="inputContainer d-flex flex-wrap justify-content-center w-50 ">
+                        <label class="fs-15 w-100 text-center">{% trans 'خروج' %}</label>
+                        <span class="fs-14 text-muted">1356/65/65 12:12</span>
+                    </div>
+                    <div class="inputContainer d-flex flex-wrap justify-content-center w-50 ">
+                        <label class="w-100 fs-15 text-center">{% trans 'تعداد' %}</label>
+                        <span class="fs-14  text-muted">2 بزرگسال، 1 کودک، 2 اتاق</span>
+                    </div>
                 </div>
 
-                <div class="w-100 my-2 bg-white py-2">
-                    {% include '_partial/modal/reservation-form.html' with form=form form_1=form_1 %}
+                <div class="w-100 m-auto my-2 bg-white py-2">
+                    {% include '_partial/modal/reservation-form.html' with form=form room=room form_1=form_1 %}
                 </div>
-
             </div>
-        </div>
     </div>
 
 {% endblock %}

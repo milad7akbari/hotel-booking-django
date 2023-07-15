@@ -1,3 +1,5 @@
+{% load humanize %}
+{% load function %}
 {% load static %}
 {% load i18n %}
 <form method="POST" class="w-100" id="registerNewCustomers" action="{% url 'registerNewUser' %}">
@@ -5,99 +7,80 @@
     <p class="alert alert-danger fs-13 d-none errMsg"></p>
     <div class="roomsListHotel">
         <ul class="p-0 d-flex flex-wrap m-0">
-            {% for i in "x"|rjust:"2" %}
-                <li class="w-100 my-3 border-bottom pb-1 d-flex flex-wrap" style="min-height: 150px">
-                    <div class="imgCover overflow-hidden border-radius-5 position-relative w-25">
-                        <span class="icon-images fs-25 position-absolute text-white " style="top: 10px;right: 10px"></span>
-                        {% if  forloop.counter == 1 %}
-                        <img class="w-100 h-100" src="https://img.freepik.com/premium-photo/rear-view-woman-stretching-her-hand-after-waking-up-bed_23-2148033285.jpg?size=626&ext=jpg&uid=R102099051&ga=GA1.2.1206123025.1673342393&semt=ais">
-
-                        {% endif %}
-                        {% if  forloop.counter == 2 %}
-                        <img class="w-100 h-100" src="https://img.freepik.com/free-photo/comfortable-pillow-bed_74190-6276.jpg?size=626&ext=jpg&uid=R102099051&ga=GA1.2.1206123025.1673342393&semt=ais">
-
-                        {% endif %}
-                        {% if  forloop.counter == 3 %}
-                        <img class="w-100 h-100" src="https://img.freepik.com/free-photo/luxury-classic-modern-bedroom-suite-hotel_105762-1787.jpg?size=626&ext=jpg&uid=R102099051&ga=GA1.2.1206123025.1673342393&semt=ais">
-
-                        {% endif %}
-                    </div>
-                    <div class="hotel-info py-1 px-2 w-50" style="border-left: 1px solid #eee">
-                        <label class="fs-17 my-1">سه تخته</label>
-                        <div class="facilityHotels flex-wrap border-bottom py-1 mt-1 d-flex">
-                            <label style="min-width: 50px;" class="border-radius-5 d-flex align-items-center d-flex bg-muted m-1 p-3">
-                                <span class="icon-man-woman px-1 fs-18"></span>
-                                <span class="w-100 d-block px-1 text-center fs-13">سه تخته</span>
-                            </label>
-                            <label style="min-width: 50px;" class="border-radius-5 d-flex align-items-center d-flex bg-muted m-1 p-3">
-                                <span class="icon-filter px-1 icon-users fs-18"></span>
-                                <span class="w-100 d-block px-1 text-center fs-13">دو نفره</span>
-                            </label>
+            {% for c in cart %}
+                {% for r in c.cart_detail.all %}
+                    <div class="w-100 my-3 roomListContainer border-bottom pb-1 d-flex flex-wrap"
+                         style="min-height: 150px">
+                        <div  class="imgCover roomListItem overflow-hidden  border-radius-5 position-relative w-25">
+                            {% if r.room.room_images_set.all.count > 0 %}
+                                <span  data-get="r" data-ref="{{ r.room.pk }}" class="icon-images btnShowImages fs-25  position-absolute text-white " style="top: 10px;right: 10px"></span>
+                            {% endif %}
+                            <img class="w-100 h-100" src="/media/{{ r.room.default_cover.file }}">
                         </div>
-                        <div class="facilityHotels flex-wrap py-1 mt-1 d-flex">
-                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
-                                <span class="w-100 d-block text-center fs-12">طبقه اول</span>
-                            </label>
-                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
-                                <span class="w-100 d-block text-center fs-12">ویو</span>
-                            </label>
-                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
-                                <span class="w-100 d-block text-center fs-12">سه تخته</span>
-                            </label>
-                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
-                                <span class="w-100 d-block text-center fs-12">اتاق بچه</span>
-                            </label>
-                        </div>
-                        <div class="noteHotels mt-3 d-flex">
-                            <p class="fs-12 text-muted" style="line-height: 2">توضیحات کلی هتل در حد همین
-                                چند جملنی جمله ای که یادداشت نوشتم در اینجا قرار میگیرد!</p>
-                        </div>
-                    </div>
-                    <div class="hotelPricing d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center"
-                         style="width: 195px">
-                        <div class="pricing d-flex align-items-center">
-                            <div class="position-relative align-items-center d-flex justify-content-center w-100"
-                             style="height: 55px">
-                            <label class="justify-content-center mx-2 w-100 d-flex flex-wrap" style="line-height: 1">
-                                <p class="fs-25 w-100 text-center my-2 d-flex align-items-center justify-content-center">
-                                    <span>1,152,000</span>&nbsp;
-                                    <span class="text-muted fs-12">تومان</span>
-                                </p>
-                            </label>
-                            <label class="justify-content-center mx-2 w-100 d-flex flex-wrap"
-                                   style="line-height: 1">
-                                <p class="fs-18 w-100 text-center my-2 d-flex align-items-center justify-content-center">
-                                    <span style="text-decoration: line-through;color: red" class=" w-100 ">1,152,000</span>&nbsp;
-                                </p>
-                            </label>
+                        <div class="hotel-info roomListItem py-1 px-2 w-50" style="border-left: 1px solid #eee">
+                            <label class="fs-17 my-1">{{ r.room.title }}</label>
+                            <div class="facilityHotels flex-wrap border-bottom py-1 mt-1 d-flex">
+                                <label style="min-width: 50px;"
+                                       class="border-radius-5 d-flex align-items-center d-flex bg-muted m-1 p-3">
+                                    <span class="icon-man-woman px-1 fs-18"></span>
+                                    <span class="w-100 d-block px-1 text-center fs-13"> {{ r.room.capacity }} {% trans 'نفره' %} </span>
+                                </label>
+                                <label style="min-width: 50px;"
+                                       class="border-radius-5 d-flex align-items-center d-flex bg-muted m-1 p-3">
+                                    <span class="icon-filter px-1 icon-users fs-18"></span>
+                                    <span class="w-100 d-block px-1 text-center fs-13">{{ r.room.extra_person }} {% trans 'افراد اضافه' %} </span>
+                                </label>
+                            </div>
+                            <div class="facilityHotels flex-wrap py-1 mt-1 d-flex">
+                                {% for f in r.room.room_facility_set.all %}
+                                    <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
+                                        <span class="w-100 d-block text-center fs-12">{{ f.title }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                            <div class="noteHotels mt-3 d-flex">
+                                <p class="fs-12 text-muted" style="line-height: 2">{{ r.room.note }}</p>
                             </div>
                         </div>
-                        <div class="w-100 d-flex text-center">
-                            <label for="enterId" class="inputContainer d-flex flex-wrap justify-content-center w-50">
-                                <input type="checkbox" id="enterId">
-                                <label>
-                                    <label class="w-100 fs-13">ورود زود هنگام</label>
-                                    <span class="fs-13 text-muted">154,000 تومان</span>
-                                </label>
+
+                        <div class="hotelPricing roomListItem d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center" style="width: 195px">
+                            {% if r.room.room_discount.all.count > 0 %}
+                                <div class="position-relative align-items-center d-flex justify-content-center w-100" style="height: 55px">
+                                    <div style="width: 55px;height: 55px;left: 0;top: 1px" class="position-absolute">
+                                        {% with r.room|getDiscount as discount %}
+                                            {% if discount.reduction_type == 1 %}
+                                                <span class="w-100 border-radius-5 d-flex bg-black" style="height: 5px;"></span>
+                                                <div class="d-flex align-items-center justify-content-center mx-auto text-white fs-20 m-auto" style="height: 50px;background: #ff5b6b;width: 95%;left: 0;right: 0;top: 5px">
+                                                    {{ discount.reduction|floatformat:"0"|intcomma }}%
+                                                </div>
+                                            {% else %}
+                                                    <span style="color: #ff5b6b;text-decoration: line-through">{{ discount.reduction|floatformat:"0"|intcomma }}  </span>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </div>
+                                    <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
+                                        <p class="fs-18 w-100 text-center my-2 d-flex align-items-center justify-content-center">
+                                            <span style="text-decoration: line-through;color: #ff5b6b" class="w-100 " >{{ r.room.price|floatformat:"0"|intcomma }}</span>&nbsp;
+                                        </p>
+                                    </label>
+                                </div>
+                            {% endif %}
+                            <div class="w-100 flex-wrap d-flex justify-content-center">
+                            </div>
+                            <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
+                                <p class="fs-25 w-100 text-center my-2 d-flex align-items-center justify-content-center">
+                                    <span>{{ r.room.price|calcPrice:r.room|floatformat:"0"|intcomma }}</span>&nbsp;
+                                    <span class="text-muted fs-12">{% trans 'تومان' %}</span>
+                                </p>
+                                <span class="w-100 text-center text-muted my-2 fs-14">{% trans 'هر شب' %}</span>
                             </label>
-                            <label for="exitId" class="inputContainer d-flex flex-wrap justify-content-center w-50">
-                                <input type="checkbox" id="exitId">
-                                <label>
-                                    <label class="w-100 fs-13">خروج دیر هنگام</label>
-                                    <span class="fs-13 text-muted">154,000 تومان</span>
-                                </label>
-                            </label>
-                        </div>
-                        <div class="w-100 text-center">
-                            <span class="fs-13">تعداد نفر اضافه: </span>
-                            <select class="form-select w-75 mx-auto text-center form-select-sm">
-                              <option value="0">نیاز ندارم</option>
-                              <option value="1">1 نفر</option>
-                              <option value="2">2 نفر</option>
-                            </select>
+                            <div class="w-100 text-center d-flex justify-content-center">
+                                <label class="fs-14 m-auto">{% trans 'تعداد' %}</label>
+                                <label class="fs-14 m-auto bg-primary justify-content-center align-items-center text-white p-2 border-radius-50" style="width: 35px;height: 35px;">{{ r.quantity }}</label>
+                            </div>
                         </div>
                     </div>
-                </li>
+                {% endfor %}
             {% endfor %}
         </ul>
     </div>

@@ -1,24 +1,20 @@
-import re
 import secrets
-
-from django.conf import settings
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-from django.core.mail import send_mail
-from django.db.models import Q, Count, F
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.db.models import Count, Prefetch, Q
+from django.http import JsonResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
 
 from apps.base.models import User, Forgot_password, Slider, Meta, Cities
 from apps.blog.models import Main
 from apps.front.forms import forgotPasswordForm, registerUserFromReservationForm, loginUserForm, \
-    forgotPasswordConfirmForm, registerGuestFromReservationForm
+    forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser
 from django.utils.translation import gettext_lazy as _
 
-from apps.hotel.forms import reviewsForm
-from apps.hotel.models import Hotel
+from apps.front.models import Cart, Cart_detail
+from apps.hotel.models import Hotel, Room, Discount
 
 
 def forgotPassword(request):
@@ -61,14 +57,17 @@ def forgotPasswordByToken(request, token):
     }
     return render(request, '_partial/forgot-password-confirm.html', context)
 
+
 def searchHotelCity(request):
     filter_param = request.GET.get("filter")
     title_param = request.GET.get("title")
     if filter_param is not None:
         if title_param is not None:
-            hotel = Cities.objects.filter(hotel__isnull=False,name__contains=title_param).annotate(count=Count('name')).values('name')
+            hotel = Cities.objects.filter(hotel__isnull=False, name__contains=title_param).annotate(
+                count=Count('name')).values('name')
             if not hotel.count():
-                hotel = Hotel.objects.filter(active=1,name__contains=title_param).annotate(count=Count('city__name')).values('name')
+                hotel = Hotel.objects.filter(active=1, name__contains=title_param).annotate(
+                    count=Count('city__name')).values('name')
             context = {
                 'hotel': list(hotel),
             }
@@ -127,17 +126,69 @@ def confirmation(request):
     context = {}
     return render(request, 'pages/confirmation.html', context)
 
+
 def dandal(request):
     context = {}
     return render(request, 'pages/dandal.html', context)
 
 
-def cart(request):
-    context = {
-        'form': registerUserFromReservationForm,
-        'form_1': registerGuestFromReservationForm
-    }
-    return render(request, 'pages/cart.html', context)
+def cart(request, ref):
+    hotel = get_object_or_404(Hotel, reference=ref)
+    if request.session.session_key:
+        session_key = request.session.session_key
+        cart = Cart.objects.filter(secure_key=session_key, flag=1, hotel_id=hotel.pk)
+        if cart.exists():
+            cart = cart.prefetch_related(Prefetch(
+            'cart_detail',
+            queryset=Cart_detail.objects.filter(flag=1).select_related('room', 'room__default_cover').prefetch_related('room__room_facility_set','room__room_images_set',Prefetch(
+            'room__room_discount',
+            queryset=Discount.objects.filter(Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now())).distinct())))).all()
+        else:
+            return redirect(reverse('hotelCategory'))
+        context = {
+            'cart': cart,
+            'form': registerUserFromReservationForm,
+            'form_1': registerGuestFromReservationForm
+        }
+        return render(request, 'pages/cart.html', context)
+
+
+def addToCart(request, ref):
+    if request.method == 'POST':
+        if not request.session.session_key:
+            request.session.save()
+        session_key = request.session.session_key
+        hotel = get_object_or_404(Hotel, reference=ref)
+        if request.user.is_authenticated:
+            cart_check = Cart.objects.filter(user_id=request.user.pk, hotel_id=hotel.pk)
+        else:
+            cart_check = Cart.objects.filter(secure_key=session_key, hotel_id=hotel.pk)
+
+        if not cart_check.exists():
+            if request.user.is_authenticated:
+                cart_check = Cart(hotel_id=hotel.pk, user_id=request.user.pk, secure_key=session_key)
+            else:
+                cart_check = Cart(hotel_id=hotel.pk, secure_key=session_key)
+            cart_check.save()
+        else:
+            cart_check = cart_check.first()
+        Cart_detail.objects.filter(cart_id=cart_check.pk).update(flag=3)
+        flag = False
+        if request.POST.getlist('qty[]') and request.POST.getlist('room[]'):
+            for idx, qty in enumerate(request.POST.getlist('qty[]')):
+                if qty.isdigit() and int(qty) > 0:
+                    room_id = request.POST.getlist('room[]')[idx]
+                    if room_id.isdigit() and int(room_id) > 0:
+                        check = Room.objects.filter(pk=room_id, hotel_id=hotel.pk).exists()
+                        if check:
+                            cart_detail = Cart_detail(cart_id=cart_check.pk, room_id=room_id, quantity=qty)
+                            cart_detail.save()
+                            flag = True
+            if flag:
+                return redirect(reverse('cart', kwargs={'ref': ref}))
+        else:
+            referer = request.META.get("HTTP_REFERER")
+            return HttpResponseRedirect(referer)
 
 
 def getLoginForm(request, *args, **kwargs):

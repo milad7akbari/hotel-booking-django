@@ -34,8 +34,10 @@ def hotelCategory(request):
                 sort = 'room__price'
             case 'price-desc':
                 sort = '-room__price'
-    hotel = Hotel.objects.filter(active=1, room__price__isnull=False, room__active__exact=1).select_related('default_cover', 'city').prefetch_related('facility_set').\
-        annotate(count_reviews=Count('reviews',distinct=True, filter=Q(reviews__active=1)),min_room_price=Min('room__price')).order_by(sort).annotate()
+    hotel = Hotel.objects.filter(active=1, room__price__isnull=False, room__active__exact=1).select_related(
+        'default_cover', 'city').prefetch_related('facility_set'). \
+        annotate(count_reviews=Count('reviews', distinct=True, filter=Q(reviews__active=1)),
+                 min_room_price=Min('room__price')).order_by(sort).annotate()
     if city_param is not None or facility_param is not None or search_param is not None:
         if city_param is not None:
             city_param = tuple([str(i) for i in city_param.split(",")])
@@ -44,7 +46,8 @@ def hotelCategory(request):
             facility_param = tuple([str(i) for i in facility_param.split(",")])
             hotel = hotel.filter(facility__title__in=facility_param).order_by(sort).all()
         if search_param is not None:
-            hotel = hotel.filter(Q(name__contains=search_param) | Q(city__name__contains=search_param)).order_by(sort).all()
+            hotel = hotel.filter(Q(name__contains=search_param) | Q(city__name__contains=search_param)).order_by(
+                sort).all()
 
     p = Paginator(hotel, 5)
     page_number = request.GET.get('page')
@@ -72,13 +75,16 @@ def hotelCategory(request):
         }
         return render(request, 'hotel/home.html', context)
 
-#Discount.objects.filter(active=True, start_date__lt=datetime.datetime.now() , end_date__gt=datetime.datetime.now()).values('reduction')
+
+# Discount.objects.filter(active=True, start_date__lt=datetime.datetime.now() , end_date__gt=datetime.datetime.now()).values('reduction')
 def hotelPage(request, ref, title):
     hotel = Hotel.objects.filter(active=1, reference=ref).select_related('default_cover', 'city').first()
     room = Room.objects.filter(active=1, hotel_id=hotel.pk).select_related('default_cover').prefetch_related(
+        'room_images_set',
         'room_facility_set', Prefetch(
             'room_discount',
-            queryset=Discount.objects.filter(Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now())).distinct()
+            queryset=Discount.objects.filter(
+                Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now())).distinct()
         ))
     facility = Facility.objects.filter(hotel_id=hotel.pk, active=1).all()
     close_spots = Close_spots.objects.filter(hotel_id=hotel.pk, active=1).all()
@@ -95,7 +101,6 @@ def hotelPage(request, ref, title):
         'facility': facility,
     }
     return render(request, 'hotel/hotel_page.html', context)
-
 
 
 def reviewsSubmit(request):
@@ -138,9 +143,7 @@ def imagesHotel(request, ref):
         return None
 
 
-
 def getHotels(request):
-
     hotel = Hotel.objects.filter(active=1, room__price__isnull=False, room__active__exact=1).select_related(
         'default_cover', 'city').prefetch_related('facility_set').annotate(
         min_room_price=Min('room__price')).all()
@@ -151,4 +154,3 @@ def getHotels(request):
     facility = request.GET.get("facility")
     html = render_to_string('hotel/_list_hotels.html', context)
     return JsonResponse(html, safe=False)
-
