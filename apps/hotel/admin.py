@@ -30,7 +30,7 @@ class Extra_person_rateInline(admin.TabularInline):
 
 class HotelAdmin(admin.ModelAdmin):
     model = Hotel
-    list_display = ('name', 'reference', 'stars', 'on_sale', 'active', 'date_add')
+    list_display = ('name', 'reference', 'stars', 'active', 'date_add')
     readonly_fields = ('reference',)
     inlines = [ImagesInline,Breakfast_rateInline, Check_in_out_rateInline, Extra_person_rateInline]
 

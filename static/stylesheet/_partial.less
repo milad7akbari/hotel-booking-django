@@ -1,5 +1,4 @@
 #_main {
-  background: #000;
   max-width: 1400px;
 }
 #_header {
@@ -11,6 +10,76 @@
       width: 33%;
     }
   }
+}
+.timeline li{
+  list-style: none;
+  float: left;
+  width: 25%;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+}
+.horizontal-line{
+  content: '';
+  position: absolute;
+  height: 2px;width: 100%;
+  display: block;top: 15px;
+  background: #4caf50;
+  }
+ul:nth-child(1){
+  color: #4caf50;
+}
+
+.timeline li ._before{
+  counter-increment: test;
+  content: counter(test);
+  width: 30px;
+  height: 30px;
+  border: 1px solid #f9f9f9;
+  border-radius: 50%;
+  display: block;
+  text-align: center;
+  line-height: 50px;
+  margin: 0 auto 10px auto;
+  background: #fff;
+  color: #000;
+  transition: all ease-in-out .3s;
+  cursor: pointer;
+}
+
+.timeline li ._after{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: grey;
+  top: 25px;
+  left: -50%;
+  z-index: -999;
+  transition: all ease-in-out .3s;
+}
+
+.timeline li:first-child ._after{
+  content: none;
+}
+.timeline li.active-tl{
+  color: #555555;
+}
+.timeline li.active-tl ._before{
+  background: #4caf50;
+  color: #F1F1F1;
+}
+
+.timeline li.active-tl + li ._after{
+  background: #4caf50;
+}
+.timeline li.pending-tl ._before{
+  background: #ffc107 ;
+  color: #F1F1F1;
+}
+
+.timeline li.pending-tl + li ._after{
+  background: #ffc107 ;
 }
 #registerLoginModal {
   width: 100%;

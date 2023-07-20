@@ -27,7 +27,8 @@ class Category(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name = "Category Blog"
+        verbose_name_plural = _("دسته بندی بلاگ")
+        verbose_name = _("دسته بندی بلاگ")
 
     def __str__(self):
         return self.title
@@ -43,7 +44,8 @@ class Main(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name = "Blog"
+        verbose_name_plural =  _("بلاگ")
+        verbose_name = _("بلاگ")
 
     def __str__(self):
         return self.title
@@ -73,7 +75,8 @@ class Files(models.Model):
             return format_html('<a href="{}">Click Me</a>'.format(self.file.url))
 
     class Meta:
-        verbose_name = "Blog File"
+        verbose_name_plural = _("فایل های بلاگ")
+        verbose_name = _("فایل های بلاگ")
 
     def __str__(self):
         return self.note

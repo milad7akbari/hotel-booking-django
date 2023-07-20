@@ -1,13 +1,10 @@
-import datetime
 import os
 
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Sum, F, Q
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-from pyexpat.errors import messages
 
 from apps.base.models import Cities, User
 
@@ -61,10 +58,8 @@ class Hotel(models.Model):
     default_cover = models.ForeignKey('Cover', null=True, on_delete=models.CASCADE)
     meta_keywords = models.CharField(default=None, blank=True, max_length=256,
                                      help_text="some tag, espinas, international, etc...")
-    available_for_order = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1)
     has_early_check_in_out = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1)
     has_breakfast = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1)
-    on_sale = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0)
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0)
     upd_add = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -73,8 +68,8 @@ class Hotel(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Hotel "
-        verbose_name = "Hotel"
+        verbose_name_plural = _('هتل ها')
+        verbose_name = _('هتل ها')
 
     def __unicode__(self):
         return 'Hotel'
@@ -107,8 +102,8 @@ class Images(models.Model):
             return format_html('<a href="{}">Click Me</a>'.format(self.file.url))
 
     class Meta:
-        verbose_name_plural = "Hotel Images"
-        verbose_name = "Hotel Images"
+        verbose_name_plural = _("عکس های هتل ها")
+        verbose_name = _("عکس های هتل ها")
 
     def __str__(self):
         return self.note
@@ -140,8 +135,8 @@ class Cover(models.Model):
             return format_html('<a href="{}">Click Me</a>'.format(self.file.url))
 
     class Meta:
-        verbose_name_plural = "Hotel Cover"
-        verbose_name = "Hotel Cover"
+        verbose_name_plural = _("کاور هتل ها")
+        verbose_name = _("کاور هتل ها")
 
     def __str__(self):
         return self.note
@@ -157,8 +152,8 @@ class Facility(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Hotel Facility"
-        verbose_name = "Hotel Facility"
+        verbose_name_plural =  _("امکانات  هتل ها")
+        verbose_name =  _("امکانات  هتل ها")
 
     def __str__(self):
         return self.title
@@ -166,7 +161,7 @@ class Facility(models.Model):
 
 class Extra_person_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
-    hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE)
+    hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE, related_name='extra_person_rate')
     rate = models.DecimalField(null=True, max_digits=9, decimal_places=2)
     note = models.CharField(null=False, default=None, max_length=256)
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1)
@@ -174,8 +169,8 @@ class Extra_person_rate(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Extra Person Rate"
-        verbose_name = "Extra Person Rate"
+        verbose_name_plural = _("نفر اضافه")
+        verbose_name = _("نفر اضافه")
 
     def __str__(self):
         return self.hotel.name
@@ -183,7 +178,7 @@ class Extra_person_rate(models.Model):
 
 class Breakfast_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
-    hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE)
+    hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE, related_name='breakfast_rate')
     rate = models.DecimalField(null=True, max_digits=9, decimal_places=2)
     note = models.CharField(null=False, default=None, max_length=256)
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1)
@@ -191,8 +186,8 @@ class Breakfast_rate(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Breakfast Rate"
-        verbose_name = "Breakfast Rate"
+        verbose_name_plural = _("نرخ صبحانه")
+        verbose_name = _("نرخ صبحانه")
 
     def __str__(self):
         return self.hotel.name
@@ -200,7 +195,7 @@ class Breakfast_rate(models.Model):
 
 class Check_in_out_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
-    hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE)
+    hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE, related_name='check_in_out_rate')
     rate = models.DecimalField(null=True, max_digits=9, decimal_places=2)
     note = models.CharField(null=False, default=None, max_length=256)
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1)
@@ -208,8 +203,8 @@ class Check_in_out_rate(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Check In Out Rate"
-        verbose_name = "Check In Out Rate"
+        verbose_name_plural = _("نرخ ورود و خروج")
+        verbose_name = _("نرخ ورود و خروج")
 
     def __str__(self):
         return self.hotel.name
@@ -225,8 +220,8 @@ class Close_spots(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Hotel Close Spots"
-        verbose_name = "Hotel Close Spots"
+        verbose_name_plural = _("مکان های نزدیک")
+        verbose_name = _("مکان های نزدیک")
 
     def __str__(self):
         return self.short_desc
@@ -258,8 +253,8 @@ class Room_cover(models.Model):
             return format_html('<a href="{}">Click Me</a>'.format(self.file.url))
 
     class Meta:
-        verbose_name_plural = "Room Cover"
-        verbose_name = "Room Cover"
+        verbose_name_plural = _("کاور اتاق ها")
+        verbose_name = _("کاور اتاق ها")
 
     def __str__(self):
         return self.title
@@ -285,11 +280,11 @@ class Room(models.Model):
         return self.title
 
     class Meta:
-        verbose_name_plural = "Room"
-        verbose_name = "Room"
+        verbose_name_plural =_("اتاق ها")
+        verbose_name =_("اتاق ها")
 
     def __unicode__(self):
-        return 'Room'
+        return _("اتاق ها")
 
 
 class Room_images(models.Model):
@@ -319,8 +314,8 @@ class Room_images(models.Model):
             return format_html('<a href="{}">Click Me</a>'.format(self.file.url))
 
     class Meta:
-        verbose_name_plural = "Room Images"
-        verbose_name = "Room Images"
+        verbose_name_plural = _("تصاویر اتاق ها")
+        verbose_name = _("تصاویر اتاق ها")
 
     def __str__(self):
         return self.title
@@ -336,8 +331,8 @@ class Room_facility(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Room Facility"
-        verbose_name = "Room Facility"
+        verbose_name_plural = _("امکانات اتاق ها")
+        verbose_name = _("امکانات اتاق ها")
 
     def __str__(self):
         return self.title
@@ -361,8 +356,8 @@ class Reviews(models.Model):
         return self.title
 
     class Meta:
-        verbose_name_plural = "Hotel Reviews"
-        verbose_name = "Hotel Reviews"
+        verbose_name_plural = _("دیدگاه ها")
+        verbose_name = _("دیدگاه ها")
 
     def __str__(self):
         return self.title
@@ -379,8 +374,8 @@ class Reviews_reply(models.Model):
         return self.short_desc
 
     class Meta:
-        verbose_name_plural = "Hotel Reviews Reply"
-        verbose_name = "Hotel Reviews Reply"
+        verbose_name_plural = _("جواب ها دیدگاه ها")
+        verbose_name = _("جواب ها دیدگاه ها")
 
     def __str__(self):
         return self.short_desc
@@ -419,8 +414,8 @@ class Discount(models.Model):
         return self.title
 
     class Meta:
-        verbose_name_plural = "Hotel Discount"
-        verbose_name = "Hotel Discount"
+        verbose_name_plural = _("تخفیف ها")
+        verbose_name = _("تخفیف ها")
 
     def __str__(self):
         return self.title

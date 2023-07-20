@@ -20,5 +20,4 @@ from apps.front.views import cart, addToCart
 urlpatterns = [
     path('get/<str:ref>', cart, name='cart'),
     path('addToCart/<str:ref>', addToCart, name='addToCart'),
-
 ]

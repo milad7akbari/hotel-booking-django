@@ -49,51 +49,21 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on('submit', '#registerNewCustomers', function (e) {
-        $('.errMsg').removeClass('d-block').addClass('d-none')
-        $(this).find('.sup').remove()
-        $(this).find('.border-red-err').removeClass('border-red-err box-shadow-red-err text-danger')
-        if ($('#id_re_password').val() != $('#id_password').val()){
-            $('#id_re_password').addClass('border-red-err text-danger');
-            $('#id_password').addClass('border-red-err text-danger');
-            return false
-        }
-        e.preventDefault();
-        $.ajax({
-            url: $(this).attr("action"),
-            type: 'POST',
-            dataType: "JSON",
-            data: $(this).serialize(),
-            success: function (data) {
-                if (data.err) {
-                    let msg = '';
-                    for (var error in data.result){
-                        if (error == 'username'){
-                            msg = data.result.username
-                        }
-                        if (error == 'email'){
-                            msg = data.result.email
-                        }
-                        if (error == 'mobile'){
-                            msg = data.result.mobile
-                        }
-                        if (error == 'password'){
-                            msg = data.result.password
-                        }
-                        $('#id_'+error).prev().append('<sup class="text-danger sup">'+msg+'</sup>');
-                        $('#id_'+error).addClass('border-red-err box-shadow-red-err text-danger')
-                    }
-                } else {
-                    $('.errMsg').addClass('d-block alert-success').removeClass('d-none alert-danger').html(data.result)
-                    $('.btnRegisterLoginPasswd').find('label').html('<a href="/panel">حساب کاربری</a>').removeClass('btnRegisterLoginPasswd')
-                    setTimeout(function () {
-                        $("#registerLoginModal").remove();
-                    } , 1000)
-                }
-            },
-            error: function (xhr, desc, err) {
-                $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
-            }
-        });
+
+    $('.check-in-inp').persianDatepicker({
+        persianDigit: true,
+        altField: '.alt-field-check-in-inp',
+        autoClose : true,
+        position: [25,250],
+        format: 'YYYY-MM-DD',
+        minDate: Date.now()
+    });
+    $('.check-out-inp').persianDatepicker({
+        persianDigit: false,
+        altField: '.alt-field-check-out-inp',
+        autoClose : true,
+        format: 'YYYY-MM-DD',
+        position: [25,250],
+        minDate: Date.now()
     });
 })

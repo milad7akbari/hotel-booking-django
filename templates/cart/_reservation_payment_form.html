@@ -1,0 +1,96 @@
+{% load function %}
+{% load humanize %}
+{% load i18n %}
+{% load static %}
+
+<ul class="display-flex justify-content-evenly flex-wrap">
+    {% for i in info %}
+        <li class="border-1" style="padding: 10px">
+            <ul class="display-flex justify-content-evenly flex-wrap">
+                <li class="w-100"> ورود <b class="text-primary">{{ i.check_in }}</b></li>
+                <li class="w-100"> خروج <b class="text-primary">{{ i.check_out }}</b></li>
+                <li class="w-100"> نام هتل <b class="text-primary">{{ i.hotel.name }}</b></li>
+                    {% for detail in i.cart_detail.all %}
+                <ul class="display-flex justify-content-evenly flex-wrap my-3 py-3">
+                        <li class="w-100"> نام اتاق <b class="text-primary">{{ detail.room.title }}</b></li>
+                        <li class="w-100"> تعداد درخواستی <b class="text-primary">{{ detail.quantity }}</b></li>
+                        <li class="w-100"> طبقه اتاق <b class="text-primary">{{ detail.room.number_floor }}</b></li>
+                        <li class="w-100 display-flex justify-content-evenly">
+                            {% if detail.room.room_discount.all.count > 0 %}
+                                <label class="w-100"> قیمت قبل <b
+                                        class="text-primary text-danger">{{ detail.room.price }}</b></label>
+                                <label class="w-100"> قیمت بعد <b
+                                        class="text-primary">{{ detail.room.price|calcPrice:detail.room }}</b></label>
+                            {% else %}
+                                <label class="w-100"> قیمت <b
+                                        class="text-primary">{{ detail.room.price|calcPrice:detail.room }}</b></label>
+                            {% endif %}
+                        </li>
+                        <li class="w-100"> نفر اضافه نیاز دارم <b
+                                class="text-primary">{{ detail.extra_person_quantity }}  </b>
+                            هزینه <b class="text-primary">{{ i.hotel.extra_person_rate.rate }}  </b></li>
+                        <li class="w-100"> ورود زودهنگام نیاز دارم <b
+                                class="text-primary">{{ detail.check_in_flag }}  </b>
+                            هزینه <b class="text-primary">{{ i.hotel.check_in_out_rate.rate }}  </b></li>
+                        <li class="w-100"> خروج دیر زودهنگام نیاز دارم <b
+                                class="text-primary">{{ detail.check_out_flag }}  </b>
+                            هزینه <b class="text-primary">{{ i.hotel.check_in_out_rate.rate }}  </b></li>
+                </ul>
+                    {% endfor %}
+            </ul>
+        </li>
+        <li>
+            <div class="inputContainer d-flex flex-wrap justify-content-center w-50">
+                <label class="w-100 fs-13 text-center">قیمت کل</label>
+                <span class="fs-15 text-muted">{{ info|totalPriceCart|floatformat:"0"|intcomma }}</span>
+            </div>
+        </li>
+
+    {% endfor %}
+</ul>
+<div class="d-flex pb-3 flex-wrap border-top py-3 w-100 mx-4" style="">
+    <div class="bg-white px-1 pt-3  w-100 m-auto " style=" ">
+        <div class="inputContainer my-2 d-flex flex-wrap w-100">
+            <label class="fs-13 mb-2 text-center w-100">قابل پرداخت</label>
+            <span class="fs-18 bg-primary text-white w-100 py-2 px-3 border-radius-25 text-center">{{ info|totalPriceCart|floatformat:"0"|intcomma }}</span>
+        </div>
+    </div>
+    <div class="input-group d-flex justify-content-center mx-2" style="width: 45%">
+        <label class="icon d-flex p-3 border-radius-5 w-75 position-relative" for="mellat"
+               style="border: 2px solid #0b5ed7">
+            <input type="radio" id="mellat" class="position-absolute invisible" name="paymentMethod"
+                   style="top: 5px;right: 5px">
+            <label class="imgPayMethod" style="width: 55px;height: 55px">
+                <img src="{% static 'img/logo-w-text.png' %}" class="w-100 h-100">
+            </label>
+            <label class="d-flex mx-2 flex-wrap">
+                <b>بانک ملت</b>
+                <span class="fs-13 w-100">پرداخت با به پرداخت ملت</span>
+            </label>
+        </label>
+    </div>
+    <div class="input-group d-flex justify-content-center mx-2" style="width: 45%">
+        <label class="icon d-flex p-3 border-radius-5 w-75 position-relative" for="mellat"
+               style="border: 1px solid #aaa">
+            <input type="radio" id="mellat" class="position-absolute invisible" name="paymentMethod"
+                   style="top: 5px;right: 5px">
+            <label class="imgPayMethod" style="width: 55px;height: 55px">
+                <img src="{% static 'img/logo-w-text.png' %}" class="w-100 h-100">
+            </label>
+            <label class="d-flex mx-2 flex-wrap">
+                <b>فیش بانکی</b>
+                <span class="fs-13 w-100">پرداخت افلاین</span>
+            </label>
+        </label>
+    </div>
+</div>
+<label for="agree" class="p-4">
+    <input type="checkbox" id="agree">
+    <span class="fs-13">با پرداخت رزرو با قوانین رزرو اینترنتی هتل تیک و قوانین لغو رزرو هتل موافقت کرده‌اید.</span>
+</label>
+<div class="d-flex pb-3 flex-wrap border-top py-3 w-100 mx-4" style="">
+    <div class="input-group  mx-2" style="width: 30%">
+        <a href="{% url 'confirmation' %}" style="" type="submit"
+           class="fs-15 btn-primary text-white btn w-100 py-2 px-3 border-0 text-center">{% trans 'پرداخت و دریافت واچر' %}</a>
+    </div>
+</div>

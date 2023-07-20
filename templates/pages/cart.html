@@ -1,4 +1,6 @@
 {% extends 'base/base.html' %}
+{% load humanize %}
+{% load jalali_tags %}
 {% load function %}
 {% load i18n %}
 {% load static %}
@@ -7,52 +9,51 @@
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "js/swiper.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/hotel-page.js" %}"></script>
 {% endblock %}
 {% block main %}
-    <div id="_cartContainer" class=" overflow-hidden">
+    <div id="_cartContainer" class="w-100 overflow-hidden">
+        <div class="timeline my-5 position-relative w-75 mx-auto">
+            <span class="horizontal-line"></span>
+            <ul class="timeline w-100 p-0 m-0 display-flex justify-content-center">
+                <li class="{% if step.step >= 1 %}active-tl{% endif %}">
+                    <span class="_before"></span>
+                    <span class="fs-14">انتخاب هتل</span>
+                    <span class="_after"></span>
+                </li>
+                <li class="_step_2 {% if step.step == 1 %}pending-tl{% elif  step.step >= 2 %}active-tl{% endif %}">
+                    <span class="_before"></span>
+                    <span class="fs-14">وارد کردن مشخصات مسافر</span>
+                    <span class="_after"></span>
+                </li>
+                <li class="_step_3 {% if step.step == 2 %}pending-tl{% elif  step.step >= 3 %}active-tl{% endif %}">
+                    <span class="_before"></span>
+                    <span class="fs-14">پرداخت</span>
+                    <span class="_after"></span>
+                </li>
+                <li class="_step_4 {% if step.step >= 3 %}active-tl{% endif %}">
+                    <span class="_before"></span>
+                    <span class="fs-14">صدور واچر</span>
+                    <span class="_after"></span>
+                </li>
+            </ul>
+        </div>
+        <div class="w-75 m-auto">
 
-{#                    <div class="display-flex bg-white p-4 pb-2 justify-content-evenly  w-100 m-auto " style=" ">#}
-{#                        <div class="inputContainer d-flex flex-wrap justify-content-center w-50">#}
-{#                            <label class="w-100 fs-13 text-center">قیمت کل</label>#}
-{#                            <span class="fs-15 text-muted">350,000 تومان</span>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="border-top bg-white px-1 pt-3  w-100 m-auto " style=" ">#}
-{#                        <div class="inputContainer my-2 d-flex flex-wrap w-100">#}
-{#                            <label class="fs-13 mb-2 text-center w-100">قابل پرداخت</label>#}
-{#                            <span class="fs-18 bg-primary text-white w-100 py-2 px-3 border-radius-25 text-center">360,000 تومان</span>#}
-{#                        </div>#}
-{#                    </div>#}
-            <div class="w-75 m-auto">
-                <div class="w-100 my-2 bg-white py-2">
-                    <p class="fs-15 text-center p-1">چنانچه عضو سایت هستید برای تسریع در فرایند رزرو <span class="btn-link btnRegisterLoginPasswd ">لاگین</span> کنید.</p>
-                </div>
-                <div class="w-100 my-2 bg-white py-2">
-                    <p class="fs-25 text-center p-1">{% trans 'خلاصه رزرو شما به شرح زیر می باشد.' %}</p>
-                </div>
-                <div class="w-100 my-2 bg-white py-2">
-                    <p class="fs-17 text-center p-1">هتل اسپیناس پالاس</p>
-                </div>
-                <div class="display-flex bg-white p-4 justify-content-evenly  w-100 m-auto " style="border-top: 1px solid #aaa;border-bottom: 1px solid #aaa">
-                    <div class="inputContainer d-flex flex-wrap justify-content-center w-50">
-                        <label class="w-100 fs-15 text-center">{% trans 'ورود' %}</label>
-                        <span class="fs-14 text-muted">1356/65/65 12:12</span>
-                    </div>
-                    <div class="inputContainer d-flex flex-wrap justify-content-center w-50 ">
-                        <label class="fs-15 w-100 text-center">{% trans 'خروج' %}</label>
-                        <span class="fs-14 text-muted">1356/65/65 12:12</span>
-                    </div>
-                    <div class="inputContainer d-flex flex-wrap justify-content-center w-50 ">
-                        <label class="w-100 fs-15 text-center">{% trans 'تعداد' %}</label>
-                        <span class="fs-14  text-muted">2 بزرگسال، 1 کودک، 2 اتاق</span>
-                    </div>
-                </div>
 
-                <div class="w-100 m-auto my-2 bg-white py-2">
-                    {% include '_partial/modal/reservation-form.html' with form=form room=room form_1=form_1 %}
-                </div>
+            <div class="w-100 m-auto my-2 bg-white py-2 _reservation_form_main">
+            {% if step.step == 1 %}
+                {% if not user.is_authenticated %}
+                    {% include 'cart/_reservation_user_form.html' with form=form ref=ref %}
+                {% else %}
+                    {% include 'cart/_summery.html' with room=room ref=ref %}
+                {% endif %}
+            {% elif step.step == 2 %}
+                    {% include 'cart/_reservation_payment_form.html' with info=info %}
+            {% elif step.step == 3 %}
+                واچر
+            {% endif %}
             </div>
+        </div>
     </div>
 
 {% endblock %}

@@ -19,7 +19,7 @@ def hotelCategory(request):
     filter_param = request.GET.get("filter")
     search_param = request.GET.get("search")
     sorting_param = request.GET.get("sorting")
-    sort = '-name'
+    sort = 'name'
     if sorting_param is not None:
         match sorting_param:
             case 'name-asc':
@@ -35,19 +35,24 @@ def hotelCategory(request):
             case 'price-desc':
                 sort = '-room__price'
     hotel = Hotel.objects.filter(active=1, room__price__isnull=False, room__active__exact=1).select_related(
-        'default_cover', 'city').prefetch_related('facility_set'). \
-        annotate(count_reviews=Count('reviews', distinct=True, filter=Q(reviews__active=1)),
-                 min_room_price=Min('room__price')).order_by(sort).annotate()
+        'default_cover', 'city').prefetch_related('facility_set' , Prefetch(
+                'room_set',
+                queryset=Room.objects.filter(
+                    Q(active=1))
+            )).annotate(count_reviews=Count('reviews', distinct=True, filter=Q(reviews__active=1))).order_by(sort).distinct()
+    for i in hotel:
+        i.price = i.room_set.first().price
+
     if city_param is not None or facility_param is not None or search_param is not None:
         if city_param is not None:
             city_param = tuple([str(i) for i in city_param.split(",")])
-            hotel = hotel.filter(city__name__in=city_param).order_by(sort).all()
+            hotel = hotel.filter(city__name__in=city_param).order_by(sort).distinct()
         if facility_param is not None:
             facility_param = tuple([str(i) for i in facility_param.split(",")])
-            hotel = hotel.filter(facility__title__in=facility_param).order_by(sort).all()
+            hotel = hotel.filter(facility__title__in=facility_param).order_by(sort).distinct()
         if search_param is not None:
             hotel = hotel.filter(Q(name__contains=search_param) | Q(city__name__contains=search_param)).order_by(
-                sort).all()
+                sort).distinct()
 
     p = Paginator(hotel, 5)
     page_number = request.GET.get('page')
@@ -78,29 +83,33 @@ def hotelCategory(request):
 
 # Discount.objects.filter(active=True, start_date__lt=datetime.datetime.now() , end_date__gt=datetime.datetime.now()).values('reduction')
 def hotelPage(request, ref, title):
+    diff = request.GET.get('diff')
     hotel = Hotel.objects.filter(active=1, reference=ref).select_related('default_cover', 'city').first()
-    room = Room.objects.filter(active=1, hotel_id=hotel.pk).select_related('default_cover').prefetch_related(
-        'room_images_set',
-        'room_facility_set', Prefetch(
-            'room_discount',
-            queryset=Discount.objects.filter(
-                Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now())).distinct()
-        ))
-    facility = Facility.objects.filter(hotel_id=hotel.pk, active=1).all()
-    close_spots = Close_spots.objects.filter(hotel_id=hotel.pk, active=1).all()
-    reviews = Reviews.objects.filter(hotel_id=hotel.pk, active=1).values('title', 'desc_good', 'desc_bad', 'short_desc',
-                                                                         'reviews_reply__short_desc', 'stars',
-                                                                         'user__first_name', 'user__last_name',
-                                                                         'date_add')
-    context = {
-        'form': reviewsForm,
-        'reviews': reviews,
-        'room': room,
-        'close_spots': close_spots,
-        'hotel': hotel,
-        'facility': facility,
-    }
-    return render(request, 'hotel/hotel_page.html', context)
+    if hotel is not None:
+        room = Room.objects.filter(active=1, hotel_id=hotel.pk).select_related('default_cover').prefetch_related(
+            'room_images_set',
+            'room_facility_set', Prefetch(
+                'room_discount',
+                queryset=Discount.objects.filter(
+                    Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
+            ))
+        facility = Facility.objects.filter(hotel_id=hotel.pk, active=1).all()
+        close_spots = Close_spots.objects.filter(hotel_id=hotel.pk, active=1).all()
+        reviews = Reviews.objects.filter(hotel_id=hotel.pk, active=1).values('title', 'desc_good', 'desc_bad',
+                                                                             'short_desc',
+                                                                             'reviews_reply__short_desc', 'stars',
+                                                                             'user__first_name', 'user__last_name',
+                                                                             'date_add')
+        context = {
+            'diff': diff,
+            'form': reviewsForm,
+            'reviews': reviews,
+            'room': room,
+            'close_spots': close_spots,
+            'hotel': hotel,
+            'facility': facility,
+        }
+        return render(request, 'hotel/hotel_page.html', context)
 
 
 def reviewsSubmit(request):

@@ -17,8 +17,9 @@ Including another URLconf
 
 from django.urls import path
 
-from apps.front.views import getLoginForm, searchHotelCity, confirmation, registerNewUser, loginUser, forgotPassword, forgotPasswordByToken, \
-    forgotPasswordConfirm
+from apps.front.views import getLoginForm, searchHotelCity, addToCartDetails, confirmation, registerNewUser, loginUser, \
+    forgotPassword, forgotPasswordByToken, \
+    forgotPasswordConfirm, createUserFromReservation
 
 from apps.hotel.views import imagesHotel
 
@@ -29,6 +30,8 @@ urlpatterns = [
     path('get-modal', getLoginForm),
     path('register-user', registerNewUser, name='registerNewUser'),
     path('login-user', loginUser, name='loginUser'),
+    path('add/<str:ref>', addToCartDetails, name='add'),
+    path('createUser/<str:ref>/<int:id_cart>', createUserFromReservation, name='createUserFromReservation'),
     #path('get', cart, name='cart'),
     path('confirmation', confirmation, name='confirmation'),
     path('forgot-password', forgotPassword, name='forgotPassword'),

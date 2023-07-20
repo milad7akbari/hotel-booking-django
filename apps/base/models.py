@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
-    USER_TYPE_CHOICES = ((1, 'admin'), (2, 'customer'),)
+    USER_TYPE_CHOICES = ((1, _('ادمین')), (2, _('مشتری')),)
     national_code = models.CharField(null=True, max_length=128)
     birthday = models.DateField(blank=True, null=True)
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=2)
@@ -27,7 +27,8 @@ class User(AbstractUser):
         super(User, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = "User"
+        verbose_name_plural =  _('مشتری')
+        verbose_name = _('مشتری')
 
     def __str__(self):
         return self.username
@@ -46,12 +47,12 @@ def file_category(self, filename):
 class Slider(models.Model):
     def validate_image(self):
         filesize = self.file.size
-        megabyte_limit = 10.5
+        megabyte_limit = 1
         if filesize > megabyte_limit * 1024 * 1024:
-            raise ValidationError(_("Max file size is %sMB") % str(megabyte_limit))
+            raise ValidationError(_("جداکثر حجم فایل %sMB") % str(megabyte_limit))
 
     file = models.ImageField(upload_to=file_category, blank=True, null=True, validators=[validate_image],
-                             help_text=_('Maximum file size allowed is 1Mb'))
+                             help_text=_("جداکثر حجم فایل 1MB"))
     title = models.CharField(max_length=255)
     active = models.SmallIntegerField(null=False, default=0)
     date_upd = models.DateTimeField(auto_now=True)
@@ -61,7 +62,8 @@ class Slider(models.Model):
         return format_html('<img style="width: 100px;" src="{}" />'.format(self.file.url))
 
     class Meta:
-        verbose_name = "Slider"
+        verbose_name_plural = _('اسلایدر')
+        verbose_name = _('اسلایدر')
 
     def __str__(self):
         return self.title
@@ -75,7 +77,8 @@ class Forgot_password(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
-        verbose_name = "Forgot Password Users"
+        verbose_name_plural =  _('فراموشی پسورد')
+        verbose_name = _('فراموشی پسورد')
 
     def __str__(self):
         return self.user.first_name
@@ -94,8 +97,8 @@ class Provinces(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "Provinces"
-        verbose_name_plural = "Provinces"
+        verbose_name = _('استان')
+        verbose_name_plural =  _('استان')
 
 
     def __str__(self):
@@ -111,8 +114,8 @@ class Cities(models.Model):
     def __unicode__(self):
         return self.name
     class Meta:
-        verbose_name = "Cities"
-        verbose_name_plural = "Cities"
+        verbose_name =  _('شهر')
+        verbose_name_plural =  _('شهر')
 
 
     def __str__(self):
@@ -126,11 +129,11 @@ class Meta(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return 'Meta'
+        return _('متا')
 
     class Meta:
-        verbose_name_plural = "Meta"
-        verbose_name = "Meta"
+        verbose_name_plural = _('متا')
+        verbose_name = _('متا')
 
     def __unicode__(self):
-        return 'Meta'
+        return _('متا')

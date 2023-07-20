@@ -60,18 +60,9 @@
                 </ul>
                 <div class="w-100 d-flex align-items-center h-75">
                     <ul class="d-flex w-100 m-0 p-0 align-items-center flex-wrap justify-content-between text-center fs-13">
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                    </ul>
-                    <ul class="d-flex w-100 m-0 p-0 align-items-center flex-wrap justify-content-between text-center fs-13">
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
-                        <li class="w-75 my-2 m-auto"><a class="w-100 fs-14 text-muted d-block text-center" href="">هتل های تهران</a></li>
+                        {% for c in city %}
+                            <li class="w-75 my-2 m-auto"><a class="w-50 fs-14 text-muted d-block text-center" href="{% url 'hotelCategory' %}?search={{ c.name }}">{{ c.name }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>

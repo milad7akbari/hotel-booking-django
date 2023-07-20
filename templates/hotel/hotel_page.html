@@ -6,10 +6,13 @@
 {% block css %}
     <link rel="stylesheet" href="{% static "stylesheet/hotel.css" %}" type="text/css">
     <link rel="stylesheet" href="{% static "stylesheet/swiper.min.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "datepicker/persian-datepicker.min.css" %}" type="text/css">
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "js/swiper.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/hotel-page.js" %}"></script>
+    <script type="text/javascript" src="{% static "datepicker/persian-date.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "datepicker/persian-datepicker.min.js" %}"></script>
 {% endblock %}
 {% block main %}
     <div class="m-auto hotelPageContainer" style="width: 90%">
@@ -58,33 +61,19 @@
         <div class="hotel-page-services  mt-4">
             <h1 class="fs-18 mx-4">{% trans 'لیست اتاق ها' %}</h1>
             <div class="formReservation flex-wrap py-1 mt-3 m-auto d-flex" style="width: 85%">
+                {% if diff is not None %}
+                    <p class="alert alert-warning fs-13 w-100">{% trans 'لطفا تاریخ ورود و خروج را بررسی کنید' %}</p>
+                {% endif %}
                 <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3">
                     <div class="d-flex w-100 filterRooms align-items-center justify-content-center border-radius-25 px-3 py-3"
                          style="border-bottom: 1px solid #ccc">
-                        <div class="w-50 position-relative mx-1">
-                            <label class="w-100 text-center position-absolute my-1 fs-13"
-                                   style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تعداد
-                                افراد</label>
-                            <div class="d-flex justify-content-evenly">
-                                <input type="text" class="w-100 fs-13 border-radius-25 text-center" placeholder=""
-                                       readonly value="انتخاب کنید">
-                                {% comment %}<label class="fs-13">بزرگسال: <span>2</span></label>
-                                <label class="fs-13">کودک: <span>1</span></label>{% endcomment %}
-                            </div>
+                        <div class="w-25 position-relative mx-1">
+                            <label class="w-100 text-center position-absolute my-1 fs-15" style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ ورود</label>
+                            <input type="text" class="w-100 check-in-inp fs-13 border-radius-25 text-center" placeholder="" readonly value="0">
                         </div>
-                        <div class="w-50 position-relative mx-1">
-                            <label class="w-100 text-center position-absolute my-1 fs-13"
-                                   style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ
-                                ورود</label>
-                            <input type="date" class="w-100 fs-13 border-radius-25 text-center" placeholder="" readonly
-                                   value="0">
-                        </div>
-                        <div class="w-50 position-relative mx-1">
-                            <label class="w-100 text-center position-absolute my-1 fs-13"
-                                   style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ
-                                خروج</label>
-                            <input type="date" class="w-100 fs-13 border-radius-25 text-center" placeholder="" readonly
-                                   value="0">
+                        <div class="w-25 position-relative mx-1">
+                            <label class="w-100 text-center position-absolute my-1 fs-15" style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ خروج</label>
+                            <input type="text" class="w-100 fs-13 check-out-inp border-radius-25 text-center" placeholder="" readonly value="0">
                         </div>
                     </div>
                     {% comment %}<div class="filterRooms w-50 justify-content-center d-flex align-items-center">
@@ -107,6 +96,8 @@
                 <div class="roomsListHotel" id="roomsListContainer">
                     <form method="post" id="frmAddToCart" action="{% url 'addToCart' hotel.reference %}" class="p-0 d-flex flex-wrap m-0">
                         {% csrf_token %}
+                            <input type="hidden" id="check-out-inp" class="alt-field-check-out-inp" name="check-out" readonly value="0">
+                            <input type="hidden" id="check-in-inp" class="alt-field-check-in-inp" name="check-in" readonly value="0">
                         {% for r in room %}
                             <input type="hidden" value="{{ r.pk }}" name="room[]">
                             <div class="w-100 my-3 roomListContainer border-bottom pb-1 d-flex flex-wrap"
@@ -176,8 +167,8 @@
                                     </label>
                                     <div class="w-100 text-center d-flex justify-content-between">
                                         <label class="fs-14 m-auto">{% trans 'تعداد' %}</label>
-                                        <select name="qty[]" data-price="{{ r.price|calcPrice:r }}" data-price-lang="{% trans 'تومان' %}"  class="form-select countOrderRoomPerson w-50 mx-auto text-center form-select-sm">
-                                            <option value="0">0</option>
+                                        <select name="qty[]" autocomplete="off" data-price="{{ r.price|calcPrice:r }}" data-price-lang="{% trans 'تومان' %}"  class="form-select countOrderRoomPerson w-50 mx-auto text-center form-select-sm">
+                                            <option selected value="0">0</option>
                                             {% with ''|center:r.capacity as range %}
                                                 {% for i in range %}
                                                     <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>

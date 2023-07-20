@@ -1,11 +1,15 @@
 import secrets
+
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.db.models import Count, Prefetch, Q
-from django.http import JsonResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+import datetime
 
 from apps.base.models import User, Forgot_password, Slider, Meta, Cities
 from apps.blog.models import Main
@@ -13,8 +17,8 @@ from apps.front.forms import forgotPasswordForm, registerUserFromReservationForm
     forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser
 from django.utils.translation import gettext_lazy as _
 
-from apps.front.models import Cart, Cart_detail
-from apps.hotel.models import Hotel, Room, Discount
+from apps.front.models import Cart, Cart_detail, Guest, Step
+from apps.hotel.models import Hotel, Room, Discount, Check_in_out_rate, Extra_person_rate
 
 
 def forgotPassword(request):
@@ -105,6 +109,111 @@ def forgotPasswordConfirm(request):
         return JsonResponse(context)
 
 
+def createUserFromReservation(request, ref, id_cart):
+    if request.method == 'POST':
+        form = registerUserFromReservationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            hotel = get_object_or_404(Hotel, reference=ref)
+            cart = Cart.objects.filter(hotel_id=hotel.pk, pk=id_cart)
+            if cart.exists():
+                cart.update(user_id=request.user.pk)
+            context = {
+                "result": _('ورود اطلاعات موفقیت آمیز بود'),
+                "err": False,
+            }
+            return JsonResponse(context)
+        else:
+            if 'err' in form.errors:
+                err = True
+                context = {
+                    "result": form.errors,
+                    "err": err,
+                }
+                return JsonResponse(context)
+
+def getInfoFromCart_(cart_pk, hotel_pk, flag = False):
+    info = Cart.objects.filter(pk=cart_pk).select_related('user', 'hotel', 'hotel__extra_person_rate',
+                                                          'hotel__check_in_out_rate').prefetch_related(
+        Prefetch(
+            'cart_detail',
+            queryset=Cart_detail.objects.filter(flag=1).prefetch_related('room', 'guest')
+        ), Prefetch(
+            'cart_detail__room__room_discount',
+            queryset=Discount.objects.filter(
+                Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
+        )).all()
+    if flag:
+        extra_person = Extra_person_rate.objects.filter(hotel_id=hotel_pk, active=1).exists()
+        check_in_out = Check_in_out_rate.objects.filter(hotel_id=hotel_pk, active=1).exists()
+        for i in info:
+            i.extra_person = extra_person
+            i.check_in_out = check_in_out
+    return info
+
+@login_required()
+def addToCartDetails(request, ref):
+    html = None
+    if request.method == 'POST':
+        cart_param = request.POST.get("cart")
+        hotel = get_object_or_404(Hotel, reference=ref)
+        status = -1
+        cart = Cart.objects.filter(Q(flag=1) & Q(pk=cart_param) & Q(hotel_id=hotel.pk) & Q(user_id=request.user.pk))
+        if cart.exists():
+            cart = cart.first()
+            extra_person = Extra_person_rate.objects.filter(hotel_id=hotel.pk, active=1).exists()
+            check_in_out = Check_in_out_rate.objects.filter(hotel_id=hotel.pk, active=1).exists()
+            cart_detail = Cart_detail.objects.filter(cart_id=cart.pk, flag=1)
+            if cart_detail.exists():
+                for idx, c in enumerate(cart_detail.all()):
+                    Guest.objects.filter(cart_detail_id=c.pk).update(flag=3)
+                    obj_cart = Cart_detail.objects.get(pk=c.pk)
+                    if check_in_out:
+                        obj_cart.check_out_flag = request.POST.getlist('check_out_flag')[idx]
+                        obj_cart.check_in_flag = request.POST.getlist('check_in_flag')[idx]
+                    if extra_person:
+                        obj_cart.extra_person_quantity = request.POST.getlist('extra_person_flag')[idx]
+                    obj_cart.save()
+                form = registerGuestFromReservationForm(request.POST)
+                if form.is_valid():
+                    for idx, c in enumerate(cart_detail.all()):
+                        fullname = request.POST.getlist('fullname')[idx]
+                        mobile = request.POST.getlist('mobile')[idx]
+                        nationality = request.POST.getlist('nationality')[idx]
+                        obj = Guest(room=c.room, cart_detail=c, fullname=fullname, mobile=mobile, nationality=nationality)
+                        obj.save()
+                        stepChangeStatus(cart.pk, 2)
+
+                        status = 1
+                        info = getInfoFromCart_(cart.pk , cart.hotel_id)
+                        for i in info:
+                            i.extra_person = extra_person
+                            i.check_in_out = check_in_out
+                        context = {
+                            'info': info,
+                        }
+                        html = render_to_string('cart/_reservation_payment_form.html', context)
+                        # object = form.save(commit=False)
+                        # object.room = c.room
+                        # object.cart_detail = c
+                        # object.save()
+                else:
+                    status = -1
+            else:
+                status = -1
+        else:
+            status = -1
+    else:
+        status = -1
+    context = {
+        'status': status,
+        'html': html,
+    }
+
+    return JsonResponse(context)
+
+
 def home_page(request):
     slider = Slider.objects.filter(active=1).order_by('?')[:3]
     meta = Meta.objects.first()
@@ -127,30 +236,46 @@ def confirmation(request):
     return render(request, 'pages/confirmation.html', context)
 
 
-def dandal(request):
-    context = {}
-    return render(request, 'pages/dandal.html', context)
-
-
 def cart(request, ref):
     hotel = get_object_or_404(Hotel, reference=ref)
-    if request.session.session_key:
+    if request.session.session_key or request.user.is_authenticated:
+
         session_key = request.session.session_key
-        cart = Cart.objects.filter(secure_key=session_key, flag=1, hotel_id=hotel.pk)
+        cart = Cart.objects.filter(flag=1, hotel_id=hotel.pk)
+        if request.user.is_authenticated:
+            cart = cart.filter(user_id=request.user.pk)
+        else:
+            cart = cart.filter(secure_key=session_key)
         if cart.exists():
-            cart = cart.prefetch_related(Prefetch(
-            'cart_detail',
-            queryset=Cart_detail.objects.filter(flag=1).select_related('room', 'room__default_cover').prefetch_related('room__room_facility_set','room__room_images_set',Prefetch(
-            'room__room_discount',
-            queryset=Discount.objects.filter(Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now())).distinct())))).all()
+            cart = cart.select_related('hotel__check_in_out_rate', 'hotel__breakfast_rate',
+                                       'hotel__extra_person_rate').prefetch_related(Prefetch(
+                'cart_detail',
+                queryset=Cart_detail.objects.filter(flag=1).select_related('room',
+                                                                           'room__default_cover').prefetch_related(
+                    'room__room_facility_set', 'room__room_images_set', Prefetch(
+                        'room__room_discount',
+                        queryset=Discount.objects.filter(Q(active=1) & Q(start_date__lt=timezone.now()) & Q(
+                            end_date__gt=timezone.now())).distinct())))).first()
         else:
             return redirect(reverse('hotelCategory'))
+        for r in cart.cart_detail.all():
+            diff = (cart.check_out - cart.check_in).days
+            r.room.price = (diff * r.room.price) * r.quantity
+        step = Step.objects.get(cart_id=cart.pk)
+        info = None
+        if step.step == 2:
+            info = getInfoFromCart_(cart.pk , cart.hotel_id, True)
         context = {
+            'info': info,
+            'step': step,
+            'ref': ref,
             'cart': cart,
             'form': registerUserFromReservationForm,
             'form_1': registerGuestFromReservationForm
         }
         return render(request, 'pages/cart.html', context)
+    else:
+        return redirect(reverse('hotelCategory'))
 
 
 def addToCart(request, ref):
@@ -164,31 +289,52 @@ def addToCart(request, ref):
         else:
             cart_check = Cart.objects.filter(secure_key=session_key, hotel_id=hotel.pk)
 
-        if not cart_check.exists():
-            if request.user.is_authenticated:
-                cart_check = Cart(hotel_id=hotel.pk, user_id=request.user.pk, secure_key=session_key)
+        checkIn = int(request.POST.get('check-in')) / 1000
+        checkOut = int(request.POST.get('check-out')) / 1000
+        checkInDate = datetime.datetime.fromtimestamp(float(checkIn))
+        checkOutDate = datetime.datetime.fromtimestamp(float(checkOut))
+        checkIn = datetime.datetime.fromtimestamp(checkIn)
+        checkOut = datetime.datetime.fromtimestamp(checkOut)
+        diff = (checkOut - checkIn).days
+        if diff > 0:
+            if not cart_check.exists():
+                if request.user.is_authenticated:
+                    cart_check = Cart(hotel_id=hotel.pk, check_in=checkInDate, check_out=checkOutDate,
+                                      user_id=request.user.pk, secure_key=session_key)
+                else:
+                    cart_check = Cart(hotel_id=hotel.pk, check_in=checkInDate, check_out=checkOutDate,
+                                      secure_key=session_key)
+                cart_check.save()
             else:
-                cart_check = Cart(hotel_id=hotel.pk, secure_key=session_key)
-            cart_check.save()
-        else:
-            cart_check = cart_check.first()
-        Cart_detail.objects.filter(cart_id=cart_check.pk).update(flag=3)
-        flag = False
-        if request.POST.getlist('qty[]') and request.POST.getlist('room[]'):
-            for idx, qty in enumerate(request.POST.getlist('qty[]')):
-                if qty.isdigit() and int(qty) > 0:
-                    room_id = request.POST.getlist('room[]')[idx]
-                    if room_id.isdigit() and int(room_id) > 0:
-                        check = Room.objects.filter(pk=room_id, hotel_id=hotel.pk).exists()
-                        if check:
-                            cart_detail = Cart_detail(cart_id=cart_check.pk, room_id=room_id, quantity=qty)
-                            cart_detail.save()
-                            flag = True
-            if flag:
-                return redirect(reverse('cart', kwargs={'ref': ref}))
-        else:
-            referer = request.META.get("HTTP_REFERER")
-            return HttpResponseRedirect(referer)
+                cart_check = cart_check.first()
+            Cart_detail.objects.filter(cart_id=cart_check.pk).update(flag=3)
+            flag = False
+            if request.POST.getlist('qty[]') and request.POST.getlist('room[]'):
+
+                for idx, qty in enumerate(request.POST.getlist('qty[]')):
+                    if qty.isdigit() and int(qty) > 0:
+
+                        room_id = request.POST.getlist('room[]')[idx]
+                        if room_id.isdigit() and int(room_id) > 0:
+                            check = Room.objects.filter(pk=room_id, hotel_id=hotel.pk).exists()
+
+                            if check:
+                                cart_detail = Cart_detail(cart_id=cart_check.pk, room_id=room_id, quantity=qty)
+                                cart_detail.save()
+                                stepChangeStatus(cart_check.pk, 1)
+                                flag = True
+                if flag:
+                    return redirect(reverse('cart', kwargs={'ref': ref}))
+
+        return redirect(reverse('hotelPage', kwargs={'ref': ref,'title': hotel.name})+'?diff=false')
+
+def stepChangeStatus(cart_id, step):
+    obj_step = Step.objects.filter(cart_id=cart_id)
+    if obj_step.exists():
+        obj_step.update(step=step)
+    else:
+        step = Step(cart_id=cart_id, step=step)
+        step.save()
 
 
 def getLoginForm(request, *args, **kwargs):
