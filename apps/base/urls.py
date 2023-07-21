@@ -19,7 +19,7 @@ from django.urls import path
 
 from apps.front.views import getLoginForm, searchHotelCity, addToCartDetails, confirmation, registerNewUser, loginUser, \
     forgotPassword, forgotPasswordByToken, \
-    forgotPasswordConfirm, createUserFromReservation
+    forgotPasswordConfirm, createUserFromReservation, placeOrders
 
 from apps.hotel.views import imagesHotel
 
@@ -27,13 +27,14 @@ from apps.hotel.views import imagesHotel
 urlpatterns = [
     path('images/<str:ref>', imagesHotel),
     path('search', searchHotelCity, name='searchHotelCity'),
+    path('place-order/<str:ref>/<int:cart_id>', placeOrders, name='placeOrders'),
     path('get-modal', getLoginForm),
     path('register-user', registerNewUser, name='registerNewUser'),
     path('login-user', loginUser, name='loginUser'),
     path('add/<str:ref>', addToCartDetails, name='add'),
     path('createUser/<str:ref>/<int:id_cart>', createUserFromReservation, name='createUserFromReservation'),
     #path('get', cart, name='cart'),
-    path('confirmation', confirmation, name='confirmation'),
+    path('confirmation/<str:reference>', confirmation, name='confirmation'),
     path('forgot-password', forgotPassword, name='forgotPassword'),
     path('forgot-pass/<str:token>', forgotPasswordByToken, name='forgotPasswordByToken'),
     path('forgot-pass-confirm', forgotPasswordConfirm, name='forgotPasswordConfirm')

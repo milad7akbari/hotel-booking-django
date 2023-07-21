@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -82,3 +83,62 @@ class Step(models.Model):
 
     def __unicode__(self):
         return self.step
+
+
+
+
+class Order(models.Model):
+    YES_NO = ((True, 'دارم'), (False, 'ندارم'),)
+    PAY_YTPE = ((1, 'فیش بانکی / کارت به کارت'), (2, 'درگاه بانکی'),)
+    user = models.ForeignKey(User, default=None, null=True, on_delete=models.CASCADE, related_name='order')
+    cart = models.OneToOneField(Cart, default=None, null=True, on_delete=models.CASCADE, related_name='order')
+    hotel = models.ForeignKey(Hotel, default=None, null=True, on_delete=models.CASCADE, related_name='order')
+    reference = models.CharField(null=True, max_length=256)
+    current_state = models.SmallIntegerField(null=False, default=1)
+    payment_type = models.SmallIntegerField(null=False, default=1)
+    total_discount = models.DecimalField(null=True, max_digits=12, decimal_places=2)
+    total_paid = models.DecimalField(null=True, max_digits=12, decimal_places=2)
+    total_amount = models.DecimalField(null=True, max_digits=12, decimal_places=2)
+    total_products   = models.SmallIntegerField(null=False, default=1)
+    has_invoice   = models.BooleanField(choices=YES_NO,null=True,blank=True,default=None)
+    agree_rule   = models.BooleanField(choices=YES_NO,null=True,blank=True,default=None)
+    date_upd = models.DateTimeField(auto_now=True)
+    date_add = models.DateTimeField(auto_now_add=True, null=True)
+    def __unicode__(self):
+        return self.pk
+
+    class Meta:
+        verbose_name_plural = _("سفارش ها")
+        verbose_name = _("سفارش ها")
+
+    def __str__(self):
+        return self.pk
+
+
+class Order_detail(models.Model):
+    order = models.ForeignKey(Order, default=None, null=True, blank=True, on_delete=models.CASCADE, related_name='step')
+    room = models.ForeignKey(Room, default=None, null=True, blank=True, on_delete=models.CASCADE, related_name='step')
+    name = models.CharField(null=False, default=1, max_length=256)
+    quantity = models.SmallIntegerField(null=False, default=1)
+    check_in_flag = models.SmallIntegerField(null=False, default=0)
+    check_out_flag = models.SmallIntegerField(null=False, default=0)
+    extra_person_quantity = models.SmallIntegerField(null=False, default=0)
+    product_price = models.DecimalField(null=True, max_digits=12, decimal_places=2)
+    reduction = models.DecimalField(null=True, max_digits=12, decimal_places=2)
+    total_price_dis_incl = models.DecimalField(null=True, max_digits=12, decimal_places=2)
+    total_price_dis_excl = models.DecimalField(null=True, max_digits=12, decimal_places=2)
+    total_paid = models.DecimalField(null=True, max_digits=12, decimal_places=2)
+    reduction_type = models.SmallIntegerField(null=False, default=1)
+    total_products   = models.SmallIntegerField(null=False)
+    date_upd = models.DateTimeField(auto_now=True)
+    date_add = models.DateTimeField(auto_now_add=True, null=True)
+    def __unicode__(self):
+        return self.pk
+
+    class Meta:
+        verbose_name_plural = _("جزئیات سفارش ها")
+        verbose_name = _("جزئیات سفارش ها")
+
+    def __str__(self):
+        return self.pk
+

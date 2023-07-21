@@ -30,6 +30,7 @@ def header(request):
     elif 'admin/' not in request.get_full_path():
         session_key = None
         check_in = None
+        ref = None
         check_out = None
         step = 1
         if request.user.is_authenticated or request.session.session_key:
@@ -38,11 +39,12 @@ def header(request):
             cart = Cart_detail.objects.select_related('cart').filter(Q(flag=1) & (Q(cart__user_id=request.user.pk) | Q(cart__secure_key=session_key)))
             if cart.exists():
                 cart = cart.last()
-                cart = Cart.objects.select_related('hotel').filter(pk=cart.cart_id).first()
-                step = Step.objects.get(cart_id=cart.pk)
-                ref = cart.hotel.reference
-                check_in = cart.check_in
-                check_out = cart.check_out
+                cart = Cart.objects.select_related('hotel').filter(pk=cart.cart_id,flag=1).first()
+                if cart is not None:
+                    step = Step.objects.get(cart_id=cart.pk)
+                    ref = cart.hotel.reference
+                    check_in = cart.check_in
+                    check_out = cart.check_out
             else:
                 ref = None
         else:

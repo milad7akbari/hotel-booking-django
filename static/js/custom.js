@@ -164,4 +164,31 @@ $(document).ready(function () {
         });
     });
 
+
+
+
+
+    $(document).on('submit', '#placeOrders', function (e) {
+        if (!$('#id_agree_rule').is(':checked')) {
+            $('#id_agree_rule').next().addClass('text-danger');
+            return false
+        }
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr("action"),
+            type: 'POST',
+            dataType: "JSON",
+            data: $(this).serialize(),
+            success: function (data) {
+                if (data.status == 1) {
+                    window.location.replace(window.location.origin + data.url);
+                } else alert('err')
+            },
+            error: function (xhr, desc, err) {
+
+                $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
+            }
+        });
+    });
+
 })

@@ -10,8 +10,8 @@
                 <li class="w-100"> ورود <b class="text-primary">{{ i.check_in }}</b></li>
                 <li class="w-100"> خروج <b class="text-primary">{{ i.check_out }}</b></li>
                 <li class="w-100"> نام هتل <b class="text-primary">{{ i.hotel.name }}</b></li>
-                    {% for detail in i.cart_detail.all %}
-                <ul class="display-flex justify-content-evenly flex-wrap my-3 py-3">
+                {% for detail in i.cart_detail.all %}
+                    <ul class="display-flex justify-content-evenly flex-wrap my-3 py-3">
                         <li class="w-100"> نام اتاق <b class="text-primary">{{ detail.room.title }}</b></li>
                         <li class="w-100"> تعداد درخواستی <b class="text-primary">{{ detail.quantity }}</b></li>
                         <li class="w-100"> طبقه اتاق <b class="text-primary">{{ detail.room.number_floor }}</b></li>
@@ -35,8 +35,8 @@
                         <li class="w-100"> خروج دیر زودهنگام نیاز دارم <b
                                 class="text-primary">{{ detail.check_out_flag }}  </b>
                             هزینه <b class="text-primary">{{ i.hotel.check_in_out_rate.rate }}  </b></li>
-                </ul>
-                    {% endfor %}
+                    </ul>
+                {% endfor %}
             </ul>
         </li>
         <li>
@@ -48,7 +48,9 @@
 
     {% endfor %}
 </ul>
-<div class="d-flex pb-3 flex-wrap border-top py-3 w-100 mx-4" style="">
+<form action="{% url 'placeOrders' ref cart.pk %}" method="post" id="placeOrders"
+      class="d-flex pb-3 flex-wrap border-top py-3 w-100 mx-4" style="">
+    {% csrf_token %}
     <div class="bg-white px-1 pt-3  w-100 m-auto " style=" ">
         <div class="inputContainer my-2 d-flex flex-wrap w-100">
             <label class="fs-13 mb-2 text-center w-100">قابل پرداخت</label>
@@ -83,14 +85,17 @@
             </label>
         </label>
     </div>
-</div>
-<label for="agree" class="p-4">
-    <input type="checkbox" id="agree">
-    <span class="fs-13">با پرداخت رزرو با قوانین رزرو اینترنتی هتل تیک و قوانین لغو رزرو هتل موافقت کرده‌اید.</span>
-</label>
-<div class="d-flex pb-3 flex-wrap border-top py-3 w-100 mx-4" style="">
-    <div class="input-group  mx-2" style="width: 30%">
-        <a href="{% url 'confirmation' %}" style="" type="submit"
-           class="fs-15 btn-primary text-white btn w-100 py-2 px-3 border-0 text-center">{% trans 'پرداخت و دریافت واچر' %}</a>
+    {% for field in form_pay %}
+    <label for="{{ field.auto_id }}" class="p-4">
+        {{ field }}
+        <span class="fs-13" >{{ field.label }}</span>
+    </label>
+    {% endfor %}
+
+    <div class="d-flex pb-3 flex-wrap border-top py-3 w-100 mx-4" style="">
+        <div class="input-group  mx-2" style="width: 30%">
+            <button type="submit" class="fs-15 btn-primary text-white btn w-100 py-2 px-3 border-0 text-center">{% trans 'پرداخت و دریافت واچر' %}</button>
+        </div>
     </div>
-</div>
+</form>
+

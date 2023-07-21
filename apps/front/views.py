@@ -1,4 +1,5 @@
 import secrets
+import uuid
 
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -6,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 from django.db.models import Count, Prefetch, Q
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -14,7 +16,7 @@ import datetime
 from apps.base.models import User, Forgot_password, Slider, Meta, Cities
 from apps.blog.models import Main
 from apps.front.forms import forgotPasswordForm, registerUserFromReservationForm, loginUserForm, \
-    forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser
+    forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser, placeOrderForm
 from django.utils.translation import gettext_lazy as _
 
 from apps.front.models import Cart, Cart_detail, Guest, Step
@@ -190,10 +192,14 @@ def addToCartDetails(request, ref):
                         for i in info:
                             i.extra_person = extra_person
                             i.check_in_out = check_in_out
+
                         context = {
                             'info': info,
+                            'form_pay': placeOrderForm,
+                            'ref': hotel.reference,
+                            'cart': cart,
                         }
-                        html = render_to_string('cart/_reservation_payment_form.html', context)
+                        html = render_to_string('cart/_reservation_payment_form.html',context=context, request=request)
                         # object = form.save(commit=False)
                         # object.room = c.room
                         # object.cart_detail = c
@@ -231,7 +237,7 @@ def home_page(request):
     return render(request, 'pages/home.html', context)
 
 
-def confirmation(request):
+def confirmation(request, reference):
     context = {}
     return render(request, 'pages/confirmation.html', context)
 
@@ -239,7 +245,6 @@ def confirmation(request):
 def cart(request, ref):
     hotel = get_object_or_404(Hotel, reference=ref)
     if request.session.session_key or request.user.is_authenticated:
-
         session_key = request.session.session_key
         cart = Cart.objects.filter(flag=1, hotel_id=hotel.pk)
         if request.user.is_authenticated:
@@ -247,6 +252,7 @@ def cart(request, ref):
         else:
             cart = cart.filter(secure_key=session_key)
         if cart.exists():
+
             cart = cart.select_related('hotel__check_in_out_rate', 'hotel__breakfast_rate',
                                        'hotel__extra_person_rate').prefetch_related(Prefetch(
                 'cart_detail',
@@ -271,7 +277,8 @@ def cart(request, ref):
             'ref': ref,
             'cart': cart,
             'form': registerUserFromReservationForm,
-            'form_1': registerGuestFromReservationForm
+            'form_1': registerGuestFromReservationForm,
+            'form_pay': placeOrderForm
         }
         return render(request, 'pages/cart.html', context)
     else:
@@ -285,9 +292,9 @@ def addToCart(request, ref):
         session_key = request.session.session_key
         hotel = get_object_or_404(Hotel, reference=ref)
         if request.user.is_authenticated:
-            cart_check = Cart.objects.filter(user_id=request.user.pk, hotel_id=hotel.pk)
+            cart_check = Cart.objects.filter(user_id=request.user.pk, hotel_id=hotel.pk,flag=1)
         else:
-            cart_check = Cart.objects.filter(secure_key=session_key, hotel_id=hotel.pk)
+            cart_check = Cart.objects.filter(secure_key=session_key, hotel_id=hotel.pk,flag=1)
 
         checkIn = int(request.POST.get('check-in')) / 1000
         checkOut = int(request.POST.get('check-out')) / 1000
@@ -317,7 +324,6 @@ def addToCart(request, ref):
                         room_id = request.POST.getlist('room[]')[idx]
                         if room_id.isdigit() and int(room_id) > 0:
                             check = Room.objects.filter(pk=room_id, hotel_id=hotel.pk).exists()
-
                             if check:
                                 cart_detail = Cart_detail(cart_id=cart_check.pk, room_id=room_id, quantity=qty)
                                 cart_detail.save()
@@ -404,6 +410,86 @@ def loginUser(request):
                 status = -1
 
             context = {
+                "status": status,
+            }
+            return JsonResponse(context)
+
+def calcOrderInfo(cart):
+    total_discount = 0
+    total_products = cart.cart_detail.all().count()
+    total_price = 0
+    extra_person_rate = 0
+    check_in_out_rate = 0
+    nights = (cart.check_out - cart.check_in).days
+    if cart.extra_person:
+        extra_person_rate = cart.hotel.extra_person_rate.rate
+    if cart.check_in_out:
+        check_in_out_rate = cart.hotel.check_in_out_rate.rate
+    for detail in cart.cart_detail.all():
+        extra_person_quantity = detail.extra_person_quantity
+        check_in_flag = detail.check_in_flag
+        check_out_flag = detail.check_out_flag
+        if detail.room.room_discount.all().count() > 0:
+            first = detail.room.room_discount.all()[0]
+            if first.reduction_type == 2:
+                price = detail.room.price - first.reduction
+                total_discount += price
+            elif first.reduction_type == 1:
+                price = ((100 - first.reduction) / 100) * detail.room.price
+                total_discount += price
+            else:
+                price = detail.room.price
+        else:
+            price = detail.room.price
+        total_price += nights * price
+        total_price *= detail.quantity
+        if check_in_flag == 1:
+            total_price += check_in_out_rate
+        if check_out_flag == 1:
+            total_price += check_in_out_rate
+        if extra_person_quantity > 0:
+            total_price += extra_person_rate * extra_person_quantity
+    context = {
+        'total_discount' : total_discount,
+        'total_products' : total_products,
+        'total_price' : total_price,
+    }
+    return context
+@login_required()
+def placeOrders(request, ref, cart_id):
+    hotel = get_object_or_404(Hotel, reference=ref)
+    url = None
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = placeOrderForm(request.POST)
+            if form.is_valid():
+                cart_exists = Cart.objects.filter(user_id=request.user.pk, hotel_id=hotel.pk, pk=cart_id, flag=1)
+                cart_obj = cart_exists.first()
+                cart_obj.extra_person = Extra_person_rate.objects.filter(hotel_id=hotel.pk, active=1).exists()
+                cart_obj.check_in_out = Check_in_out_rate.objects.filter(hotel_id=hotel.pk, active=1).exists()
+                if cart_exists.exists():
+                    info = calcOrderInfo(cart_obj)
+                    order_obj = form.save(commit=False)
+                    order_obj.user = cart_obj.user
+                    order_obj.cart = cart_obj
+                    order_obj.hotel = cart_obj.hotel
+                    order_obj.total_discount = info['total_discount']
+                    order_obj.total_amount = info['total_price']
+                    order_obj.total_products = info['total_products']
+                    order_obj.reference = str(uuid.uuid1())[:7]
+                    order_obj.save()
+                    stepChangeStatus(cart_obj.pk, 3)
+                    cart_exists.update(flag=2)
+                    url = reverse('confirmation', kwargs={'reference': order_obj.reference}),
+                    status = 1
+                else:
+                    status = 0
+            else:
+                #print(form.errors.as_data())
+                status = -1
+
+            context = {
+                "url": url,
                 "status": status,
             }
             return JsonResponse(context)

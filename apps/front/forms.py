@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from apps.base.models import User
-from apps.front.models import Guest
+from apps.front.models import Guest, Order
 
 
 class forgotPasswordForm(forms.Form):
@@ -153,4 +153,19 @@ class registerGuestFromReservationForm(forms.ModelForm):
             'fullname': _('نام کامل'),
             'mobile': _('تلفن'),
             'nationality': _('ملیت'),
+        }
+
+class placeOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['has_invoice', 'agree_rule']
+        widgets = {
+            'has_invoice': forms.CheckboxInput(attrs={"class": ' fs-14 py-1 w-100', 'autocomplete':'off' , 'checked':'false' ,
+                                                   "placeholder": _('دریافت فاکتور رسمی')}),
+            'agree_rule': forms.CheckboxInput(attrs={"class": ' fs-14 py-1 w-100', 'autocomplete':'off','checked':'false',
+                                                   "placeholder": _('دریافت فاکتور رسمی')}),
+        }
+        labels = {
+            'has_invoice': _('دریافت فاکتور رسمی'),
+            'agree_rule': _(' با پرداخت سفارش با قوانین رزرو اینترنتی هتل تیک و قوانین لغو رزرو هتل موافقت می کنم!'),
         }
