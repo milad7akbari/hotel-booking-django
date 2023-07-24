@@ -1,0 +1,33 @@
+{% extends 'blog/base/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load jalali_tags %}
+{% block blog_main %}
+    <ul class="w-100 px-1 mb-0 flex-wrap display-flex" style="line-height: 3">
+        {% for b in blogs %}
+            <li class="w-100 flex-wrap mt-2 border-bottom cursor-pointer justify-content-between position-relative display-flex align-items-center fs-13">
+                <label style="width: 100%;max-height: 500px;overflow: hidden">
+{#                    <img class="w-100 h-100" alt="{{ b.title }}" title="{{ b.title }}" src="/{{ b.default_image__file }}">#}
+                    <img class="w-100 h-100" alt="{{ b.title }}" title="{{ b.title }}" src="/media/{{ b.default_image__file|default:'media/logo-w-text.png' }}">
+                </label>
+                <label class="display-flex flex-wrap">
+                    <label class="px-2 display-flex align-items-center">
+                        <b>{% trans 'تاریخ بروزرسانی:' %}</b>&nbsp;&nbsp;
+                        <b>{{ b.date_upd|to_jalali:"%Y-%m-%d" }}</b>
+                    </label>
+                    <a href="{% url 'blogPage' b.pk b.title.split|join:"_"|default:'no_subject'  %}" class="px-2 w-100">{{ b.title|truncatewords:5 }}</a>
+                    <p class=" text-justify">{{ b.desc|truncatewords:20 }}</p>
+                </label>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="display-flex my-4 align-items-center justify-content-center">
+        {%if blogs.has_previous %}
+            <a class="btn btn-primary fs-13" style="width: 100px;" href="?page={{blogs.previous_page_number}}">{% trans 'صفحه قبل' %}</a>
+        {% endif %}
+        <span class="fs-15 fw-bold mx-3 border-radius-5 p-2 text-center" style="width: 85px;">{{blogs.number}}</span>
+        {%if blogs.has_next %}
+            <a class="btn btn-primary fs-13" style="width: 100px;" href="?page={{blogs.next_page_number}}">{% trans 'صفحه بعد' %}</a>
+        {% endif %}
+    </div>
+{% endblock %}

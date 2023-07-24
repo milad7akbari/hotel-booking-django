@@ -1,0 +1,120 @@
+{% extends 'base/base.html' %}
+{% load humanize %}
+{% load i18n %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "stylesheet/hotel.css" %}" type="text/css">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static "js/_filter_hotels_list.js" %}"></script>
+{% endblock %}
+{% block main %}
+    <div id="HotelMain" class=" w-100 overflow-hidden">
+        <div class="row justify-content-evenly">
+            <div class="col-xl-3 col-md-3">
+                <button type="button" class="btn py-3 fs-14 d-none w-100 showBtnFilterHotelList btn-primary">{% trans 'مشاهده فیلتر' %}</button>
+                <div class="filterContainer">
+                    <div class="hotel-category-content bg-white my-2 p-2 border-radius-5">
+                        <label class="mt-2 display-flex justify-content-between align-items-center">
+                            <label class="display-flex">
+                                <span class="icon-reply"></span>
+                                <h6>{% trans 'جستوجو' %}</h6>
+                            </label>
+                            <span class="text-danger btnDeleteFilters fs-13" style="display: none">{% trans 'حذف فیلتر' %}</span>
+                        </label>
+                        {% include '_partial/form-search.html' with page='hotel' %}
+                    </div>
+                    <div class="hotel-search-content bg-white my-2 p-2 border-radius-5 overflow-auto" style="min-height: 250px;max-height: 225px;">
+                        <div class="w-100 px-1 mb-0 flex-wrap display-flex" style="line-height: 3">
+                            <h6 class="fs-14 mt-2">
+                                <label class="icon-reply"></label>
+                                <span>{% trans 'فیلتر براساس شهر' %}</span>
+                            </h6>
+                            <ul class="w-100 px-4 mb-0 flex-wrap display-flex" style="line-height: 3">
+                                {% for c in city %}
+                                    <li class="w-100 cursor-pointer justify-content-between position-relative display-flex align-items-center fs-13">
+                                        <label class="icon-arrow-left2 position-absolute" style="right: 5px"></label>
+                                        <span class="px-4">{{ c.name }}</span>
+                                        <input data-action="city" data-value="{{ c.name }}" value="{{ c.name }}" class="filter-options" type="checkbox">
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="hotel-search-content bg-white my-2 p-2 border-radius-5 overflow-auto" style="min-height: 250px;max-height: 225px;">
+                        <div class="w-100 px-1 mb-0 flex-wrap display-flex" style="line-height: 3">
+                            <h6 class="fs-14 mt-2">
+                                <label class="icon-reply"></label>
+                                <span>{% trans 'فیلتر براساس امکانات' %}</span>
+                            </h6>
+                            <ul class="w-100 px-4 mb-0 flex-wrap display-flex" style="line-height: 3">
+                                {% for f in facility %}
+                                    <li class="w-100 cursor-pointer justify-content-between position-relative display-flex align-items-center fs-13">
+                                        <label class="icon-arrow-left2 position-absolute" style="right: 5px"></label>
+                                        <span class="px-4">{{ f.title }}</span>
+                                        <input data-action="facility" data-value="{{ f.title }}" value="{{ f.title }}" class="filter-options" type="checkbox">
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <button type="button" class="btn py-3 fs-14 w-100 d-none closeBtnFilterHotelList btn-danger">{% trans 'بستن فیلتر' %}</button>
+                </div>
+            </div>
+            <div class="col-xl-9 col-md-9">
+                <div class="hotel-category-content bg-white my-2 p-2 border-radius-5">
+                    <div id="sorting" class=" bg-muted py-3">
+                        <ul class="w-100 p-0 m-0 d-flex justify-content-evenly">
+                            <li class="d-flex border-radius-15 px-2 py-1 mx-2 align-items-center">
+                                <span class="icon-sort-alpha-asc"></span>&nbsp;
+                                <label for="sortingNameASC" class="fs-12">
+                                    <span>حروف الفبا صعودی</span>
+                                    <input type="radio" id="sortingNameASC" name="sorting" value="name-asc" data-action="sorting" class="fs-12 sorting border-0 bg-transparent filter-options">
+                                </label>
+                            </li>
+                            <li class="d-flex border-radius-15 px-2 py-1 mx-2 align-items-center">
+                                <span class="icon-sort-alpha-desc"></span>&nbsp;
+                                <label for="sortingNameDESC" class="fs-12">
+                                    <span>حروف الفبا نزولی</span>
+                                    <input type="radio" id="sortingNameDESC" name="sorting" value="name-desc" data-action="sorting" class="fs-12 sorting border-0 bg-transparent filter-options">
+                                </label>
+                            </li>
+                            <li class="d-flex border-radius-15 px-2 py-1 mx-2 align-items-center">
+                                <span class="icon-sort-amount-asc"></span>&nbsp;
+                                <label for="sortingPriceASC" class="fs-12">
+                                    <span>ارزانترین</span>
+                                    <input type="radio" id="sortingPriceASC" name="sorting" value="price-asc" data-action="sorting" class="fs-12 sorting border-0 bg-transparent filter-options">
+                                </label>
+                            </li>
+                            <li class="d-flex border-radius-15 px-2 py-1 mx-2 align-items-center">
+                                <span class="icon-sort-amount-desc"></span>&nbsp;
+                                <label for="sortingPriceDESC" class="fs-12">
+                                    <span>گرانترین</span>
+                                    <input type="radio" id="sortingPriceDESC" name="sorting" value="price-desc" data-action="sorting" class="fs-12 sorting border-0 bg-transparent filter-options">
+                                </label>
+                            </li>
+                            <li class="d-flex border-radius-15 px-2 py-1 mx-2 align-items-center">
+                                <span class="icon-sort-numeric-asc"></span>&nbsp;
+                                <label for="sortingStarASC" class="fs-12">
+                                    <span>کمترین ستاره</span>
+                                    <input type="radio" id="sortingStarASC" name="sorting" value="star-asc" data-action="sorting" class="fs-12 sorting border-0 bg-transparent filter-options">
+                                </label>
+                            </li>
+                            <li class="d-flex border-radius-15 px-2 py-1 mx-2 align-items-center">
+                                <span class="icon-sort-numberic-desc"></span>&nbsp;
+                                <label for="sortingStarDESC" class="fs-12">
+                                    <span>بیشترین ستاره</span>
+                                    <input type="radio" id="sortingStarDESC" name="sorting" value="star-desc" data-action="sorting" class="fs-12 sorting border-0 bg-transparent filter-options">
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="_list_hotel_container" class="w-100 position-relative">
+                        <span class="position-absolute icon-spinner9" style="display: none"></span>
+                        {% include 'hotel/_list_hotels.html' with hotel=hotel %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% load i18n %}
+{% load static %}
+
+<form action="" class="display-flex bg-white p-4 justify-content-center {% if page == 'home' %} position-absolute {% else %} flex-wrap  w-100 m-auto {% endif %}" method="post" style="{% if page == 'home' %};width: 500px;bottom: 35px;right: 0;left: 0;margin: auto; {% else %} {% endif %}">
+    {% csrf_token %}
+    <div class="inputContainer position-relative mx-2 {% if page == 'home' %} w-75 {% else %} w-100 {% endif %} text-center">
+        <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'نام هتل یا شهر' %}</label>
+        <input data-url_root="{% url 'hotelCategory' %}" data-field-id="{% if page == 'home' %}ih-search{% endif %}" data-url="{% url 'searchHotelCity' %}" type="text" class="w-100 inpSearchHotelCity fs-14 " placeholder="{% trans 'نام هتل یا شهر' %}" name="">
+        <ul id="findCityByInpContainer" class="p-0 bg-white overflow-auto lh-lg p-2 m-0 w-100 position-absolute" style="max-height: 150px;display: none;z-index: 9;box-shadow: 2px 5px 4px #ddd;">
+        </ul>
+    </div>
+</form>

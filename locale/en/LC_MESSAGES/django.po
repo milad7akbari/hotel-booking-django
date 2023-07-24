@@ -1,0 +1,233 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-23 23:25+0430\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\apps\front\forms.py:13 .\apps\front\forms.py:22 .\apps\front\forms.py:28
+#: .\templates\_partial\modal\register\forgot-password.html:13
+msgid "موبایل یا ایمیل"
+msgstr "Mobile or Email"
+
+#: .\apps\front\forms.py:24 .\apps\front\forms.py:29 .\apps\front\forms.py:39
+#: .\apps\front\forms.py:42 .\apps\front\forms.py:109
+#: .\apps\front\forms.py:115
+msgid "پسورد"
+msgstr "Password"
+
+#: .\apps\front\forms.py:57 .\apps\front\forms.py:67
+msgid "موبایل اشتباه است!"
+msgstr ""
+
+#: .\apps\front\forms.py:64
+msgid "موبایل وجود دارد!"
+msgstr ""
+
+#: .\apps\front\forms.py:75
+msgid "کد ملی وجود دارد!"
+msgstr ""
+
+#: .\apps\front\forms.py:77
+msgid "کد ملی اشتباه است!"
+msgstr ""
+
+#: .\apps\front\forms.py:80
+msgid "کدملی اشتباه است!"
+msgstr ""
+
+#: .\apps\front\forms.py:84 .\apps\front\forms.py:92
+msgid "ایمیل اشتباه است!"
+msgstr ""
+
+#: .\apps\front\forms.py:90
+msgid "ایمیل وجود دارد!"
+msgstr ""
+
+#: .\apps\front\forms.py:103 .\apps\front\forms.py:112
+msgid "موبایل"
+msgstr "Mobile"
+
+#: .\apps\front\forms.py:105 .\apps\front\forms.py:113
+msgid "ایمیل"
+msgstr "Email"
+
+#: .\apps\front\forms.py:107 .\apps\front\forms.py:114
+msgid "کدملی"
+msgstr "National Code"
+
+#: .\apps\front\views.py:17
+msgid "اطلاعاتی یافت نشد"
+msgstr ""
+
+#: .\apps\front\views.py:31
+msgid "لینک بازیابی پسورد به موبایل شما ارسال شد! "
+msgstr ""
+
+#: .\apps\front\views.py:33
+msgid "لینک بازیابی پسورد به ایمیل شما ارسال شد! "
+msgstr ""
+
+#: .\apps\front\views.py:56
+msgid "مشکل در بروزرسانی اطلاعات"
+msgstr ""
+
+#: .\apps\front\views.py:69
+msgid "تغییر پسورد موفقیت آمیز بود"
+msgstr ""
+
+#: .\apps\front\views.py:119
+msgid "ثبت نام موفقیت آمیز بود!"
+msgstr ""
+
+#: .\hotel\settings.py:114
+msgid "Persian"
+msgstr ""
+
+#: .\hotel\settings.py:115
+msgid "English"
+msgstr ""
+
+#: .\templates\_partial\footer.html:8 .\templates\_partial\footer.html:58
+msgid "آدرس و اطلاعات تماس"
+msgstr ""
+
+#: .\templates\_partial\footer.html:13
+msgid "کد پستی: "
+msgstr ""
+
+#: .\templates\_partial\footer.html:14
+msgid "تلفن: "
+msgstr ""
+
+#: .\templates\_partial\footer.html:15
+msgid "ایمیل: "
+msgstr ""
+
+#: .\templates\_partial\footer.html:33
+msgid "قوانین و خبر رسانی ها"
+msgstr ""
+
+#: .\templates\_partial\footer.html:81
+msgid "حقوق ها همه حفظ در اختیار هتل تیک هست"
+msgstr ""
+
+#: .\templates\_partial\forgot-password-confirm.html:8
+#: .\templates\_partial\modal\register\forgot-password.html:6
+msgid "فراموشی کلمه عبور"
+msgstr ""
+
+#: .\templates\_partial\forgot-password-confirm.html:17
+msgid "بروزرسانی"
+msgstr ""
+
+#: .\templates\_partial\header\_header.html:8
+#: .\templates\_partial\home\_home_header.html:7
+msgid "ورود یا ثبت نام"
+msgstr ""
+
+#: .\templates\_partial\header\_header.html:10
+msgid "حساب کاربری"
+msgstr ""
+
+#: .\templates\_partial\header\_header.html:15
+#: .\templates\_partial\home\_home_header.html:11
+msgid "1402-03-31"
+msgstr ""
+
+#: .\templates\_partial\header\_header.html:27
+#: .\templates\_partial\home\_home_header.html:23
+msgid "صفحه اصلی"
+msgstr "Home"
+
+#: .\templates\_partial\header\_header.html:29
+#: .\templates\_partial\header\_header.html:31
+#: .\templates\_partial\header\_header.html:32
+#: .\templates\_partial\header\_header.html:33
+#: .\templates\_partial\header\_header.html:34
+#: .\templates\_partial\header\_header.html:35
+#: .\templates\_partial\header\_header.html:36
+#: .\templates\_partial\header\_header.html:37
+#: .\templates\_partial\home\_home_header.html:25
+#: .\templates\_partial\home\_home_header.html:27
+#: .\templates\_partial\home\_home_header.html:28
+#: .\templates\_partial\home\_home_header.html:29
+#: .\templates\_partial\home\_home_header.html:30
+#: .\templates\_partial\home\_home_header.html:31
+#: .\templates\_partial\home\_home_header.html:32
+#: .\templates\_partial\home\_home_header.html:33
+msgid "هتل ها"
+msgstr ""
+
+#: .\templates\_partial\header\_header.html:40
+#: .\templates\_partial\home\_home_header.html:36
+msgid "بهترین هتل شهرها"
+msgstr ""
+
+#: .\templates\_partial\header\_header.html:41
+#: .\templates\_partial\home\_home_header.html:37
+msgid "وبلاگ"
+msgstr "Blogs"
+
+#: .\templates\_partial\header\_header.html:42
+#: .\templates\_partial\home\_home_header.html:38
+msgid "درباره ما"
+msgstr "About Us"
+
+#: .\templates\_partial\modal\register\forgot-password.html:7
+msgid " برای بازیابی کلمه عبور شماره موبایل یا ایمیل خود را وارد کنید."
+msgstr ""
+
+#: .\templates\_partial\modal\register\forgot-password.html:15
+#: .\templates\_partial\modal\register\register-user.html:16
+msgid "تایید و ادامه"
+msgstr "Confirm"
+
+#: .\templates\_partial\modal\register\login-password.html:6
+#: .\templates\_partial\modal\register\register-user.html:19
+msgid "ورود به سامانه"
+msgstr "Login"
+
+#: .\templates\_partial\modal\register\login-password.html:7
+msgid " شماره موبایل یا ایمیل به همراه کلمه عبور خود را وارد کنید."
+msgstr ""
+
+#: .\templates\_partial\modal\register\register-user.html:6
+msgid "ثبت نام سامانه"
+msgstr "Register"
+
+#: .\templates\_partial\modal\register\register-user.html:13
+#: .\templates\_partial\modal\register\register-user.html:14
+msgid "تکرار پسورد"
+msgstr "Confirm Password"
+
+#: .\templates\pages\home.html:16
+msgid "هتل تیک"
+msgstr "Hotel Tik"
+
+#: .\templates\pages\home.html:17 .\templates\pages\home.html:18
+msgid "از بهترین های رزرو در ایران به صورت گروهی و سریع"
+msgstr ""
+
+#: .\templates\pages\home.html:22 .\templates\pages\home.html:23
+msgid "نام هتل یا شهر"
+msgstr ""
+
+#: .\templates\pages\home.html:26
+msgid "تاریخ ورود"
+msgstr "Check In"
+
+#: .\templates\pages\home.html:30
+msgid "Check Out"
+msgstr ""

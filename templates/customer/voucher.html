@@ -1,0 +1,78 @@
+{% extends 'customer/base/base.html' %}
+{% load i18n %}
+{% load static %}
+{% block customer_main %}
+    <style>
+.coupon-card{
+    background: linear-gradient(135deg, #7158fe, #9d4de6);
+color: #fff;
+text-align: center;
+padding: 20px 10px;width: 350px;
+border-radius: 15px;
+box-shadow: 0 10px 10px 0 rgba(0,0,0,0.15);
+position: relative;
+
+}
+.coupon-card h3{
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 40px;
+
+}
+.coupon-card p{
+    font-size: 15px;
+
+}
+.coupon-row{
+    display: flex;
+    align-items: center;
+    margin: 25px auto;
+    width: fit-content;
+
+}
+#cpnCode{
+    border: 1px dashed #fff;
+    padding: 10px 20px;
+    border-right: 0;
+
+}
+#cpnBtn{
+    border: 1px solid #fff;
+    background: #fff;
+    padding: 10px 20px;
+    color: #7158fe;
+    cursor: pointer;
+}
+.circle1, .circle2{
+background: #fff;
+width: 38px;
+height: 30px;
+border-radius: 50%;
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+
+}
+.circle1{
+    left: -25px;
+}
+.circle2{
+    right: -25px;
+}
+</style>
+<div class="container d-flex justify-content-between flex-wrap">
+        {% for i in "x"|rjust:"5" %}
+            <div class="coupon-card m-2">
+                <h6 class="fs-13">این کد تخفیف به شما تعبق گرفت با تشکر از خرید شما در هتل تیک</h6>
+                <div class="coupon-row dir-ltr">
+                    <span id="cpnCode" class="text-white fs-14">ETYJWTEFT</span>
+                    <span id="cpnBtn" class="fs-13">کپی</span>
+                </div>
+                <p class="text-white fs-13">تاریخ انقضاء: یک ماه بعد</p>
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+            </div>
+        {% endfor %}
+
+</div>
+{% endblock %}

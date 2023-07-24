@@ -1,0 +1,333 @@
+#_main {
+  max-width: 1400px;
+}
+#_header {
+  .header_top_container {
+    .btnShowMenuMain {
+      display: none;
+    }
+    li {
+      width: 33%;
+    }
+  }
+}
+.timeline li{
+  list-style: none;
+  float: left;
+  width: 25%;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+}
+.horizontal-line{
+  content: '';
+  position: absolute;
+  height: 2px;width: 100%;
+  display: block;top: 15px;
+  background: #4caf50;
+  }
+ul:nth-child(1){
+  color: #4caf50;
+}
+
+.timeline li ._before{
+  counter-increment: test;
+  content: counter(test);
+  width: 30px;
+  height: 30px;
+  border: 1px solid #f9f9f9;
+  border-radius: 50%;
+  display: block;
+  text-align: center;
+  line-height: 50px;
+  margin: 0 auto 10px auto;
+  background: #fff;
+  color: #000;
+  transition: all ease-in-out .3s;
+  cursor: pointer;
+}
+
+.timeline li ._after{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: grey;
+  top: 25px;
+  left: -50%;
+  z-index: -999;
+  transition: all ease-in-out .3s;
+}
+
+.timeline li:first-child ._after{
+  content: none;
+}
+.timeline li.active-tl{
+  color: #555555;
+}
+.timeline li.active-tl ._before{
+  background: #4caf50;
+  color: #F1F1F1;
+}
+
+.timeline li.active-tl + li ._after{
+  background: #4caf50;
+}
+.timeline li.pending-tl ._before{
+  background: #ffc107 ;
+  color: #F1F1F1;
+}
+
+.timeline li.pending-tl + li ._after{
+  background: #ffc107 ;
+}
+#registerLoginModal {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  z-index: 99;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .8);
+
+  .inpPhoneNumberOtp {
+    transition: all ease-in-out .5s;
+    text-align: left
+  }
+
+  #timerOtp {
+    border-radius: 5px 0 0 5px !important;
+    background: #fff;
+    direction: rtl !important;
+    font-size: 13px
+  }
+
+  .errOtpReq {
+    position: absolute;
+    z-index: 9;
+    font-size: 11px;
+    bottom: -20px;
+    right: 0;
+  }
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+  .containerOtpReqCheckActive {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;color: #ff7b62;
+  }
+  .border-red-err{
+    border: 1px solid #ff7b62 !important;
+  }
+
+
+  .box-shadow-red-err{
+    box-shadow: 0 3px 11px -4px #ff7b62 !important;
+  }
+
+  .isActiveTransition {
+    top: -10px !important;
+    transition: all ease-in-out .5s;
+
+  }
+
+  .borderRadiusFPI {
+    border-radius: 0 5px 5px 0 !important;
+  }
+
+  .otpConfirmationInput {
+    border-radius: 0 5px 5px 0 !important;
+    text-align: center;
+    letter-spacing: 15px;
+    font-weight: bolder
+  }
+
+  .labelOtpPhoneNumber {
+    z-index: 9;
+    top: 11px;
+    right: 0;
+    background: #fff;
+    font-size: 13px;
+    border-radius: 15px;
+    padding: 0 10px;
+    transition: all ease-in-out .5s;
+  }
+}
+.btnCloseModal{
+  position: absolute;top: 20px;left: 20px;padding: 10px;transition: all ease-in-out .1s;
+  &:hover{
+    color: red;transition: all ease-in .1s;cursor: pointer;
+  }
+}
+.col-right-pg-login-reset-password{
+width: 40%;
+height: 100%;
+position: relative;
+display: flex;
+justify-content: center;
+justify-items: center;
+align-items: center;
+align-self: center;
+    background-size: 80% 60% !important;
+    background-position: center !important;
+}
+.col-left-pg-login {
+  padding: 35px;
+    width: 60%;background: transparent;height: 100%;position: relative;
+    .tab-bg-login{
+        width: 100%;height: 50px;
+        ul{
+            display: flex;justify-content: space-around;
+            li{
+                width: 50%;text-align: center;cursor: pointer;background: black;color: white;transition: all ease-in-out .2s;line-height: 3;
+                &:hover{
+                    background: rgba(0,0,0,.8);color: #cccccc;transition: all ease-in-out .2s;
+                }
+            }
+        }
+    }
+
+    .ulImDirector{
+        width: 100%;
+        display: flex;
+        ul{
+            width: 100%;
+            display: flex;
+        }
+    }
+
+    .privacyContainer{
+        position: absolute;
+        width: 100%;
+        bottom: 70px;
+    }
+    .privacyContainer-condition{
+        position: relative;
+        bottom: unset !important;
+        margin-top: 40px !important;
+        p{
+            color: #000 !important;
+        }
+    }
+}
+#registerLoginModal {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  z-index: 9;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .2);
+
+  .inpPhoneNumberOtp {
+    transition: all ease-in-out .5s;
+    border-radius: 0 5px 5px 0 !important;
+    text-align: left
+  }
+
+  #timerOtp {
+    border-radius: 5px 0 0 5px !important;
+    background: #fff;
+    direction: rtl !important;
+    font-size: 13px
+  }
+
+  .errOtpReq {
+    position: absolute;
+    z-index: 9;
+    font-size: 11px;
+    bottom: -20px;
+    right: 0;
+  }
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+  .containerOtpReqCheckActive {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;color: #ff7b62;
+  }
+  .border-red-err{
+    border: 1px solid #ff7b62;
+  }
+
+  .isActiveTransition {
+    top: -13px !important;
+    transition: all ease-in-out .5s;
+
+  }
+
+  .borderRadiusFPI {
+    border-radius: 0 5px 5px 0 !important;
+  }
+
+  .otpConfirmationInput {
+    border-radius: 0 5px 5px 0 !important;
+    text-align: center;
+    letter-spacing: 15px;
+    font-weight: bolder
+  }
+
+  .labelOtpPhoneNumber {
+    z-index: 9;
+    top: 11px;
+    right: 15px;
+    background: #fff;
+    font-size: 15px;
+    border-radius: 15px;
+    padding: 0 10px;
+    transition: all ease-in-out .5s;
+  }
+}
+
+#regLogModal {
+  width: 40%;
+  margin: auto;
+  float: right;
+
+  .regLogModalContainer {
+    width: 100%;
+    margin: auto;
+    background: white;
+    padding: 60px;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
+  }
+}

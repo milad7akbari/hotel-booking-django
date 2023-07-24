@@ -1,0 +1,75 @@
+{% load i18n %}
+{% load static %}
+<footer id="_footer" class="w-100  overflow-hidden  ">
+    <div class="row " >
+        <div class="col-sm-9 mx-sm-auto col-lg-4">
+            <div class="footer-left h-100 w-100 d-flex flex-wrap">
+                <ul class="d-flex p-0 w-100 flex-wrap align-items-center justify-content-between text-right fs-13">
+                    <li style="padding: 15px" class="border-bottom w-100 text-center"><b>{% trans 'آدرس و اطلاعات تماس' %}</b></li>
+                </ul>
+                <div class="w-100 h-75">
+                    <div class="w-100 d-flex align-items-center" style="height: 100px">
+                        <ul class="d-flex m-0 px-0 py-2 w-100 flex-wrap align-items-center justify-content-between text-center fs-13">
+                            <li class="w-75 my-2 m-auto"><a class="w-100 fs-13 d-block textRight" href="">{% trans 'کد پستی: ' %}</a></li>
+                            <li class="w-75 my-2 m-auto"><a class="w-100 fs-13 d-block textRight" href="">{% trans 'تلفن: ' %} 0984844485</a></li>
+                            <li class="w-75 my-2 m-auto"><a class="w-100 fs-13 d-block textRight" href="">{% trans 'ایمیل: ' %}</a></li>
+                            <li class="w-75 my-2 m-auto"><a class="w-100 fs-13 d-block textRight" href="{% url 'blogMainPage' %}">{% trans 'وبلاگ ' %}</a></li>
+                        </ul>
+                    </div>
+                    <div class="w-100 d-flex align-items-end" style="height: 100px">
+                        <ul class="d-flex w-75 mx-auto p-0 align-items-end justify-content-between text-center fs-13">
+                            <li class="mx-3"><a href="" class="fs-25 icon-instagram text-danger"></a></li>
+                            <li class="mx-3"><a href="" class="fs-25 icon-telegram text-info"></a></li>
+                            <li class="mx-3"><a href="" class="fs-25 icon-facebook"></a></li>
+                            <li class="mx-3"><a href="" class="fs-25 icon-youtube text-danger"></a></li>
+                            <li class="mx-3"><a href="" class="fs-25 icon-twitter "></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 mx-sm-auto col-lg-4">
+            <div class="footer-left h-100 w-100 d-flex flex-wrap">
+                 <ul class="d-flex p-0 w-100 flex-wrap align-items-center justify-content-between text-right fs-13">
+                    <li style="padding: 15px" class="border-bottom w-100 text-center"><b>{% trans 'قوانین و خبر رسانی ها' %}</b></li>
+                </ul>
+                <div class="w-100 h-75">
+                    <a href="" class="btn btn-link text-center w-100">قوانین و مقررات رزرو در هتل تیک</a>
+                    <div class="w-100 d-flex align-items-center" style="height: 100px">
+                        <form action="" method="post" class="w-75 mx-auto display-flex align-items-center justify-content-center" style="position: relative;">
+                            <input type="text" style="text-align: left;width: 100%;font-weight: bold;" placeholder="example@gmail.com">
+                            <button type="button" class="btn fs-13 btn-customize" style="position: absolute;right: 0;top: 0;bottom: 0;">خبرم کن</button>
+                        </form>
+                    </div>
+                    <ul class="d-flex p-0 w-100  align-items-end justify-content-between text-center fs-13">
+                         {% for i in "x"|rjust:"4" %}
+                            <li style="width: 150px;height: 50px">
+                                <a class="w-100 h-100 d-block" href="#">
+                                    <img src="{% static 'img/logo.png' %}" title="" alt="" height="75%">
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 mx-sm-auto col-lg-4">
+            <div class="footer-left h-100 w-100 d-flex flex-wrap">
+                <ul class="d-flex p-0 w-100 flex-wrap align-items-center justify-content-between text-right fs-13">
+                    <li style="padding: 15px" class="border-bottom w-100 text-center"><b>{% trans 'آدرس و اطلاعات تماس' %}</b></li>
+                </ul>
+                <div class="w-100 d-flex align-items-center h-75">
+                    <ul class="d-flex w-100 m-0 p-0 align-items-center flex-wrap justify-content-between text-center fs-13">
+                        {% for c in city %}
+                            <li class="w-75 my-2 m-auto"><a class="w-50 fs-14 text-muted d-block text-center" href="{% url 'hotelCategory' %}?search={{ c.name }}">{{ c.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-100 display-flex align-items-center justify-content-center" style="height: 50px;border-top: 1px solid #cccccc">
+        <p class="fs-13 pb-0 text-center">{% trans 'حقوق ها همه حفظ در اختیار هتل تیک هست' %}</p>
+    </div>
+</footer>

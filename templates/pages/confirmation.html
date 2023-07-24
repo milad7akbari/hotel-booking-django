@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+{% load function %}
+{% load i18n %}
+{% load static %}
+{% block main %}
+    <div id="_confirmation" class="w-100 bg-white">
+    <div class="d-flex flex-wrap justify-content-center m-auto p-5 w-75 align-items-center">
+        <div class="w-100 mb-2 d-flex justify-content-center align-items-center">
+            <span class="icon-checkmark2 text-success" style="font-size: 35px"></span>&nbsp;&nbsp;
+            <h4 class="mb-0">رزرو شما موفقیت آمیز بود</h4>
+        </div>
+        <div class="border my-4 p-3 w-100">
+            <label class="w-100 my-3 d-flex justify-content-center align-items-center">
+                <span class="icon-info text-success text-warning"></span>&nbsp;&nbsp;
+                <p class="mb-0">تیم ما اطلاعات رزرو و جزیات پرداختی و را به ایمیل شما milad7akbari@gmail.com ارسال کردند.</p>
+            </label>
+            <label class="w-100 my-2 d-flex justify-content-center align-items-center">
+                <h6>شماره رزرو و پیگیری شما: 215485</h6>
+            </label>
+        </div>
+        <div style="width: 450px;height: 450px;margin: 25px auto">
+            <img src="/media/media/voucher.JPG" style="object-fit: cover" width="100%" height="100%">
+        </div>
+        <div class="border my-2 p-3 d-flex align-items-center justify-content-center w-100">
+            <div class=" d-flex justify-content-center" style="width: 10%">
+                <span class="icon-phone text-primary" style="font-size: 45px"></span>
+            </div>
+            <div class="w-50 flex-wrap d-flex">
+                <label class="w-100 my-3 d-flex justify-content-center align-items-center">
+                    <p class="mb-0  text-primary">شماره تماس تیم پشتیبانی هتل تیک:</p>
+                </label>
+                <label class="w-100  my-2 d-flex justify-content-center align-items-center">
+                    <h6 class=" text-primary">021154588555</h6>
+                </label>
+            </div>
+        </div>
+        <div class="w-100 mb-2 d-flex justify-content-around align-items-center">
+            <a class="mb-0 btn-link fs-13 btn" href="{% url 'panelOrders' %}">ورود به سوابق سفارش</a>
+            <a class="mb-0 btn-primary fs-13 btn" href="{% url 'panelOrders' %}">{% trans 'چاپ ووچر / دانلود PDF' %}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

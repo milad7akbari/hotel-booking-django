@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load humanize %}
+{% load jalali_tags %}
+{% load function %}
+{% load i18n %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "stylesheet/swiper.min.css" %}" type="text/css">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static "js/swiper.min.js" %}"></script>
+{% endblock %}
+{% block main %}
+    <div id="_cartContainer" class="w-100 overflow-hidden">
+        <div class="timeline my-5 position-relative w-75 mx-auto">
+            <span class="horizontal-line"></span>
+            <ul class="timeline w-100 p-0 m-0 display-flex justify-content-center">
+                <li class="{% if step.step >= 1 %}active-tl{% endif %}">
+                    <span class="_before"></span>
+                    <span class="fs-14">انتخاب هتل</span>
+                    <span class="_after"></span>
+                </li>
+                <li class="_step_2 {% if step.step == 1 %}pending-tl{% elif  step.step >= 2 %}active-tl{% endif %}">
+                    <span class="_before"></span>
+                    <span class="fs-14">وارد کردن مشخصات مسافر</span>
+                    <span class="_after"></span>
+                </li>
+                <li class="_step_3 {% if step.step == 2 %}pending-tl{% elif  step.step >= 3 %}active-tl{% endif %}">
+                    <span class="_before"></span>
+                    <span class="fs-14">پرداخت</span>
+                    <span class="_after"></span>
+                </li>
+                <li class="_step_4 {% if step.step >= 3 %}active-tl{% endif %}">
+                    <span class="_before"></span>
+                    <span class="fs-14">صدور واچر</span>
+                    <span class="_after"></span>
+                </li>
+            </ul>
+        </div>
+        <div class="w-75 m-auto">
+
+            <div class="w-100 m-auto my-2 bg-white py-2 _reservation_form_main">
+            {% if step.step == 1 %}
+                {% if not user.is_authenticated %}
+                    {% include 'cart/_reservation_user_form.html' with form=form ref=ref %}
+                {% else %}
+                    {% include 'cart/_summery.html' with room=room ref=ref %}
+                {% endif %}
+            {% elif step.step == 2 %}
+                    {% include 'cart/_reservation_payment_form.html' with info=info form_pay=form_pay ref=ref cart=cart %}
+            {% elif step.step == 3 %}
+                واچر
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
