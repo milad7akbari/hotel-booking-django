@@ -20,6 +20,13 @@ class loginUserForm(forms.Form):
         attrs={"class": 'borderRadiusFPI fw-bolder align-left dir-ltr w-100'}), label=_('پسورد'))
 
 
+class trackingForm(forms.Form):
+    reference = forms.CharField(required=True, widget=forms.TextInput(
+        attrs={"class": 'border-radius-15 fw-bolder align-left dir-ltr w-100'}), label=_('رفرنس'))
+    username = forms.CharField(required=True, widget=forms.NumberInput(
+        attrs={"class": 'border-radius-15 fw-bolder align-left dir-ltr w-100'}), label=_('موبایل'))
+
+
 class forgotPasswordConfirmForm(forms.ModelForm):
     class Meta:
         model = User
@@ -90,15 +97,20 @@ class registerUser(forms.ModelForm):
 
 
 class registerUserFromReservationForm(forms.ModelForm):
-
     def clean(self):
+        errors_flag = 0
         username = self.cleaned_data['username']
         firstname = self.cleaned_data['first_name']
         lastname = self.cleaned_data['last_name']
+        if len(firstname) < 2:
+            self.errors['first_name'] = _('نام اشتباه است!')
+            errors_flag = 1
+        if len(lastname) < 2:
+            self.errors['last_name'] = _('نام خانوادگی اشتباه است!')
+            errors_flag = 1
         if len(username) == 10:
             username = '09' + username[1:]
         user = User.objects.filter(Q(username=username))
-        errors_flag = 0
         if len(username) == 11 or len(username) == 10:
             regex = r'\b^(\+98|0)?9\d{9}$\b'
             if not re.fullmatch(regex, username):
@@ -111,6 +123,7 @@ class registerUserFromReservationForm(forms.ModelForm):
                 errors_flag = 1
         else:
             self.errors['username'] = _('موبایل اشتباه است!')
+            errors_flag = 1
 
         if errors_flag == 1:
             self.errors['err'] = 1
@@ -131,6 +144,31 @@ class registerUserFromReservationForm(forms.ModelForm):
 
 
 class registerGuestFromReservationForm(forms.ModelForm):
+    def clean(self):
+        errors_flag = 0
+        nationality = self.cleaned_data['nationality']
+        mobile = self.cleaned_data['mobile']
+        fullname = self.cleaned_data['fullname']
+
+        if len(fullname) < 5:
+            self.errors['fullname'] = _('نام کامل اشتباه است!')
+            errors_flag = 1
+        if nationality > 2 or nationality < 1:
+            self.errors['nationality'] = _('ملیت اشتباه است!')
+            errors_flag = 1
+        if len(mobile) == 10:
+            mobile = '09' + mobile[1:]
+        if len(mobile) == 11 or len(mobile) == 10:
+            regex = r'\b^(\+98|0)?9\d{9}$\b'
+            if not re.fullmatch(regex, mobile):
+                self.errors['mobile'] = _('موبایل اشتباه است!')
+                errors_flag = 1
+        else:
+            self.errors['mobile'] = _('موبایل اشتباه است!')
+            errors_flag = 1
+
+        if errors_flag == 1:
+            self.errors['err'] = 1
 
     class Meta:
         model = Guest
@@ -140,11 +178,9 @@ class registerGuestFromReservationForm(forms.ModelForm):
             ('2', _('غیر ایرانی')),
         )
         widgets = {
-            'cart_detail': forms.HiddenInput(),
-            'room': forms.HiddenInput(),
             'fullname': forms.TextInput(attrs={"class": ' fs-14 py-1 w-100',
-                                                   "placeholder": _('نام کانل')}),
-            'mobile': forms.TextInput(attrs={"class": ' fs-14 py-1 w-100',
+                                                   "placeholder": _('نام کامل')}),
+            'mobile': forms.NumberInput(attrs={"class": ' fs-14 py-1 w-100',
                                                   "placeholder": _('تلفن')}),
             'username': forms.Select(choices=CHOICES,attrs={"class": ' fs-14 py-1 w-100',
                                                  "placeholder": _('ملیت')}),

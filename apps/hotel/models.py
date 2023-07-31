@@ -41,8 +41,8 @@ class Hotel(models.Model):
 
     TYPE_STARS = ((1, '1'), (2, '2'), (4, '3'), (4, '4'), (5, '5'),)
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
-    name = models.CharField(null=True, max_length=256, verbose_name=_("نام هتل"))
-    reference = models.CharField(null=True, max_length=256, unique=True, verbose_name=_("رفرنس"))
+    name = models.CharField(null=True, max_length=255, verbose_name=_("نام هتل"))
+    reference = models.CharField(null=True, max_length=255, unique=True, verbose_name=_("رفرنس"))
     long_desc = models.TextField(null=True, verbose_name=_("توضیحات بلند"))
     short_desc = models.TextField(null=True, blank=True, verbose_name=_("توضیحات کوتاه"))
     rule_cancelable = models.TextField(null=True, blank=True, verbose_name=_("قوانین کنسل"))
@@ -52,12 +52,12 @@ class Hotel(models.Model):
     address = models.TextField(null=True, verbose_name=_("آدرس"))
     latitude = models.DecimalField(null=True, max_digits=12, decimal_places=8)
     longitude = models.DecimalField(null=True, max_digits=12, decimal_places=8)
-    phone_number = models.CharField(null=True, max_length=256, verbose_name=_("شماره تلفن"))
+    phone_number = models.CharField(null=True, max_length=255, verbose_name=_("شماره تلفن"))
     number_rooms = models.SmallIntegerField(null=False, default=0, verbose_name=_("تعداد اتاق ها"))
     number_floor = models.SmallIntegerField(null=False, default=0, verbose_name=_("تعداد طبقه"))
     stars = models.PositiveSmallIntegerField(choices=TYPE_STARS, default=1, verbose_name=_("ستاره ها"))
     default_cover = models.ForeignKey('Cover', null=True, on_delete=models.CASCADE, verbose_name=_("عکس پیش فرض"))
-    meta_keywords = models.CharField(default=None, blank=True, max_length=256,
+    meta_keywords = models.CharField(default=None, blank=True, max_length=255,
                                      help_text="some tag, espinas, international, etc...", verbose_name=_("متا کیبورد"))
     has_early_check_in_out = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("دارای ورود و خروج زود هنگام"))
     has_breakfast = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("دارای صبحانه"))
@@ -88,8 +88,8 @@ class Images(models.Model):
     file = models.ImageField(upload_to=file, null=False, default=None, validators=[validate_image],
                              help_text=_('Maximum file size allowed is 1Mb'))
     hotel = models.ForeignKey(Hotel, null=True, on_delete=models.CASCADE, verbose_name=_("نام هتل"))
-    title = models.CharField(null=True, max_length=256, verbose_name=_("عنوان"))
-    note = models.CharField(null=True, blank=True, max_length=256, verbose_name=_("نوت"))
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
+    note = models.CharField(null=True, blank=True, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -107,7 +107,7 @@ class Images(models.Model):
         verbose_name = _("عکس های هتل ها")
 
     def __str__(self):
-        return self.note
+        return self.title
 
 
 class Cover(models.Model):
@@ -121,8 +121,8 @@ class Cover(models.Model):
 
     file = models.ImageField(upload_to=file, blank=True, null=True, validators=[validate_image],
                              help_text=_('Maximum file size allowed is 1Mb'))
-    title = models.CharField(null=True, max_length=256, verbose_name=_("عنوان"))
-    note = models.CharField(null=True, blank=True, max_length=256, verbose_name=_("نوت"))
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
+    note = models.CharField(null=True, blank=True, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -140,14 +140,14 @@ class Cover(models.Model):
         verbose_name = _("کاور هتل ها")
 
     def __str__(self):
-        return self.note
+        return self.title
 
 
 class Facility(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
     hotel = models.ForeignKey(Hotel, null=True, on_delete=models.CASCADE, verbose_name=_("نام هتل"))
-    title = models.CharField(null=True, max_length=256, verbose_name=_("عنوان"))
-    note = models.CharField(null=False, blank=True, default=None, max_length=256, verbose_name=_("نوت"))
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
+    note = models.CharField(null=False, blank=True, default=None, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -164,7 +164,7 @@ class Extra_person_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
     hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE, related_name='extra_person_rate', verbose_name=_("نام هتل"))
     rate = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت"))
-    note = models.CharField(null=False, default=None, max_length=256, verbose_name=_("نوت"))
+    note = models.CharField(null=False, default=None, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -181,7 +181,7 @@ class Breakfast_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
     hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE, related_name='breakfast_rate', verbose_name=_("نام هتل"))
     rate = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت"))
-    note = models.CharField(null=False, default=None, max_length=256, verbose_name=_("نوت"))
+    note = models.CharField(null=False, default=None, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -198,7 +198,7 @@ class Check_in_out_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
     hotel = models.OneToOneField(Hotel, null=True, on_delete=models.CASCADE, related_name='check_in_out_rate', verbose_name=_("نام هتل"))
     rate = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت"))
-    note = models.CharField(null=False, default=None, max_length=256, verbose_name=_("نوت"))
+    note = models.CharField(null=False, default=None, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -239,8 +239,8 @@ class Room_cover(models.Model):
 
     file = models.ImageField(upload_to=file_room, blank=True, null=True, validators=[validate_image],
                              help_text=_('Maximum file size allowed is 1Mb'))
-    title = models.CharField(null=True, max_length=256, verbose_name=_("عنوان"))
-    note = models.CharField(null=True, blank=True, max_length=256, verbose_name=_("نوت"))
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
+    note = models.CharField(null=True, blank=True, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -263,8 +263,9 @@ class Room_cover(models.Model):
 
 class Room(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
-    title = models.CharField(null=True, max_length=256, verbose_name=_("عنوان"))
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
     hotel = models.ForeignKey(Hotel, null=True, on_delete=models.CASCADE, verbose_name=_("نام هتل"))
+    base_price = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت پابه"))
     price = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت"))
     short_desc = models.TextField(null=True, verbose_name=_("توضیحات کوتاه"))
     note = models.TextField(null=True, verbose_name=_("نوت"))
@@ -300,8 +301,8 @@ class Room_images(models.Model):
     file = models.ImageField(upload_to=file_room, null=False, default=None, validators=[validate_image],
                              help_text=_('Maximum file size allowed is 1Mb'))
     room = models.ForeignKey(Room, null=True, on_delete=models.CASCADE)
-    title = models.CharField(null=True, max_length=256, verbose_name=_("عنوان"))
-    note = models.CharField(null=True, blank=True, max_length=256, verbose_name=_("نوت"))
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
+    note = models.CharField(null=True, blank=True, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -325,8 +326,8 @@ class Room_images(models.Model):
 class Room_facility(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
     room = models.ForeignKey(Room, null=True, on_delete=models.CASCADE)
-    title = models.CharField(null=True, max_length=256, verbose_name=_("عنوان"))
-    note = models.CharField(null=False, blank=True, default=None, max_length=256, verbose_name=_("نوت"))
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
+    note = models.CharField(null=False, blank=True, default=None, max_length=255, verbose_name=_("نوت"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
     date_upd = models.DateTimeField(auto_now=True)
     date_add = models.DateTimeField(auto_now_add=True, null=True)
@@ -345,7 +346,7 @@ class Reviews(models.Model):
     hotel = models.ForeignKey(Hotel, default=None, on_delete=models.CASCADE, verbose_name=_("نام هتل"))
     user = models.ForeignKey(User,null=True, blank=True, default=None, on_delete=models.CASCADE)
     stars = models.SmallIntegerField(choices=TYPE_STARS, null=False, default=0)
-    title = models.CharField(null=False, default=None, max_length=256, verbose_name=_("عنوان"))
+    title = models.CharField(null=False, default=None, max_length=255, verbose_name=_("عنوان"))
     short_desc = models.TextField(null=True, blank=True, default=None, verbose_name=_("توضیحات کوتاه"))
     desc_good = models.TextField(null=True, blank=True, verbose_name=_("نکات مثبت"))
     desc_bad = models.TextField(null=True, blank=True, verbose_name=_("نکات منفی"))
@@ -375,8 +376,8 @@ class Reviews_reply(models.Model):
         return self.short_desc
 
     class Meta:
-        verbose_name_plural = _("جواب ها دیدگاه ها")
-        verbose_name = _("جواب ها دیدگاه ها")
+        verbose_name_plural = _("جواب دیدگاه ها")
+        verbose_name = _("جواب دیدگاه ها")
 
     def __str__(self):
         return self.short_desc
@@ -385,8 +386,8 @@ class Reviews_reply(models.Model):
 class Discount(models.Model):
     TYPE_TRUE = ((1, 'فعال'), (0, 'غیرفعال'),)
     TYPE_DISCOUNT = ((1, 'درصد'), (2, 'مقدار'),)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, default=0, null=True, related_name="room_discount")
-    title = models.CharField(null=True, max_length=256, verbose_name=_("عنوان تخفیف"))
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, related_name="hotel_discount")
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان تخفیف"))
     reduction_type = models.SmallIntegerField(choices=TYPE_DISCOUNT,null=False, default=1, verbose_name=_("نوع تخفیف"))
     reduction = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("مقدار"))
     start_date = models.DateTimeField(null=False, default=0, verbose_name=_("تاریخ شروع"))

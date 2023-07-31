@@ -44,18 +44,39 @@
             </div>
             <div class="hotelPricing hotelListItem d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center"
                  style="width: 195px">
-
+                {% if h.reduction > 0 %}
+                    <div class="position-relative align-items-center d-flex justify-content-center w-100"
+                         style="height: 55px">
+                        <div style="width: 55px;height: 55px;left: 0;top: 1px" class="position-absolute">
+                                {% if h.reduction_type == 1 %}
+                                    <span class="w-100 border-radius-5 d-flex bg-black" style="height: 5px;"></span>
+                                    <div class="d-flex align-items-center justify-content-center mx-auto text-white fs-20 m-auto" style="height: 50px;background: #ff5b6b;width: 95%;left: 0;right: 0;top: 5px">
+                                        {{ h.reduction|floatformat:"0"|intcomma }}%
+                                    </div>
+                                {% else %}
+                                    <span style="color: #ff5b6b;text-decoration: line-through">{{ h.reduction|floatformat:"0"|intcomma }}  </span>
+                                {% endif %}
+                        </div>
+                        <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
+                            <p class="fs-18 w-100 text-center my-2 d-flex align-items-center justify-content-center">
+                                <span style="text-decoration: line-through;color: #ff5b6b"
+                                      class="w-100 ">{{ h.price_bef|floatformat:"0"|intcomma }}</span>&nbsp;
+                            </p>
+                        </label>
+                    </div>
+                {% endif %}
                 <div class="w-100 flex-wrap d-flex justify-content-center">
                 </div>
                 <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
                     <p class="fs-25 w-100 text-center my-2 d-flex align-items-center justify-content-center">
-                        <span class="">{{ h.price|floatformat:"0"|intcomma }}</span>&nbsp;
-                        <span class="text-muted fs-12">تومان</span>
+                        <span class="_price_per_night">{{ h.price|floatformat:"0"|intcomma }}</span>&nbsp;
+                        <span class="text-muted fs-12">{% trans 'تومان' %}</span>
                     </p>
                     <span class="w-100 text-center text-muted my-2 fs-14">{% trans 'هر شب' %}</span>
                 </label>
                 <div class="w-100 text-center">
-                    <a href="{% url 'hotelPage' h.reference h.name.split|join:"_" %}" class="btn fs-14 m-auto btn-primary" style="width: 95%">مشاهده اتاق ها</a>
+                    <a href="{% url 'hotelPage' h.reference h.name.split|join:"_" %}"
+                       class="btn fs-14 m-auto btn-primary" style="width: 95%">مشاهده اتاق ها</a>
                 </div>
             </div>
         </div>
@@ -69,7 +90,9 @@
                        class="fs-12 position-absolute  border-0 bg-transparent filter-options">
             </label>
         {% endif %}
-        <span class="fs-15 fw-bold mx-3 border-radius-5 p-2 text-center" style="width: 85px;">{{ hotel.number }}</span>
+        {% if hotel.has_previous and hotel.has_next %}
+            <span class="fs-15 fw-bold mx-3 border-radius-5 p-2 text-center" style="width: 85px;">{{ hotel.number }}</span>
+        {% endif %}
         {% if hotel.has_next %}
             <label for="nextPage" class="fs-12 btn btn-primary" style="width: 100px;">
                 <span class="d-block text-center text-white">{% trans 'صفحه بعد' %}</span>

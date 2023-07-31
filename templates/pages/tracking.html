@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% load function %}
+{% block title %} {% endblock %}
+{% block meta_desc %} {{ meta.description }} {% endblock %}
+{% block meta_keywords %} {{ meta.keywords }} {% endblock %}
+
+{% load i18n %}
+{% load static %}
+
+{% block main %}
+    <div id="_tracking">
+        <div class="w-75 bg-light p-3 border-radius-15 my-3 m-auto" style="">
+            <h6 class="text-right fs-15 py-3 pr-3">{% trans 'پیگیری وضعیت:' %}</h6>
+            <div class="d-flex pb-3 flex-wrap _guest_container_form justify-content-between w-100" style="">
+                {% for field in form %}
+                    <div class="mx-2 display-flex" style="width: 30%">
+                        <label style="width: 75px" class=" fs-13 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="mx-2 display-flex" style="width: 30%">
+                    <button type="button" class="btn border-radius-15 btn-customize fs-14">{% trans 'جستوجو' %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

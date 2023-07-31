@@ -10,16 +10,20 @@
                     <label><a href="{% url 'panel' %}" class="px-3 border-bottom cursor-pointer">{% trans 'حساب کاربری' %}</a></label>
                 {% endif %}
             </li>
-            <li class=" text-center fs-15"><img style="width: 120px;" src="{% static 'img/logo.png' %}" class="fs-25 fw-bolder"></li>
+            <li class=" text-center fs-15"><a href="{% url 'home_page' %}"><img style="width: 120px;" src="{% static 'img/logo.png' %}" class="fs-25 fw-bolder"></a></li>
             <li class="justify-content-center btnShowMenuMain">
                 <label class="icon-menu fs-25"></label>
             </li>
             <li class="display-flex align-items-center justify-content-center text-center fs-15">
                 <label class="li"><i class="p-3">{% trans '1402-03-31' %}</i></label>
+
                 <form class="li" action="{% url 'set_language' %}" method="post">
                     {% csrf_token %}
-                    <button class="border-0 bg-transparent fs-14" type="submit" name="language" value="en"><b>EN</b></button>
-                    <button class="border-0 bg-transparent fs-14" type="submit" name="language" value="fa"><b>FA</b></button>
+                    {% if request.LANGUAGE_CODE == 'fa' %}
+                        <button class="border-0 bg-transparent fs-14" type="submit" name="language" value="en"><span class="bg-customize fs-12 p-2 text-white border-radius-15">EN</span></button>
+                    {% else %}
+                        <button class="border-0 bg-transparent fs-14" type="submit" name="language" value="fa"><span class="bg-customize fs-12 p-2 text-white border-radius-15">FA</span></button>
+                    {% endif %}
                 </form>
             </li>
         </ul>
@@ -29,7 +33,7 @@
             <li class="w-25 text-center fs-15"><a href="{% url 'home_page' %} " class="px-3 border-bottom cursor-pointer text-success">{% trans 'صفحه اصلی' %}</a></li>
             <li class="w-25 text-center fs-15 position-relative">
                 <a href="{% url 'hotelCategory' %}" class="px-3 border-bottom cursor-pointer">{% trans 'همه هتل ها' %}</a>
-                <ul class="w-100 d-none flex-wrap mt-2 bg-white display-flex position-absolute" style="z-index: 1;padding: unset;box-shadow: -1px 5px 3px 2px #eee;">
+                {% comment %}<ul class="w-100 d-none flex-wrap mt-2 bg-white display-flex position-absolute" style="z-index: 1;padding: unset;box-shadow: -1px 5px 3px 2px #eee;">
                     <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
                     <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
                     <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
@@ -37,17 +41,17 @@
                     <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
                     <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
                     <li class="w-100 p-2">{% trans 'هتل ها' %}</li>
-                </ul>
+                </ul>{% endcomment %}
             </li>
-            <li class="w-25 text-center fs-15"><a href="{% url 'blogMainPage' %}" class="px-3 border-bottom cursor-pointer">{% trans 'پیگیری رزرو' %}</a></li>
+            <li class="w-25 text-center fs-15"><a href="{% url 'tracking' %}" class="px-3 border-bottom cursor-pointer">{% trans 'پیگیری رزرو' %}</a></li>
             {% if ref is not None %}
                 <li class="w-25 text-center fs-15"><a href="{% url 'cart' ref %}" class="px-3 border-bottom cursor-pointer">{% trans 'سبد خرید' %}</a></li>
             {% endif %}
-            <li class="w-25 text-center fs-15"><a href="#" class="px-3 border-bottom cursor-pointer">{% trans 'درباره ما' %}</a></li>
+            <li class="w-25 text-center fs-15"><a href="{% url 'about_us' %}" class="px-3 border-bottom cursor-pointer">{% trans 'درباره ما' %}</a></li>
             <li class="w-25 align-items-center d-flex justify-content-center text-center fs-15">
                 <a href="" class="fs-25 mx-2 icon-instagram text-danger"></a>
                 <a href="" class="fs-25 mx-2 icon-telegram text-info"></a>
-                <a href="" class="fs-25 mx-2 icon-twitter"></a>
+                <a href="https://wa.me/09398200970" class="fs-25 mx-2 text-success icon-whatsapp"></a>
             </li>
         </ul>
     </div>

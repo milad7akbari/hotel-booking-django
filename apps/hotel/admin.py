@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.hotel.models import Cover, Hotel, Facility, Close_spots, Images, Breakfast_rate, Check_in_out_rate, \
+from apps.hotel.models import Cover, Hotel, Facility, Close_spots, Images, Check_in_out_rate, \
     Extra_person_rate, Room_cover, Room_facility, Room_images, Room, Reviews, Discount
 
 
@@ -10,13 +10,6 @@ class ImagesInline(admin.TabularInline):
     show_change_link = True
 
 
-
-
-
-class Breakfast_rateInline(admin.TabularInline):
-    model = Breakfast_rate
-    extra = 1
-    show_change_link = True
 
 class Check_in_out_rateInline(admin.TabularInline):
     model = Check_in_out_rate
@@ -28,13 +21,28 @@ class Extra_person_rateInline(admin.TabularInline):
     extra = 1
     show_change_link = True
 
+class DiscountInline(admin.TabularInline):
+    model = Discount
+    extra = 1
+    show_change_link = True
+
+class RoomInline(admin.TabularInline):
+    model = Room
+    list_display = ('title', 'note', 'number_floor', 'count', 'capacity', 'extra_person', 'active')
+    show_change_link = True
+
 class HotelAdmin(admin.ModelAdmin):
+    search_fields = ['name']
     model = Hotel
     list_display = ('name', 'reference', 'stars', 'active', 'date_add')
     readonly_fields = ('reference',)
-    inlines = [ImagesInline,Breakfast_rateInline, Check_in_out_rateInline, Extra_person_rateInline]
+    inlines = [DiscountInline,RoomInline,ImagesInline, Check_in_out_rateInline, Extra_person_rateInline]
 
 
+
+class RoomAdmin(admin.ModelAdmin):
+    model = Room
+    list_display = ('title', 'note', 'number_floor', 'count', 'capacity', 'extra_person', 'active')
 
 class CoverAdmin(admin.ModelAdmin):
     model = Cover
@@ -73,11 +81,6 @@ class Room_facilityInline(admin.TabularInline):
     list_display = ('hotel', 'title', 'active', 'date_add')
 
 
-class RoomAdmin(admin.ModelAdmin):
-    model = Room
-    list_display = ('title', 'note', 'number_floor', 'count', 'capacity', 'extra_person', 'active', 'date_add')
-    inlines = [Room_imagesInline, Room_facilityInline, ]
-
 class ReviewsAdmin(admin.ModelAdmin):
     model = Reviews
     list_display = ('title', 'short_desc', 'desc_bad', 'stars', 'desc_good', 'active', 'date_add')
@@ -90,8 +93,8 @@ class DiscountAdmin(admin.ModelAdmin):
         return obj.room.title
 
 
-admin.site.register(Discount, DiscountAdmin)
 admin.site.register(Room, RoomAdmin)
+admin.site.register(Discount, DiscountAdmin)
 admin.site.register(Room_cover, Room_coverAdmin)
 
 

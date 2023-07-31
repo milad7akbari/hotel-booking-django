@@ -9,10 +9,9 @@
     <link rel="stylesheet" href="{% static "datepicker/persian-datepicker.min.css" %}" type="text/css">
 {% endblock %}
 {% block js %}
-    <script type="text/javascript" src="{% static "js/swiper.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/hotel-page.js" %}"></script>
-    <script type="text/javascript" src="{% static "datepicker/persian-date.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "datepicker/persian-datepicker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "/js/swiper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "/js/hotel-page.js" %}"></script>
+    <script type="text/javascript" src="{% static "/datepicker/persian-date.min.js" %}"></script>
 {% endblock %}
 {% block main %}
     <div class="m-auto hotelPageContainer" style="width: 90%">
@@ -61,37 +60,24 @@
         <div class="hotel-page-services  mt-4">
             <h1 class="fs-18 mx-4">{% trans 'لیست اتاق ها' %}</h1>
             <div class="formReservation flex-wrap py-1 mt-3 m-auto d-flex" style="width: 85%">
-                {% if diff is not None %}
-                    <p class="alert alert-warning fs-13 w-100">{% trans 'لطفا تاریخ ورود و خروج را بررسی کنید' %}</p>
-                {% endif %}
+                <div data-msg-lang="{% trans 'لطفا تاریخ ورود و خروج را بررسی کنید' %}" class="w-100 containerMsgDiv">
+                    {% if diff is not None %}
+                        <p class="alert alert-warning fs-13 w-100">{% trans 'لطفا تاریخ ورود و خروج را بررسی کنید' %}</p>
+                    {% endif %}
+                </div>
                 <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3">
                     <div class="d-flex w-100 filterRooms align-items-center justify-content-center border-radius-25 px-3 py-3"
                          style="border-bottom: 1px solid #ccc">
                         <div class="w-25 position-relative mx-1">
                             <label class="w-100 text-center position-absolute my-1 fs-15" style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ ورود</label>
-                            <input type="text" class="w-100 check-in-inp fs-13 border-radius-25 text-center" placeholder="" readonly value="0">
+                            <input id="datepicker12from" type="text" class="w-100 fs-13 border-radius-25 text-center" placeholder="" readonly value="0">
                         </div>
-                        <div class="w-25 position-relative mx-1">
+                        <div class="w-25 position-relative mx-1" style="display: none">
                             <label class="w-100 text-center position-absolute my-1 fs-15" style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ خروج</label>
-                            <input type="text" class="w-100 fs-13 check-out-inp border-radius-25 text-center" placeholder="" readonly value="0">
+                            <input id="datepicker12to" type="text" class="w-100 fs-13 border-radius-25 text-center" placeholder="" readonly value="0">
                         </div>
                     </div>
-                    {% comment %}<div class="filterRooms w-50 justify-content-center d-flex align-items-center">
-                        <div class="iconFilter">
-                            <span class="icon-filter"></span>
-                            <label class="fs-14">فیلتر اتاق ها: </label>
-                        </div>
-                        <div class="facilityHotels flex-wrap d-flex">
-                            <label style="min-width: 70px;"
-                                   class="border-radius-5 border-radius-25 bg-primary border m-1 py-1 px-2">
-                                <span class="w-100 d-block text-white text-center fs-13">فقط سه تخته</span>
-                            </label>
-                            <label style="min-width: 70px;"
-                                   class="border-radius-5 border-radius-25 border m-1 py-1 px-2">
-                                <span class="w-100 d-block text-center fs-13">فقط سه تخته</span>
-                            </label>
-                        </div>
-                    </div>{% endcomment %}
+
                 </div>
                 <div class="roomsListHotel" id="roomsListContainer">
                     <form method="post" id="frmAddToCart" action="{% url 'addToCart' hotel.reference %}" class="p-0 d-flex flex-wrap m-0">
@@ -134,24 +120,22 @@
                                     </div>
                                 </div>
 
-                                <div class="hotelPricing roomListItem d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center" style="width: 195px">
-                                    {% if r.room_discount.all.count > 0 %}
+                                <div  data-price="{{ r.price }}" class="hotelPricing roomListItem d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center" style="width: 195px">
+                                    {% if r.reduction > 0 %}
                                         <div class="position-relative align-items-center d-flex justify-content-center w-100" style="height: 55px">
                                             <div style="width: 55px;height: 55px;left: 0;top: 1px" class="position-absolute">
-                                                {% with r|getDiscount as discount %}
-                                                    {% if discount.reduction_type == 1 %}
-                                                        <span class="w-100 border-radius-5 d-flex bg-black" style="height: 5px;"></span>
-                                                        <div class="d-flex align-items-center justify-content-center mx-auto text-white fs-20 m-auto" style="height: 50px;background: #ff5b6b;width: 95%;left: 0;right: 0;top: 5px">
-                                                            {{ discount.reduction|floatformat:"0"|intcomma }}%
-                                                        </div>
-                                                    {% else %}
-                                                            <span style="color: #ff5b6b;text-decoration: line-through">{{ discount.reduction|floatformat:"0"|intcomma }}  </span>
-                                                    {% endif %}
-                                                {% endwith %}
+                                                {% if r.reduction_type == 1 %}
+                                                    <span class="w-100 border-radius-5 d-flex bg-black" style="height: 5px;"></span>
+                                                    <div class="d-flex align-items-center justify-content-center mx-auto text-white fs-20 m-auto" style="height: 50px;background: #ff5b6b;width: 95%;left: 0;right: 0;top: 5px">
+                                                        {{ r.reduction|floatformat:"0"|intcomma }}%
+                                                    </div>
+                                                {% else %}
+                                                        <span style="color: #ff5b6b;text-decoration: line-through">{{ r.reduction|floatformat:"0"|intcomma }}  </span>
+                                                {% endif %}
                                             </div>
                                             <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
                                                 <p class="fs-18 w-100 text-center my-2 d-flex align-items-center justify-content-center">
-                                                    <span style="text-decoration: line-through;color: #ff5b6b" class="w-100 " >{{ r.price|floatformat:"0"|intcomma }}</span>&nbsp;
+                                                    <span style="text-decoration: line-through;color: #ff5b6b" class="w-100 " >{{ r.price_bef|floatformat:"0"|intcomma }}</span>&nbsp;
                                                 </p>
                                             </label>
                                         </div>
@@ -160,14 +144,14 @@
                                     </div>
                                     <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
                                         <p class="fs-25 w-100 text-center my-2 d-flex align-items-center justify-content-center">
-                                            <span class="_price_per_night">{{ r.price|calcPrice:r|floatformat:"0"|intcomma }}</span>&nbsp;
+                                            <span class="_price_per_night">{{ r.price|floatformat:"0"|intcomma }}</span>&nbsp;
                                             <span class="text-muted fs-12">{% trans 'تومان' %}</span>
                                         </p>
                                         <span class="w-100 text-center text-muted my-2 fs-14">{% trans 'هر شب' %}</span>
                                     </label>
                                     <div class="w-100 text-center d-flex justify-content-between">
                                         <label class="fs-14 m-auto">{% trans 'تعداد' %}</label>
-                                        <select name="qty[]" autocomplete="off" data-price="{{ r.price|calcPrice:r }}" data-price-lang="{% trans 'تومان' %}"  class="form-select countOrderRoomPerson w-50 mx-auto text-center form-select-sm">
+                                        <select name="qty[]" autocomplete="off" data-price="{{ r.price }}"  data-price-lang="{% trans 'تومان' %}"  class="form-select countOrderRoomPerson w-50 mx-auto text-center form-select-sm">
                                             <option selected value="0">0</option>
                                             {% with ''|center:r.capacity as range %}
                                                 {% for i in range %}
@@ -312,4 +296,16 @@
                 </div>
         </div>
     </div>
+    {% block js_bottom %}
+        <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
+        <script>
+            $(document).ready(function () {
+                $("#datepicker12to").val('تاریخ ورود را وارد کنید');
+                $("#datepicker12from").val(moment().locale('fa').format('YYYY-MM-DD'));
+                $("#check-out-inp").val(moment().locale('en').format('YYYY-MM-DD'));
+                $("#check-in-inp").val(moment().locale('en').format('YYYY-MM-DD'));
+            });
+        </script>
+    {% endblock %}
+
 {% endblock %}

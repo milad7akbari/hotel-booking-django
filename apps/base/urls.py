@@ -31,7 +31,7 @@ urlpatterns = [
     path('get-modal', getLoginForm),
     path('register-user', registerNewUser, name='registerNewUser'),
     path('login-user', loginUser, name='loginUser'),
-    path('add/<str:ref>', addToCartDetails, name='add'),
+    path('add/<str:ref>/<int:id_cart>', addToCartDetails, name='add'),
     path('createUser/<str:ref>/<int:id_cart>', createUserFromReservation, name='createUserFromReservation'),
     #path('get', cart, name='cart'),
     path('confirmation/<str:reference>', confirmation, name='confirmation'),

@@ -7,8 +7,9 @@
     <p class="fs-25 text-center p-1">{% trans 'خلاصه رزرو شما به شرح زیر می باشد.' %}</p>
 </div>
 <div class="w-100 my-2 bg-white py-2">
-    <p class="fs-17 text-center p-1">هتل اسپیناس پالاس</p>
+    <p class="fs-17 text-center p-1">{{ cart.hotel.name }}</p>
 </div>
+
 <div class="display-flex bg-white p-4 justify-content-evenly  w-100 m-auto "
      style="border-top: 1px solid #aaa;border-bottom: 1px solid #aaa">
     <div class="inputContainer d-flex flex-wrap justify-content-center w-50">
@@ -25,9 +26,11 @@
 
     </div>
 </div>
-<form method="POST" id="addToCartDetails" action="{% url 'add' ref %}" class="w-100 mb-5 pb-5">
+<form method="POST" id="addToCartDetails" {% if user.is_authenticated %} data-auth="1" {% endif %} action="{% url 'add' ref cart.pk %}" class="w-100 mb-5 pb-5">
     {% csrf_token %}
-    <input type="hidden" value="{{ cart.pk }}" name="cart">
+    {% if not user.is_authenticated %}
+        {% include 'cart/_reservation_user_form.html' with form=form ref=ref %}
+    {% endif %}
     <p class="alert alert-danger fs-13 d-none errMsg"></p>
     <div class="roomsListHotel">
         <div class="p-0 d-flex flex-wrap m-0">
@@ -68,30 +71,23 @@
                         </div>
                     </div>
 
-                    <div data-price="{{ r.room.price|calcPrice:r.room }}"
-                         class="hotelPricing roomListItem d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center"
-                         style="width: 195px">
-                        {% if r.room.room_discount.all.count > 0 %}
-                            <div class="position-relative align-items-center d-flex justify-content-center w-100"
-                                 style="height: 55px">
+                    <div data-price="{{ r.room.price }}"
+                         class="hotelPricing roomListItem d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center" style="width: 195px">
+                        {% if r.room.reduction > 0 %}
+                            <div class="position-relative align-items-center d-flex justify-content-center w-100" style="height: 55px">
                                 <div style="width: 55px;height: 55px;left: 0;top: 1px" class="position-absolute">
-                                    {% with r.room|getDiscount as discount %}
-                                        {% if discount.reduction_type == 1 %}
-                                            <span class="w-100 border-radius-5 d-flex bg-black"
-                                                  style="height: 5px;"></span>
-                                            <div class="d-flex align-items-center justify-content-center mx-auto text-white fs-20 m-auto"
-                                                 style="height: 50px;background: #ff5b6b;width: 95%;left: 0;right: 0;top: 5px">
-                                                {{ discount.reduction|floatformat:"0"|intcomma }}%
-                                            </div>
-                                        {% else %}
-                                            <span style="color: #ff5b6b;text-decoration: line-through">{{ discount.reduction|floatformat:"0"|intcomma }}  </span>
-                                        {% endif %}
-                                    {% endwith %}
+                                    {% if r.room.reduction_type == 1 %}
+                                        <span class="w-100 border-radius-5 d-flex bg-black" style="height: 5px;"></span>
+                                        <div class="d-flex align-items-center justify-content-center mx-auto text-white fs-20 m-auto" style="height: 50px;background: #ff5b6b;width: 95%;left: 0;right: 0;top: 5px">
+                                            {{ r.room.reduction|floatformat:"0"|intcomma }}%
+                                        </div>
+                                    {% else %}
+                                        <span style="color: #ff5b6b;text-decoration: line-through">{{ r.room.reduction|floatformat:"0"|intcomma }}  </span>
+                                    {% endif %}
                                 </div>
                                 <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
                                     <p class="fs-18 w-100 text-center my-2 d-flex align-items-center justify-content-center">
-                                        <span style="text-decoration: line-through;color: #ff5b6b"
-                                              class="w-100 ">{{ r.room.price|floatformat:"0"|intcomma }}</span>&nbsp;
+                                        <span style="text-decoration: line-through;color: #ff5b6b" class="w-100 ">{{ r.room.price_bef|floatformat:"0"|intcomma }}</span>&nbsp;
                                     </p>
                                 </label>
                             </div>
@@ -100,7 +96,7 @@
                         </div>
                         <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
                             <p class="fs-25 w-100 text-center my-2 d-flex align-items-center justify-content-center">
-                                <span class="_price">{{ r.room.price|calcPrice:r.room|floatformat:"0"|intcomma }}</span>&nbsp;
+                                <span class="_price">{{ r.room.price|floatformat:"0"|intcomma }}</span>&nbsp;
                                 <span class="text-muted fs-12">{% trans 'تومان' %}</span>
                             </p>
                             <span class="w-100 text-center text-muted my-2 fs-14">{% trans 'هر شب' %}</span>
@@ -108,7 +104,7 @@
                         {% if cart.hotel.check_in_out_rate.rate > 0 %}
                             <div class="w-100  d-flex text-center">
                                 <label for="enterId"
-                                       class="inputContainer d-flex flex-wrap justify-content-center w-50">
+                                       class="inputContainer align-items-center d-flex flex-wrap justify-content-center w-50">
                                     <span data-price="{{ cart.hotel.check_in_out_rate.rate }}"
                                           class="icon-checkbox-unchecked text-primary inp_checkin"></span>
                                     <input type="checkbox" value="0" name="check_in_flag" checked class=""
@@ -118,7 +114,8 @@
                                         <span class="fs-13 text-muted">{{ cart.hotel.check_in_out_rate.rate|floatformat:"0"|intcomma }} تومان </span>
                                     </label>
                                 </label>
-                                <label for="exitId" class="inputContainer d-flex flex-wrap justify-content-center w-50">
+                                <label for="exitId"
+                                       class="inputContainer align-items-center d-flex flex-wrap justify-content-center w-50">
                                     <span data-price="{{ cart.hotel.check_in_out_rate.rate }}"
                                           class="icon-checkbox-unchecked text-primary inp_checkout"></span>
                                     <input type="checkbox" value="0" name="check_out_flag" checked
@@ -149,7 +146,7 @@
                     </div>
                     <div class="w-100" style="">
                         <h6 class="text-right fs-15 pt-3 pr-3">{% trans 'مشخصات مسافر:' %}</h6>
-                        <div class="d-flex pb-3 flex-wrap justify-content-between w-100" style="">
+                        <div class="d-flex pb-3 flex-wrap _guest_container_form justify-content-between w-100" style="">
                             {% for field in form_1 %}
                                 {% if field.auto_id == 'id_room' %}
                                 {% elif field.auto_id == 'id_cart_detail' %}
@@ -186,6 +183,14 @@
                 </div>
             {% endfor %}
         </div>
-        <button type="submit" class="btn btn-primary float-left w-25">{% trans 'مرحله بعدی' %}</button>
+        <div class="__show_errs">
+
+        </div>
+        <div class="w-100 my-3 finalAmountContainer">
+            <div class="display-flex align-items-center flex-wrap  justify-content-center p-3   "
+                 style="box-shadow: 0px 4px 3px #0d6efd;border-radius: 50px;">
+                <button type="submit" class="btn btn-primary float-left w-25">{% trans 'مرحله بعدی' %}</button>
+            </div>
+        </div>
     </div>
 </form>

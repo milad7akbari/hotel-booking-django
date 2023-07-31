@@ -7,11 +7,11 @@
     <meta name="description" content="{% block meta_desc %}{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-
+    <link rel="shortcut icon" href="{% static "img/logo-w-text.ico" %}">
     <script type="text/javascript" src="{% static "js/jquery-3.6.3.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/login-register.js" %}"></script>
     {% block js %}{% endblock %}
-    <script type="text/javascript" src="{% static "js/custom.js" %}"></script>
+    <script src="{% static "js/custom.js" %}"></script>
 {#    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>#}
     {% block sliderHomePage %}{% endblock %}
     {% block css %}{% endblock %}
@@ -35,6 +35,7 @@
     {% include '_partial/footer.html' %}
     <div id="_partial">
     </div>
+    {% block js_bottom %}{% endblock %}
 
 </body>
 </html>

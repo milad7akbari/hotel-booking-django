@@ -15,6 +15,15 @@ def file_category(self, filename):
     filename = "%s.%s" % (str(pk), ext)
     return os.path.join('media/slider/images/', filename)
 
+def file_city(self, filename):
+    ext = filename.split('.')[-1]
+    if self.pk is None:
+        pk = 1
+    else:
+        pk = self.pk + 1
+    filename = "%s.%s" % (str(pk), ext)
+    return os.path.join('media/city/images/', filename)
+
 
 class Slider(models.Model):
     def validate_image(self):
@@ -61,8 +70,8 @@ class Forgot_password(models.Model):
 
 class Provinces(models.Model):
     name = models.CharField(null=True, max_length=128)
-    latitude = models.DecimalField(null=True, max_digits=10, decimal_places=8)
-    longitude = models.DecimalField(null=True, max_digits=11, decimal_places=8)
+    latitude = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
+    longitude = models.DecimalField(null=True, blank=True, max_digits=11, decimal_places=8)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __unicode__(self):
@@ -77,10 +86,17 @@ class Provinces(models.Model):
         return self.name
 
 class Cities(models.Model):
+    def validate_image(self):
+        filesize = self.file.size
+        megabyte_limit = 1
+        if filesize > megabyte_limit * 1024 * 1024:
+            raise ValidationError(_("حداکثر حجم فایل %MB") % str(megabyte_limit))
     provinces = models.ForeignKey(Provinces, default=None, on_delete=models.CASCADE)
     name = models.CharField(null=True, max_length=128)
-    latitude = models.DecimalField(null=True, max_digits=10, decimal_places=8)
-    longitude = models.DecimalField(null=True, max_digits=11, decimal_places=8)
+    file = models.ImageField(upload_to=file_city,null=True, blank=True, validators=[validate_image],
+                             help_text=_('Maximum file size allowed is 1Mb'))
+    latitude = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
+    longitude = models.DecimalField(null=True, blank=True, max_digits=11, decimal_places=8)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __unicode__(self):

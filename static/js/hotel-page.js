@@ -1,7 +1,6 @@
 $(document).ready(function () {
 
 
-
     $('#id_star_container .star').click(function (e) {
         $('#id_stars').val($(this).attr('data-val'));
         var length = $('.review-container .star').length;
@@ -14,9 +13,9 @@ $(document).ready(function () {
             }
         });
     });
-    $('.countOrderRoomPerson option').on('click', function () {
+    $(document).on('change', '.countOrderRoomPerson', function () {
         let final = 0
-        const lang = $(this).parent().attr('data-price-lang');
+        const lang = $(this).attr('data-price-lang');
         $('.countOrderRoomPerson option:selected').each(function () {
             const count = $(this).val();
             const price = $(this).parent().attr('data-price');
@@ -27,7 +26,7 @@ $(document).ready(function () {
                 $('#finalAmount').next().addClass('d-none');
             }
         });
-        $('#finalAmount').val(final.toLocaleString() + ' ' + lang);
+        $('#finalAmount').val(Math.round(final).toLocaleString() + ' ' + lang);
     })
 
     $(document).on('click', '.btnShowImages', function () {
@@ -38,6 +37,7 @@ $(document).ready(function () {
     $(document).on('click', '.btnHideImages', function () {
         $('#_partial').empty();
     });
+
     function modalImages(ref, get) {
         $.ajax({
             type: "GET",
@@ -48,36 +48,70 @@ $(document).ready(function () {
             }
         });
     }
-
-
-    $('.check-in-inp').persianDatepicker({
-        persianDigit: true,
-        altField: '.alt-field-check-in-inp',
-        autoClose : true,
-        position: [25,250],
-        format: 'YYYY-MM-DD',
-        minDate: Date.now()
+    $('#datepicker12from').datepicker({
+        minDate: '0',
+        changeMonth: true,
+        dateFormat: 'yy-mm-dd',
+        changeYear: true,
+        showButtonPanel: true,
+        onSelect: function (dateText, inst) {
+            $('#datepicker12to').parent().show();
+            $('#datepicker12to').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], parseInt(inst['selectedDay']) + 1));
+            const date = inst['selectedYear'] + '-' + inst['selectedMonth'] + '-' + inst['selectedDay'];
+            const final_date = moment.from(date, 'fa', 'YYYY-M-D').format('YYYY-M-D')
+            $('.alt-field-check-in-inp').val(final_date)
+            $('.alt-field-check-out-inp').val(final_date)
+            $('.countOrderRoomPerson option:first-child').each(function () {
+                $(this).prop('selected' , true)
+            });
+            checkCalcDiff(-1)
+        },
     });
-    $('.check-out-inp').persianDatepicker({
-        persianDigit: false,
-        altField: '.alt-field-check-out-inp',
-        autoClose : true,
-        format: 'YYYY-MM-DD',
-        position: [25,250],
-        minDate: Date.now(),
-        onSelect: function(unix){
-            if (unix > $('.alt-field-check-in-inp').val()){
-                var difference = unix - $('.alt-field-check-in-inp').val();
-                var daysDifference = Math.floor(difference/1000/60/60/24);
-                const final = daysDifference * $('.countOrderRoomPerson').attr('data-price')
-                $('.countOrderRoomPerson').attr('data-price' , final)
-                $('._price_per_night').html(final.toLocaleString())
-            }else return false
+    $('#datepicker12to').datepicker({
+        changeMonth: true,
+        showButtonPanel: true,
+        dateFormat: 'yy-mm-dd',
+        changeYear: true,
+        onSelect: function (dateText, inst) {
+            const date = inst['selectedYear'] + '-' + inst['selectedMonth'] + '-' + inst['selectedDay'];
+            const final_date = moment.from(date, 'fa', 'YYYY-M-D').format('YYYY-M-D')
+            $('.alt-field-check-out-inp').val(final_date)
+            const check_in = $('.alt-field-check-in-inp').val().split('-');
+            const check_out = $('.alt-field-check-out-inp').val().split('-');
+            var a = moment([check_out[0], check_out[1], check_out[2]]);
+            var b = moment([check_in[0], check_in[1], check_in[2]]);
+            checkCalcDiff(a.diff(b, 'days'))
+        },
+    });
+
+    // $('.check-in-inp').persianDatepicker({
+    //     persianDigit: true,
+    //     altField: '.alt-field-check-in-inp',
+    //     autoClose : true,
+    //     position: [25,250],
+    //     format: 'YYYY-MM-DD',
+    //     minDate: Date.now(),
+    //     onSelect: function(unix){
+    //         checkCalcDiff(unix)
+    //     }
+    // });
+
+    function checkCalcDiff(diff) {
+        let final = 0
+        if (diff > 0) {
+            $('.countOrderRoomPerson').each(function () {
+                const base_price = $(this).parents('.hotelPricing').attr('data-price')
+                final = diff * base_price
+                $(this).attr('data-price', final)
+                $(this).parents('.hotelPricing').find('._price_per_night').html(Math.round(final).toLocaleString())
+                $('.containerMsgDiv').empty();
+            });
+        } else {
+            $('.containerMsgDiv').html('<p class="alert alert-warning fs-13 w-100">' + $('.containerMsgDiv').attr('data-msg-lang') + '</p>')
+            $('.countOrderRoomPerson').each(function () {
+                const base_price = $(this).parents('.hotelPricing').attr('data-price')
+                $(this).parents('.hotelPricing').find('._price_per_night').html(Math.round(base_price).toLocaleString())
+            });
         }
-    });
-
-
-
-
-
+    }
 })

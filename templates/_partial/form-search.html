@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 
-<form action="" class="display-flex bg-white p-4 justify-content-center {% if page == 'home' %} position-absolute {% else %} flex-wrap  w-100 m-auto {% endif %}" method="post" style="{% if page == 'home' %};width: 500px;bottom: 35px;right: 0;left: 0;margin: auto; {% else %} {% endif %}">
+<form action="" class="display-flex bg-white border-radius-15 p-4 justify-content-center {% if page == 'home' %} position-absolute filterSearchContainerResp {% else %} flex-wrap  w-100 m-auto {% endif %}" method="post" style="{% if page == 'home' %};width: 500px;bottom: 35px;right: 0;left: 0;margin: auto; {% else %} {% endif %}">
     {% csrf_token %}
     <div class="inputContainer position-relative mx-2 {% if page == 'home' %} w-75 {% else %} w-100 {% endif %} text-center">
         <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'نام هتل یا شهر' %}</label>

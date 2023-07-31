@@ -79,11 +79,15 @@ $(document).ready(function () {
                         for (const i in records) {
                             const record = records[i];
                             const id = 'inp_'+i;
-                            console.log('S')
                             if (data.flag == 1){
-                                out += '<li class=""><label for="'+id+'" class="fs-12"><a href="'+url+'?search='+record.name+'">'+record.name+'</a></label></li>';
+                                out += '<li class=""><label for="'+id+'" class="fs-12"><a href="'+url+'?search='+record.name+'">'+record.name+' ('+record.total+')</a></label></li>';
                             }else{
-                                out += '<li class=""><label for="'+id+'" class="fs-12"><a href="'+url+'?search='+record.name+'">'+record.name+'</a></label></li>';
+                                const base_url = data.url
+                                let title = record.name
+                                title = title.replace('', '_')
+                                let url = base_url.replace('REF', record.reference)
+                                url = url.replace('NAME', title)
+                                out += '<li class=""><label for="'+id+'" class="fs-12"><a href="'+url+'">'+record.name+'</a></label></li>';
                             }
                         }
                     }else{

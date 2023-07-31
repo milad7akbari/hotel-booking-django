@@ -37,17 +37,13 @@
                 </li>
             </ul>
         </div>
-        <div class="w-75 m-auto">
+        <div class="w-75 m-auto _info_container">
 
             <div class="w-100 m-auto my-2 bg-white py-2 _reservation_form_main">
             {% if step.step == 1 %}
-                {% if not user.is_authenticated %}
-                    {% include 'cart/_reservation_user_form.html' with form=form ref=ref %}
-                {% else %}
-                    {% include 'cart/_summery.html' with room=room ref=ref %}
-                {% endif %}
+                {% include 'cart/_summery.html' with room=room ref=ref form=form %}
             {% elif step.step == 2 %}
-                    {% include 'cart/_reservation_payment_form.html' with info=info form_pay=form_pay ref=ref cart=cart %}
+                {% include 'cart/_reservation_payment_form.html' with info=info form_pay=form_pay ref=ref cart=cart %}
             {% elif step.step == 3 %}
                 واچر
             {% endif %}

@@ -1,7 +1,17 @@
 from modeltranslation.translator import register, TranslationOptions
 
-from .models import Slider, Meta
+from .models import Slider, Meta, Cities, Provinces
 
+
+@register(Provinces)
+class ProvincesTranslationOptions(TranslationOptions):
+    fields = ('name',)
+    required_languages = ('en', 'fa')
+
+@register(Cities)
+class CitiesTranslationOptions(TranslationOptions):
+    fields = ('name',)
+    required_languages = ('en', 'fa')
 
 @register(Slider)
 class SliderTranslationOptions(TranslationOptions):

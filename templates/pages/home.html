@@ -38,9 +38,8 @@
         </div>
     </div>
 
-    {% include '_partial/home/_home_on_sale.html' %}
-    {% include '_partial/home/_home_city.html' %}
-    {% include '_partial/home/_home_on_sale.html' %}
+    {% include '_partial/home/_home_on_sale.html' with hotel=hotel %}
+    {% include '_partial/home/_home_city.html' with city=city %}
     {% include '_partial/home/_home_blog.html' with blogs_related=blogs_related %}
     </div>
 <script>
@@ -51,36 +50,53 @@
       },
     });
     var swiper1 = new Swiper("._homeBlogItems", {
-      slidesPerView: 4,
-      spaceBetween: 25,
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
       },
+      breakpoints: {
+          640: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+          },
+          768: {
+              slidesPerView: 4,
+              spaceBetween: 25,
+          },
+      }
     });
     var swiper2 = new Swiper("._homeOnSaleItems", {
-      slidesPerView: 4,
-      spaceBetween: 25,
+
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
       },
-    });
-    var swiper3 = new Swiper("._homeOnWish", {
-      slidesPerView: 4,
-      spaceBetween: 25,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
+      breakpoints: {
+          640: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+          },
+          768: {
+              slidesPerView: 4,
+              spaceBetween: 25,
+          },
+      }
     });
     var swiper4 = new Swiper("._homeCity", {
-      slidesPerView: 4,
-      spaceBetween: 25,
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
       },
+      breakpoints: {
+          640: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+          },
+          768: {
+              slidesPerView: 4,
+              spaceBetween: 25,
+          },
+      }
     });
   </script>
 {% endblock %}
