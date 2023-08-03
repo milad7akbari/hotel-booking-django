@@ -16,13 +16,13 @@ Including another URLconf
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
-from django.urls import path, include
-
-from Hotel_Test import settings
-from apps.front.views import home_page
+from django.template.defaulttags import url
+from django.urls import path, include, re_path
+from django.views.static import serve
+from hotel import settings
+from apps.front.views import home_page, general_policy, about_us, tracking
 from django.conf.urls.static import static
 
-admin.site.site_header = "Hotel Tik"
 admin.site.site_title = "Hotel Tik"
 admin.site.index_title = "Hotel Tik"
 urlpatterns = i18n_patterns(
@@ -34,14 +34,16 @@ urlpatterns = i18n_patterns(
     path('hotel/', include('apps.hotel.urls')),
     path('panel/', include('apps.customer.urls')),
     path('', home_page, name='home_page'),
+    path('general-policy', general_policy, name='generalPolicy'),
+    path('tracking', tracking, name='tracking'),
+    path('about-us', about_us, name='about_us'),
     path("logout/", LogoutView.as_view(), name="logout"),
-
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 )
 
 urlpatterns += [
-    path('login/', include('apps.base.urls')),
-    path('hotel-l/', include('apps.base.urls')),
-    path('cart/', include('apps.base.urls')),
+    path('get/', include('apps.base.urls')),
 
 ]
 if settings.DEBUG:

@@ -68,6 +68,24 @@ class Forgot_password(models.Model):
         return self.user.first_name
 
 
+class Footer(models.Model):
+    PTYPE = (('postal_code', 'کد پستی'), ('phone', 'تلفن'), ('email', 'ایمبل'), ('instagram', 'اینستاگرام'), ('whatsapp', 'واتس اپ'), ('telegram', 'تلگرام'),)
+    name = models.CharField(choices=PTYPE, null=True, max_length=255)
+    value = models.CharField(null=True, max_length=255)
+    date_upd = models.DateTimeField(auto_now=True)
+    date_add = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        verbose_name_plural =  _('فوتر')
+        verbose_name = _('فوتر')
+
+    def __str__(self):
+        return self.value
+
+    def __unicode__(self):
+        return self.value
+
+
 class Provinces(models.Model):
     name = models.CharField(null=True, max_length=128)
     latitude = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
@@ -110,6 +128,8 @@ class Cities(models.Model):
         return self.name
 
 class Meta(models.Model):
+    PTYPE = (('hotels','همه هتل ها'),('home_page','صفحه اصلی'),('about_us_page','درباره ما'),('general_policy_page','قوانین و مقررات'),('cart_page','سبد خرید'),)
+    page_name = models.CharField(choices=PTYPE, max_length=255, blank=True)
     title = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
     keywords = models.TextField(blank=True, help_text="some tag, hoteltik, international, etc...")
@@ -117,11 +137,11 @@ class Meta(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return _('متا')
+        return self.title
 
     class Meta:
         verbose_name_plural = _('متا')
         verbose_name = _('متا')
 
     def __unicode__(self):
-        return _('متا')
+        return self.title

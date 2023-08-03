@@ -13,9 +13,9 @@
                                 <div class="container-favIcon bg-danger">
                                     {% if h.reduction > 0 %}
                                         {% if h.reduction_type == 1 %}
-                                            <span class="fs-13 text-white">{{ h.reduction|floatformat:"0"|intcomma }}%</span>
+                                            <span class="fs-13 text-white">{{ h.reduction|floatformat:"0"|intcomma:False }}%</span>
                                         {% else %}
-                                            <span class="fs-13 text-white">{{ h.reduction|floatformat:"0"|intcomma }}</span>
+                                            <span class="fs-13 text-white">{{ h.reduction|floatformat:"0"|intcomma:False }}</span>
                                         {% endif %}
                                     {% endif %}
                                 </div>
@@ -33,9 +33,9 @@
                             <div class="cart-footer my-2 w-100 flex-wrap display-flex justify-content-between">
                                 <label class="d-flex justify-content-evenly w-100">
                                     {% if h.reduction > 0 %}
-                                        <span style="color: red;text-decoration: line-through">{{ h.price_bef|floatformat:"0"|intcomma }}</span>
+                                        <span style="color: red;text-decoration: line-through">{{ h.price_bef|floatformat:"0"|intcomma:False }}</span>
                                     {% endif %}
-                                    <span>{{ h.price|floatformat:"0"|intcomma }}</span>
+                                    <span>{{ h.price|floatformat:"0"|intcomma:False }}</span>
                                 </label>
                                 <span class="my-1 text-center w-100 fs-14 fw-bolder">{% trans ' تومان برای هر شب' %}</span>
                             </div>

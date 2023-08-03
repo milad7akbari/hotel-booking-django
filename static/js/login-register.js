@@ -2,7 +2,7 @@ $(document).ready(function () {
     function modalRegisterForm(url) {
         $.ajax({
             type:"GET",
-            url: "/login/get-modal?modalName=" + url,
+            url: "/get/login/get-modal?modalName=" + url,
             success: function(data){
                 $('#_partial').empty().html(data);
             }
@@ -133,8 +133,8 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
             $('#id_password').addClass('border-red-err text-danger');
             return false
         }
-        if ($('#id_username').val().length >= 1){
-            if($('#id_username').val().indexOf('@') != -1){
+        if ($('#formLoginUser #id_username').val().length >= 1){
+            if($('#formLoginUser #id_username').val().indexOf('@') != -1){
                 let pattern = /^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b$/i
                 if(!pattern.test($('#id_username').val())) {
                     $('.errMsg').removeClass('d-none').addClass('d-block').html($('#id_username').val());
@@ -142,7 +142,7 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
                 }
             }else {
                 let pattern = /^09\d{9}$/i
-                if(!pattern.test($('#id_username').val())) {
+                if(!pattern.test($('#formLoginUser #id_username').val())) {
                     $('.errMsg').removeClass('d-none').addClass('d-block').html('موبایل را به درستی وارد کنید');
                     return false
                 }
@@ -158,6 +158,7 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
                 if (data.status == 1) {
                     $('.btnRegisterLoginPasswd').find('label').empty().append('<a href="/panel">حساب کاربری</a>').removeClass('btnRegisterLoginPasswd')
                     $("#registerLoginModal").remove();
+                    $("._reservation_user_form_container").remove();
                 } else if (data.status == 0 ||data.status == -1) {
                     $('.errMsg').removeClass('d-none').addClass('d-block').html('کاربری با این مشخصات پیدا نشد')
                 }

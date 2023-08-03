@@ -1,3 +1,4 @@
+import re
 import secrets
 import uuid
 
@@ -18,7 +19,7 @@ from apps.front.forms import forgotPasswordForm, trackingForm, registerUserFromR
     forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser, placeOrderForm
 from django.utils.translation import gettext_lazy as _
 
-from apps.front.models import Cart, Cart_detail, Guest, Step, Order_detail
+from apps.front.models import Cart, Cart_detail, Guest, Step, Order_detail, Order
 from apps.hotel.models import Hotel, Room, Discount, Check_in_out_rate, Extra_person_rate
 
 
@@ -69,8 +70,7 @@ def searchHotelCity(request):
     if filter_param is not None:
         if title_param is not None:
             hotel = Cities.objects.filter(hotel__isnull=False, name__contains=title_param).annotate(
-                total=Count('hotel')).values('name','total')
-
+                total=Count('hotel')).values('name', 'total')
             flag = 1
             url = None
             if not hotel.count():
@@ -117,30 +117,30 @@ def forgotPasswordConfirm(request):
         }
         return JsonResponse(context)
 
-
-def createUserFromReservation(request, ref, id_cart):
-    if request.method == 'POST':
-        form = registerUserFromReservationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            hotel = get_object_or_404(Hotel, reference=ref)
-            cart = Cart.objects.filter(hotel_id=hotel.pk, pk=id_cart)
-            if cart.exists():
-                cart.update(user_id=request.user.pk)
-            context = {
-                "result": _('ورود اطلاعات موفقیت آمیز بود'),
-                "err": False,
-            }
-            return JsonResponse(context)
-        else:
-            if 'err' in form.errors:
-                err = True
-                context = {
-                    "result": form.errors,
-                    "err": err,
-                }
-                return JsonResponse(context)
+#
+# def createUserFromReservation(request, ref, id_cart):
+#     if request.method == 'POST':
+#         form = registerUserFromReservationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             login(request, user)
+#             hotel = get_object_or_404(Hotel, reference=ref)
+#             cart = Cart.objects.filter(hotel_id=hotel.pk, pk=id_cart)
+#             if cart.exists():
+#                 cart.update(user_id=request.user.pk)
+#             context = {
+#                 "result": _('ورود اطلاعات موفقیت آمیز بود'),
+#                 "err": False,
+#             }
+#             return JsonResponse(context)
+#         else:
+#             if 'err' in form.errors:
+#                 err = True
+#                 context = {
+#                     "result": form.errors,
+#                     "err": err,
+#                 }
+#                 return JsonResponse(context)
 
 
 def getInfoFromCart_(cart_pk, hotel_pk):
@@ -182,7 +182,7 @@ def getInfoFromCart_(cart_pk, hotel_pk):
                 i.room.price = ((100 - reduction) / 100) * ((diff * price) * i.quantity)
                 total_amount += ((100 - reduction) / 100) * ((diff * price) * i.quantity)
         else:
-            i.price = price
+            i.price = price * diff
             total_amount += price
 
     cart.total_amount = total_amount
@@ -196,7 +196,9 @@ def addToCartDetails(request, ref, id_cart):
             form_user = registerUserFromReservationForm(request.POST)
             form_guest = registerGuestFromReservationForm(request.POST)
             if form_user.is_valid() and form_guest.is_valid():
-                user = form_user.save()
+                user = form_user.save(commit=False)
+                user.password = make_password('123', salt="Argon2PasswordHasher", hasher="default")
+                user.save()
                 login(request, user)
                 cart = Cart.objects.filter(hotel_id=hotel.pk, pk=id_cart, flag=1)
                 if cart.exists():
@@ -359,29 +361,73 @@ def _cities():
     city = Cities.objects.filter(hotel__isnull=False).order_by('?')[:6]
     return city
 
+
 def general_policy(request):
+    meta = Meta.objects.filter(page_name='general_policy_page').first()
+
     context = {
+        'meta' : meta
     }
     return render(request, 'pages/general_policy.html', context)
 
+
 def about_us(request):
+    meta = Meta.objects.filter(page_name='general_policy_page').first()
+
     context = {
+        'meta': meta
     }
     return render(request, 'pages/about_us.html', context)
 
+
 def tracking(request):
     context = {
-        'form' : trackingForm
+        'form': trackingForm
     }
     return render(request, 'pages/tracking.html', context)
 
 
+def trackingSubmit(request):
+    if request.method == 'POST':
+        err = True
+        form = trackingForm(request.POST)
+        if form.is_valid():
+            order = _('اطلاعات وارد شده صحیح نیست.')
+            reference = request.POST.get('reference')
+            username = request.POST.get('username')
+            if len(username) == 10:
+                username = '09' + username[1:]
+            if len(username) == 11 or len(username) == 10:
+                regex = r'\b^(\+98|0)?9\d{9}$\b'
+                if re.fullmatch(regex, username):
+                    user = User.objects.filter(username=username).first()
+                    if user is not None:
+                        order = Order.objects.filter(user_id=user.pk, reference=reference).first()
+                        if order is not None:
+                            err = False
+                            current_state = _('در انتظار بررسی')
+                            if order.current_state == 2:
+                                current_state = _('تایید شده است')
+                            order = current_state
+            context = {
+                'err': err,
+                'order': order
+            }
+            return JsonResponse(context)
+        else:
+            context = {
+                'err': True
+            }
+            return JsonResponse(context)
+
+
 def home_page(request):
     slider = Slider.objects.filter(active=1).order_by('?')[:3]
-    meta = Meta.objects.first()
     hotel = _hotels()
     blogs_related = _blogs()
     city = _cities()
+    meta = Meta.objects.filter(page_name='hotels').first()
+
     context = {
         'blogs_related': blogs_related,
         'city': city,
@@ -435,12 +481,14 @@ def cart(request, ref):
                     if reduction_type == 1:
                         i.room.price = ((100 - reduction) / 100) * ((diff * price) * i.quantity)
                 else:
-                    i.price = price
+                    i.room.price = price * diff
             step = Step.objects.filter(cart_id=cart.pk).first()
             info = None
             if step is not None and step.step == 2:
                 info = getInfoFromCart_(cart.pk, cart.hotel_id)
+            meta = Meta.objects.filter(page_name='cart_page').first()
             context = {
+                'meta': meta,
                 'info': info,
                 'step': step,
                 'ref': ref,
@@ -543,6 +591,8 @@ def registerNewUser(request):
     if request.method == 'POST':
         form = registerUser(request.POST)
         if form.is_valid():
+            user = form.save(commit=False)
+            user.password = make_password(form.cleaned_data['password'], salt="Argon2PasswordHasher", hasher="default")
             user = form.save()
             login(request, user)
             context = {
@@ -575,7 +625,13 @@ def loginUser(request):
                     user = User.objects.filter(username=username_email, password=password).first()
                 if user is not None:
                     status = 1
+                    secure_key = 0
+                    if request.session.session_key:
+                        secure_key = request.session.session_key
                     login(request, user)
+                    cart = Cart.objects.filter(flag=1, secure_key=secure_key)
+                    if cart.exists():
+                        cart.update(user_id=request.user.pk)
                 else:
                     status = 0
             else:
@@ -587,7 +643,7 @@ def loginUser(request):
             return JsonResponse(context)
 
 
-def calcOrderInfo(cart, hotel):
+def calcOrderInfo(cart, hotel, extra_person, check_in_out):
     hotel_discount = Hotel.objects.filter(pk=hotel.pk).prefetch_related(
         Prefetch('hotel_discount', queryset=Discount.objects.filter(
             Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now())))).first()
@@ -597,10 +653,13 @@ def calcOrderInfo(cart, hotel):
     extra_person_rate = 0
     check_in_out_rate = 0
     nights = (cart.check_out - cart.check_in).days
-    if cart.hotel.has_early_check_in_out:
-        extra_person_rate = cart.hotel.extra_person_rate.rate
-    if cart.check_in_out:
-        check_in_out_rate = cart.hotel.check_in_out_rate.rate
+    if extra_person.exists():
+        if cart.hotel.has_early_check_in_out:
+            extra_person_rate = cart.hotel.extra_person_rate.rate
+    if check_in_out.exists():
+        if cart.check_in_out:
+            check_in_out_rate = cart.hotel.check_in_out_rate.rate
+
     for detail in cart.cart_detail.all():
         extra_person_quantity = detail.extra_person_quantity
         check_in_flag = detail.check_in_flag
@@ -634,8 +693,8 @@ def calcOrderInfo(cart, hotel):
         'total_products': total_products,
         'total_amount_dis_incl': total_amount_dis_incl,
         'total_amount_dis_excl': total_amount_dis_excl,
-        'extra_person_rate': cart.hotel.extra_person_rate.rate,
-        'check_in_out_rate': cart.hotel.check_in_out_rate.rate,
+        'extra_person_rate': extra_person_rate,
+        'check_in_out_rate': check_in_out_rate,
     }
     return context
 
@@ -664,10 +723,12 @@ def placeOrders(request, ref, cart_id):
             if form.is_valid():
                 cart_exists = Cart.objects.filter(user_id=request.user.pk, hotel_id=hotel.pk, pk=cart_id, flag=1)
                 cart_obj = cart_exists.first()
-                cart_obj.extra_person = Extra_person_rate.objects.filter(hotel_id=hotel.pk, active=1).exists()
-                cart_obj.check_in_out = Check_in_out_rate.objects.filter(hotel_id=hotel.pk, active=1).exists()
+                extra_person = Extra_person_rate.objects.filter(hotel_id=hotel.pk, active=1)
+                cart_obj.extra_person = extra_person.exists()
+                check_in_out = Check_in_out_rate.objects.filter(hotel_id=hotel.pk, active=1)
+                cart_obj.check_in_out = check_in_out.exists()
                 if cart_exists.exists():
-                    info = calcOrderInfo(cart_obj, hotel)
+                    info = calcOrderInfo(cart_obj, hotel, extra_person, check_in_out)
                     order_obj = form.save(commit=False)
                     order_obj.user = cart_obj.user
                     order_obj.cart = cart_obj

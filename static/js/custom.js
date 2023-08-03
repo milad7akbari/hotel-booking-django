@@ -8,6 +8,20 @@ $(document).ready(function () {
         }, 2000);
     });
 
+    function en_digit(thiss) {
+        const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+        const a2e = s => s.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+        let final = p2e(thiss.val())
+        final = a2e(final)
+        thiss.val(final)
+    }
+    $(document).on('keyup', '.id_mobile', function (e) {
+        en_digit($(this))
+    });
+    $(document).on('keyup', '.id_username', function (e) {
+        en_digit($(this))
+    });
+
     function calcPrice(thiss) {
         if (thiss.hasClass('active')) {
             thiss.next().val(0)
@@ -168,6 +182,39 @@ $(document).ready(function () {
             },
             error: function (xhr, desc, err) {
 
+                $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
+            }
+        });
+    });
+
+    $(document).on('submit', '#_tracking_form', function (e) {
+        $('.span_loader_').removeClass('d-none').addClass('d-block')
+        $('.errMsg').removeClass('alert-success').addClass('d-none alert-danger').html('')
+        $('#id_username').removeClass('border-red-err text-danger')
+        $('#id_reference').removeClass('border-red-err text-danger')
+        let pattern_guest = /^(\+98|0)?9\d{9}$/i
+        if (!pattern_guest.test($('#id_username').val())) {
+            $('#id_username').addClass('border-red-err text-danger');
+            return false
+        }
+        if ($('#id_reference').val() < 8) {
+            $('#id_reference').addClass('border-red-err text-danger');
+            return false
+        }
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr("action"),
+            type: 'POST',
+            dataType: "JSON",
+            data: $(this).serialize(),
+            success: function (data) {
+                $('.span_loader_').addClass('d-none').removeClass('d-block')
+                if (!data.err) {
+                    $('.errMsg').removeClass('d-none alert-danger').addClass('d-block alert-success').html(data.order)
+                } else $('.errMsg').removeClass('d-none').addClass('d-block').html(data.order)
+            },
+            error: function (xhr, desc, err) {
+                $('.span_loader_').addClass('d-none').removeClass('d-block')
                 $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
             }
         });

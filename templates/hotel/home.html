@@ -2,6 +2,9 @@
 {% load humanize %}
 {% load i18n %}
 {% load static %}
+{% block title %} {{ meta.title }} {% endblock %}
+{% block meta_desc %} {{ meta.description }} {% endblock %}
+{% block meta_keywords %} {{ meta.keywords }} {% endblock %}
 {% block css %}
     <link rel="stylesheet" href="{% static "stylesheet/hotel.css" %}" type="text/css">
 {% endblock %}

@@ -10,7 +10,7 @@
                     <h6 class="mt-2 fs-13 text-center">{% trans 'شما با این شماره تلفن وارد شده اید' %}</h6>
                     <ul class="w-100 px-4 mb-0 flex-wrap display-flex" style="line-height: 3">
                         <li class="w-100 cursor-pointer position-relative justify-content-center display-flex align-items-center fs-13">
-                            <label class="mx-5 fw-bolder fs-15">09398200979</label>
+                            <label class="mx-5 fw-bolder fs-15">{{ request.user.username }}</label>
                         </li>
                     </ul>
                 </div>
@@ -22,7 +22,7 @@
                     <ul class="w-100 px-4 mb-0 flex-wrap display-flex" style="line-height: 3">
                         <li class="w-100 cursor-pointer justify-content-between position-relative display-flex align-items-center fs-13">
                             <label class="icon-user position-absolute" style="right: 5px"></label>
-                            <a href="#" class="px-4">مشخصات</a>
+                            <a href="{% url 'personality' %}" class="px-4">مشخصات</a>
                         </li>
                         <li class="w-100 cursor-pointer justify-content-between position-relative display-flex align-items-center fs-13">
                             <label class="icon-checkmark position-absolute" style="right: 5px"></label>

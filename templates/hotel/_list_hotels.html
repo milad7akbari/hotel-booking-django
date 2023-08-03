@@ -2,6 +2,9 @@
 {% load humanize %}
 {% load i18n %}
 {% load static %}
+{% block title %} {{ hotel.name }} {% endblock %}
+{% block meta_desc %} {{ hotel.description }} {% endblock %}
+{% block meta_keywords %} {{ h.name.split|join:"," }} {% endblock %}
 <div class="p-0 d-flex flex-wrap m-0" id="hotelsListContainer">
     {% for h in hotel %}
         <div class="w-100 my-3 hotelListContainer border-bottom pb-1 d-flex flex-wrap" style="min-height: 255px">
@@ -51,16 +54,16 @@
                                 {% if h.reduction_type == 1 %}
                                     <span class="w-100 border-radius-5 d-flex bg-black" style="height: 5px;"></span>
                                     <div class="d-flex align-items-center justify-content-center mx-auto text-white fs-20 m-auto" style="height: 50px;background: #ff5b6b;width: 95%;left: 0;right: 0;top: 5px">
-                                        {{ h.reduction|floatformat:"0"|intcomma }}%
+                                        {{ h.reduction|floatformat:"0"|intcomma:False }}%
                                     </div>
                                 {% else %}
-                                    <span style="color: #ff5b6b;text-decoration: line-through">{{ h.reduction|floatformat:"0"|intcomma }}  </span>
+                                    <span style="color: #ff5b6b;text-decoration: line-through">{{ h.reduction|floatformat:"0"|intcomma:False }}  </span>
                                 {% endif %}
                         </div>
                         <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
                             <p class="fs-18 w-100 text-center my-2 d-flex align-items-center justify-content-center">
                                 <span style="text-decoration: line-through;color: #ff5b6b"
-                                      class="w-100 ">{{ h.price_bef|floatformat:"0"|intcomma }}</span>&nbsp;
+                                      class="w-100 ">{{ h.price_bef|floatformat:"0"|intcomma:False }}</span>&nbsp;
                             </p>
                         </label>
                     </div>
@@ -69,7 +72,7 @@
                 </div>
                 <label class="justify-content-center w-100 d-flex flex-wrap" style="line-height: 1">
                     <p class="fs-25 w-100 text-center my-2 d-flex align-items-center justify-content-center">
-                        <span class="_price_per_night">{{ h.price|floatformat:"0"|intcomma }}</span>&nbsp;
+                        <span class="_price_per_night">{{ h.price|floatformat:"0"|intcomma:False }}</span>&nbsp;
                         <span class="text-muted fs-12">{% trans 'تومان' %}</span>
                     </p>
                     <span class="w-100 text-center text-muted my-2 fs-14">{% trans 'هر شب' %}</span>

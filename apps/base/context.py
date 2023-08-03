@@ -1,5 +1,5 @@
 from django.db.models import Count, Q
-from apps.base.models import Cities
+from apps.base.models import Cities, Footer, Meta
 from apps.blog.models import Category, Main
 from apps.front.models import Cart, Cart_detail, Step
 
@@ -52,12 +52,40 @@ def header(request):
             'check_out': check_out,
         }
 
+
     return context
 
 
 def footer(request):
     city = Cities.objects.filter(hotel__isnull=False).annotate(count=Count('name')).all()[:10]
+    footer = Footer.objects.all()
+    postal_code = 0
+    phone = 0
+    email = 0
+    instagram = 0
+    whatsapp = 0
+    telegram = 0
+    for i in footer:
+        if i.name == 'postal_code':
+            postal_code = i.value
+        if i.name == 'phone':
+            phone = i.value
+        if i.name == 'email':
+            email = i.value
+        if i.name == 'instagram':
+            instagram = i.value
+        if i.name == 'whatsapp':
+            whatsapp = i.value
+        if i.name == 'telegram':
+            telegram = i.value
     context = {
+        'phone': phone,
+        'email': email,
+        'instagram': instagram,
+        'whatsapp': whatsapp,
+        'telegram': telegram,
+        'postal_code': postal_code,
         'city': city,
+        'footer': footer,
     }
     return context

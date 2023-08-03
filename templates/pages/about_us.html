@@ -1,6 +1,6 @@
 {% extends 'base/base.html' %}
 {% load function %}
-{% block title %} {% endblock %}
+{% block title %} {{ meta.title }} {% endblock %}
 {% block meta_desc %} {{ meta.description }} {% endblock %}
 {% block meta_keywords %} {{ meta.keywords }} {% endblock %}
 
@@ -9,7 +9,17 @@
 
 {% block main %}
     <div id="_rules">
-        <h3 class="my-5 text-center">درباره ما سایت هتل تیک</h3>
-        <h6 class="my-5 text-center">در حال بروزرسانی</h6>
+        <div id="about-us">
+            <div id="about-us-container">
+                <div class="item-col logoContainerAbout">
+                    <img title="" alt="" src="{% static 'img/logo.png' %}">
+                </div>
+                <div class="item-col titleContainerAbout">
+                    <h2>درباره</h2>
+                    <p>ما</p>
+                    <p>با تلاش و کوشش فراوان توانستیم سامانه هتل تیک را راه بیاندازیم و دلیل آن امکانات محدود سایت های مشابه در داخل کشور است که این به خودی خود باعث می شود کاربر علاوه بر استفاده از امکانات بتواند از بازدید از سایت لذت کافی ببرد یکی آز آنها تبلیغ در صفحه اصلی سایت می باشد که افزایش بازدید از محصولات و یا غیره شما را به همراه دارد علاوه بر آن ما امکاناتی را تدارک دیده ایم که مشتری می تواند از محصولات و یا کسب و کار خود در صورت لزوم ویدئو تهیه کند و در داخل سایت به اشتراک بگذارد.</p>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

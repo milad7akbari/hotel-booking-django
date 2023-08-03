@@ -15,16 +15,16 @@ class forgotPasswordForm(forms.Form):
 
 class loginUserForm(forms.Form):
     username = forms.CharField(required=True, widget=forms.TextInput(
-        attrs={"class": 'borderRadiusFPI fw-bolder align-left dir-ltr w-100'}), label=_('موبایل یا ایمیل'))
+        attrs={"class": 'borderRadiusFPI align-left dir-ltr w-100'}), label=_('موبایل یا ایمیل'))
     password = forms.CharField(required=True, widget=forms.PasswordInput(
-        attrs={"class": 'borderRadiusFPI fw-bolder align-left dir-ltr w-100'}), label=_('پسورد'))
+        attrs={"class": 'borderRadiusFPI align-left dir-ltr w-100'}), label=_('پسورد'))
 
 
 class trackingForm(forms.Form):
     reference = forms.CharField(required=True, widget=forms.TextInput(
-        attrs={"class": 'border-radius-15 fw-bolder align-left dir-ltr w-100'}), label=_('رفرنس'))
+        attrs={"class": 'border-radius-15 align-left dir-ltr w-100'}), label=_('رفرنس'))
     username = forms.CharField(required=True, widget=forms.NumberInput(
-        attrs={"class": 'border-radius-15 fw-bolder align-left dir-ltr w-100'}), label=_('موبایل'))
+        attrs={"class": 'border-radius-15 align-left dir-ltr w-100'}), label=_('موبایل'))
 
 
 class forgotPasswordConfirmForm(forms.ModelForm):
@@ -45,6 +45,7 @@ class registerUser(forms.ModelForm):
         username = self.cleaned_data['username']
         if len(username) == 10:
             username = '09' + username[1:]
+        self.cleaned_data['username'] = username
         email = self.cleaned_data['email']
         user = User.objects.filter(Q(username=username) | Q(email=email))
         errors_flag = 0
@@ -110,6 +111,7 @@ class registerUserFromReservationForm(forms.ModelForm):
             errors_flag = 1
         if len(username) == 10:
             username = '09' + username[1:]
+        self.cleaned_data['username'] = username
         user = User.objects.filter(Q(username=username))
         if len(username) == 11 or len(username) == 10:
             regex = r'\b^(\+98|0)?9\d{9}$\b'

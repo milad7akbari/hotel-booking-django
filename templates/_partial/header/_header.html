@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load static %}
+{% load function %}
 <header id="_header">
     <div class="header_top_container w-100 ">
         <ul class="d-flex  px-0 justify-content-between py-2">
@@ -15,7 +16,7 @@
                 <label class="icon-menu fs-25"></label>
             </li>
             <li class="display-flex align-items-center justify-content-center text-center fs-15">
-                <label class="li"><i class="p-3">{% trans '1402-03-31' %}</i></label>
+                <label class="li"><i class="p-3">{{ 'date'|currentDate }}</i></label>
 
                 <form class="li" action="{% url 'set_language' %}" method="post">
                     {% csrf_token %}
@@ -49,9 +50,9 @@
             {% endif %}
             <li class="w-25 text-center fs-15"><a href="{% url 'about_us' %}" class="px-3 border-bottom cursor-pointer">{% trans 'درباره ما' %}</a></li>
             <li class="w-25 align-items-center d-flex justify-content-center text-center fs-15">
-                <a href="" class="fs-25 mx-2 icon-instagram text-danger"></a>
-                <a href="" class="fs-25 mx-2 icon-telegram text-info"></a>
-                <a href="https://wa.me/09398200970" class="fs-25 mx-2 text-success icon-whatsapp"></a>
+                <a href="{{ instagram }}" class="fs-25 mx-2 icon-instagram text-danger"></a>
+                <a href="https://t.me/{{ telegram }}" class="fs-25 mx-2 icon-telegram text-info"></a>
+                <a href="https://wa.me/{{ whatsapp }}" class="fs-25 mx-2 text-success icon-whatsapp"></a>
             </li>
         </ul>
     </div>

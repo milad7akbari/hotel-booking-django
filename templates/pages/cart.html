@@ -1,9 +1,8 @@
 {% extends 'base/base.html' %}
-{% load humanize %}
-{% load jalali_tags %}
-{% load function %}
-{% load i18n %}
-{% load static %}
+{% load jalali_tags function humanize i18n static %}
+{% block title %} {{ meta.title }} {% endblock %}
+{% block meta_desc %} {{ meta.description }} {% endblock %}
+{% block meta_keywords %} {{ meta.keywords }} {% endblock %}
 {% block css %}
     <link rel="stylesheet" href="{% static "stylesheet/swiper.min.css" %}" type="text/css">
 {% endblock %}

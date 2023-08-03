@@ -39,11 +39,11 @@
                             <label class="fs-15 text-black w-100">
                                 {% if detail.room.reduction > 0 %}
                                     <label class="display-flex flex-wrap justify-content-center">
-                                        <i style="text-decoration: line-through" class="text-danger d-block w-100">{{ detail.room.price_bef|floatformat:"0"|intcomma }} </i>
-                                        <span>{{ detail.room.price|floatformat:"0"|intcomma }} <span class="fs-13">{% trans 'تومان' %}</span> </span>
+                                        <i style="text-decoration: line-through" class="text-danger d-block w-100">{{ detail.room.price_bef|floatformat:"0"|intcomma:False }} </i>
+                                        <span>{{ detail.room.price|floatformat:"0"|intcomma:False }} <span class="fs-13">{% trans 'تومان' %}</span> </span>
                                     </label>
                                 {% else %}
-                                    <span> {{ detail.room.price|floatformat:"0"|intcomma }} <span class="fs-13">{% trans 'تومان' %}</span> </span>
+                                    <span> {{ detail.room.price|floatformat:"0"|intcomma:False }} <span class="fs-13">{% trans 'تومان' %}</span> </span>
                                 {% endif %}
                             </label>
                         </div>
@@ -55,7 +55,7 @@
                                 {% if  detail.extra_person_quantity > 0 %}
                                     <label class="w-100 display-flex flex-wrap">
                                         <span class="w-100 text-center">{% trans 'نیاز دارم' %}</span>
-                                        <span class="w-100 text-center">{{ info.hotel.extra_person_rate.rate|floatformat:"0"|intcomma }}*{{ detail.extra_person_quantity }} <span class="fs-13">{% trans 'تومان' %}</span></span>
+                                        <span class="w-100 text-center">{{ info.hotel.extra_person_rate.rate|floatformat:"0"|intcomma:False }}*{{ detail.extra_person_quantity }} <span class="fs-13">{% trans 'تومان' %}</span></span>
                                     </label>
                                 {% else %}
                                     {% trans 'نیاز ندارم' %}
@@ -68,7 +68,7 @@
                                 {% if  detail.check_in_flag > 0 %}
                                     <label class="w-100 display-flex flex-wrap">
                                         <span class="w-100 text-center text-muted">{% trans 'نیاز دارم' %}</span>
-                                        <span class="w-100 text-center">{{ info.hotel.check_in_out_rate.rate|floatformat:"0"|intcomma }} <span class="fs-13">{% trans 'تومان' %}</span> </span>
+                                        <span class="w-100 text-center">{{ info.hotel.check_in_out_rate.rate|floatformat:"0"|intcomma:False }} <span class="fs-13">{% trans 'تومان' %}</span> </span>
                                     </label>
                                 {% else %}
                                     {% trans 'نیاز ندارم' %}
@@ -81,7 +81,7 @@
                                 {% if  detail.check_out_flag > 0 %}
                                     <label class="w-100 display-flex flex-wrap">
                                         <span class="w-100 text-center">{% trans 'نیاز دارم' %}</span>
-                                        <span class="w-100 text-center">{{ info.hotel.check_in_out_rate.rate|floatformat:"0"|intcomma }} <span class="fs-13">{% trans 'تومان' %}</span> </span>
+                                        <span class="w-100 text-center">{{ info.hotel.check_in_out_rate.rate|floatformat:"0"|intcomma:False }} <span class="fs-13">{% trans 'تومان' %}</span> </span>
                                     </label>
                                 {% else %}
                                     {% trans 'نیاز ندارم' %}
@@ -101,7 +101,7 @@
     <div class="bg-white px-1 pt-3  w-100 m-auto " style=" ">
         <div class="inputContainer my-2 d-flex flex-wrap w-100">
             <label class="fs-13 mb-2 text-center w-100">قابل پرداخت</label>
-            <span class="fs-18 bg-primary text-white w-100 py-2 px-3 border-radius-25 text-center">{{ info.total_amount|floatformat:"0"|intcomma }} <span class="fs-13 text-white">{% trans 'تومان' %}</span> </span>
+            <span class="fs-18 bg-primary text-white w-100 py-2 px-3 border-radius-25 text-center">{{ info.total_amount|floatformat:"0"|intcomma:False }} <span class="fs-13 text-white">{% trans 'تومان' %}</span> </span>
         </div>
     </div>
     {% for field in form_pay %}

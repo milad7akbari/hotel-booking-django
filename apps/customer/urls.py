@@ -15,12 +15,14 @@ Including another URLconf
 """
 from django.urls import path
 
-from apps.customer.views import quickReserve, voucher, panelOrders
+from apps.customer.views import quickReserve, voucher, panelOrders, orderDetail, personality
 
 urlpatterns = [
     path('', panelOrders, name='panel'),
+    path('personality', personality, name='personality'),
     path('voucher', voucher, name='voucher'),
     path('quick-reservation', quickReserve, name='quickReserve'),
     path('panel-orders', panelOrders, name='panelOrders'),
+    path('order/<int:id>', orderDetail, name='orderDetail'),
 ]
 

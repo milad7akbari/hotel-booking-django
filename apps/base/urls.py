@@ -16,26 +16,28 @@ Including another URLconf
 
 
 from django.urls import path
+from setuptools import namespaces
 
 from apps.front.views import getLoginForm, searchHotelCity, addToCartDetails, confirmation, registerNewUser, loginUser, \
     forgotPassword, forgotPasswordByToken, \
-    forgotPasswordConfirm, createUserFromReservation, placeOrders
+    forgotPasswordConfirm,  placeOrders, trackingSubmit
 
 from apps.hotel.views import imagesHotel
 
 
 urlpatterns = [
-    path('images/<str:ref>', imagesHotel),
-    path('search', searchHotelCity, name='searchHotelCity'),
-    path('place-order/<str:ref>/<int:cart_id>', placeOrders, name='placeOrders'),
-    path('get-modal', getLoginForm),
-    path('register-user', registerNewUser, name='registerNewUser'),
-    path('login-user', loginUser, name='loginUser'),
-    path('add/<str:ref>/<int:id_cart>', addToCartDetails, name='add'),
-    path('createUser/<str:ref>/<int:id_cart>', createUserFromReservation, name='createUserFromReservation'),
+    path('hotel-l/images/<str:ref>', imagesHotel),
+    path('tracking-request/show', trackingSubmit, name='trackingSubmit'),
+    path('hotel-l/search', searchHotelCity, name='searchHotelCity'),
+    path('cart/place-order/<str:ref>/<int:cart_id>', placeOrders, name='placeOrders'),
+    path('login/get-modal', getLoginForm),
+    path('login/register-user', registerNewUser, name='registerNewUser'),
+    path('login/login-user', loginUser, name='loginUser'),
+    path('cart/add/<str:ref>/<int:id_cart>', addToCartDetails, name='addToCartDetails'),
+    # path('createUser/<str:ref>/<int:id_cart>', createUserFromReservation, name='createUserFromReservation'),
     #path('get', cart, name='cart'),
-    path('confirmation/<str:reference>', confirmation, name='confirmation'),
-    path('forgot-password', forgotPassword, name='forgotPassword'),
-    path('forgot-pass/<str:token>', forgotPasswordByToken, name='forgotPasswordByToken'),
-    path('forgot-pass-confirm', forgotPasswordConfirm, name='forgotPasswordConfirm')
+    path('cart/confirmation/<str:reference>', confirmation, name='confirmation'),
+    path('login/forgot-password', forgotPassword, name='forgotPassword'),
+    path('login/forgot-pass/<str:token>', forgotPasswordByToken, name='forgotPasswordByToken'),
+    path('login/forgot-pass-confirm', forgotPasswordConfirm, name='forgotPasswordConfirm')
 ]

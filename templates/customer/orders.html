@@ -1,4 +1,6 @@
 {% extends 'customer/base/base.html' %}
+{% load func_customer %}
+{% load jalali_tags %}
 {% load i18n %}
 {% load static %}
 {% block customer_main %}
@@ -10,26 +12,18 @@
             <li style="width: 10%" class="fs-13 text-center">موافقت با قوانین</li>
             <li style="width: 10%" class="fs-13 text-center">وضعیت</li>
             <li style="width: 10%" class="fs-13 text-center">فاکتور</li>
-            <li style="width: 10%" class="fs-13 text-center">نوع پرداخت</li>
-            <li style="width: 10%" class="fs-13 text-center">قابل پرداخت</li>
-            <li style="width: 10%" class="fs-13 text-center">میزان تخفیف</li>
-            <li style="width: 10%" class="fs-13 text-center">پرداخت شده</li>
             <li style="width: 10%" class="fs-13 text-center">تعدا اتاق ها</li>
             <li style="width: 25%" class="fs-13 text-center">تاریخ ایجاد</li>
         </ul>
         {% for o in orders %}
             <ul class="p-0 cursor-pointer w-100 align-items-center my-2 d-flex justify-content-between">
-                <li style="width: 10%" class="text-center fs-13">{{ o.reference|upper }}</li>
+                <li style="width: 10%" class="text-center fs-13"><a href="{% url 'orderDetail' o.pk %}">{{ o.reference }}</a></li>
                 <li style="width: 25%" class="text-center fs-13">{{ o.hotel.name }}</li>
-                <li style="width: 10%" class="text-center fs-13">{{ o.agree_rule }}</li>
-                <li style="width: 10%" class="text-center fs-13">{{ o.current_state }}</li>
-                <li style="width: 10%" class="text-center fs-13">{{ o.has_invoice }}</li>
-                <li style="width: 10%" class="text-center fs-13">{{ o.payment_type }}</li>
-                <li style="width: 10%" class="text-center fs-13">{{ o.total_amount }}</li>
-                <li style="width: 10%" class="text-center fs-13">{{ o.total_discount }}</li>
-                <li style="width: 10%" class="text-center fs-13">{{ o.total_paid }}</li>
-                <li style="width: 10%" class="text-center fs-13">{{ o.total_products }}</li>
-                <li style="width: 25%" class="text-center fs-13">{{ o.date_add }}</li>
+                <li style="width: 10%" class="text-center fs-13">{% if o.agree_rule %}{% trans 'دارم' %}{% else %}{% trans 'ندارم' %}{% endif %}</li>
+                <li style="width: 10%" class="text-center fs-13">{{ o.current_state|currentState }}</li>
+                <li style="width: 10%" class="text-center fs-13">{% if o.has_invoice %}{% trans 'دارم' %}{% else %}{% trans 'ندارم' %}{% endif %}</li>
+                <li style="width: 10%" class="text-center fs-13">{{ o.total_room }}</li>
+                <li style="width: 25%" class="text-center fs-13">{{ o.date_add|to_jalali:"%Y-%m-%d" }}</li>
             </ul>
 {#            {% if  forloop.counter == 2 %}#}
 {#                <ul class="p-0 flex-wrap cursor-pointer w-75 mx-auto align-items-center my-4 border-radius-5 d-flex justify-content-between">#}

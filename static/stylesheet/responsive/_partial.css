@@ -22,6 +22,26 @@
   ##Screen = B/w 481px to 767px
 */
 @media (max-width: 767px) {
+  #policy {
+    height: unset !important;
+  }
+  #policy .policy-title {
+    display: none;
+  }
+  #policy .policy-description {
+    width: 90% !important;
+  }
+  #about-us {
+    height: unset !important;
+  }
+  #about-us #about-us-container .item-col {
+    width: 100% !important;
+    height: unset !important;
+  }
+  #about-us #about-us-container .item-col img {
+    width: 100% !important;
+    margin: unset !important;
+  }
   .hotelPageContainer .finalAmountContainer {
     position: fixed;
     bottom: 0;

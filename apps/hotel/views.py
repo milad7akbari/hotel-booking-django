@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.base.models import Cities
+from apps.base.models import Cities, Meta
 from apps.hotel.forms import reviewsForm
 from apps.hotel.models import Hotel, Facility, Close_spots, Images, Room, Room_images, Reviews, Discount
 
@@ -86,7 +86,9 @@ def hotelCategory(request):
     else:
         city = Cities.objects.filter(hotel__isnull=False).annotate(count=Count('name')).all()
         facility = Facility.objects.filter(active=1, hotel__isnull=False).all()
+        meta = Meta.objects.filter(page_name='hotels').first()
         context = {
+            'meta': meta,
             'hotel': hotel,
             'city': city,
             'facility': facility,

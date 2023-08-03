@@ -1,17 +1,20 @@
 #_main {
   max-width: 1400px;
 }
+
 #_header {
   .header_top_container {
     .btnShowMenuMain {
       display: none;
     }
+
     li {
       width: 33%;
     }
   }
 }
-.timeline li{
+
+.timeline li {
   list-style: none;
   float: left;
   width: 25%;
@@ -19,18 +22,22 @@
   text-align: center;
   text-transform: uppercase;
 }
-.horizontal-line{
+
+.horizontal-line {
   content: '';
   position: absolute;
-  height: 2px;width: 100%;
-  display: block;top: 15px;
+  height: 2px;
+  width: 100%;
+  display: block;
+  top: 15px;
   background: #4caf50;
-  }
-ul:nth-child(1){
+}
+
+ul:nth-child(1) {
   color: #4caf50;
 }
 
-.timeline li ._before{
+.timeline li ._before {
   counter-increment: test;
   content: counter(test);
   width: 30px;
@@ -47,7 +54,7 @@ ul:nth-child(1){
   cursor: pointer;
 }
 
-.timeline li ._after{
+.timeline li ._after {
   content: "";
   position: absolute;
   width: 100%;
@@ -59,28 +66,129 @@ ul:nth-child(1){
   transition: all ease-in-out .3s;
 }
 
-.timeline li:first-child ._after{
+.timeline li:first-child ._after {
   content: none;
 }
-.timeline li.active-tl{
+
+.timeline li.active-tl {
   color: #555555;
 }
-.timeline li.active-tl ._before{
+
+.timeline li.active-tl ._before {
   background: #4caf50;
   color: #F1F1F1;
 }
 
-.timeline li.active-tl + li ._after{
+.timeline li.active-tl + li ._after {
   background: #4caf50;
 }
-.timeline li.pending-tl ._before{
-  background: #ffc107 ;
+
+.timeline li.pending-tl ._before {
+  background: #ffc107;
   color: #F1F1F1;
 }
 
-.timeline li.pending-tl + li ._after{
-  background: #ffc107 ;
+#about-us {
+  width: 100%;
+  height: 500px;
+  float: right;
 }
+#policy {
+  direction: rtl;
+  margin: 20px auto;
+  width: 100%;
+  float: right;
+  height: 450px;
+  justify-content: space-around;
+  display: flex;
+
+.active-p-s-l {
+  margin-left: 20px !important;
+  transition: all ease-in-out 2s !important;
+}
+.policy-title {
+  display: table;
+  width: 25%;
+  float: right;
+  height: 100%;
+  border-left: 10px solid;
+}
+.policy-title p {
+  display: table-cell;
+  vertical-align: middle;
+}
+.policy-title p span {
+  font-weight: bolder;
+}
+.policy-description {
+  width: 65%;
+  float: left;
+  height: 100%;
+}
+.policy-description p {
+  font-size: 14px;
+  text-align: justify;
+  direction: rtl;
+  line-height: 2.4;
+  padding: 10px;
+  margin-top: 25px;
+}
+  .span-margin-left {
+  margin-left: -70px !important;
+  transition: all ease-in-out 2s !important;
+}
+}
+#about-us #about-us-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  .item-col {
+  width: 50%;
+  height: 500px;
+}
+}
+
+#about-us #about-us-container .titleContainerAbout {
+  text-align: right;
+}
+
+#about-us #about-us-container .titleContainerAbout {
+  p, h2 {
+    padding: 50px 50px 0;
+  }
+}
+
+#about-us #about-us-container .titleContainerAbout p {
+  padding-top: 0;
+}
+
+#about-us #about-us-container .titleContainerAbout p:last-child {
+  line-height: 2.2;
+  font-size: 18px;
+  direction: rtl;
+  text-align: justify;
+  margin-top: 15px;
+}
+
+#about-us #about-us-container .logoContainerAbout {
+  width: 40%;
+  height: 485px;
+  float: left;
+  padding: 0 25px;
+  overflow: hidden;
+
+  img {
+    width: 85%;
+    height: auto;
+    float: right;
+    margin: 50px;
+  }
+}
+
+.timeline li.pending-tl + li ._after {
+  background: #ffc107;
+}
+
 #registerLoginModal {
   width: 100%;
   margin: auto;
@@ -115,32 +223,36 @@ ul:nth-child(1){
     bottom: -20px;
     right: 0;
   }
-@keyframes shake {
-  10%, 90% {
-    transform: translate3d(-1px, 0, 0);
+
+  @keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
   }
 
-  20%, 80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%, 50%, 70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
-  40%, 60% {
-    transform: translate3d(4px, 0, 0);
-  }
-}
   .containerOtpReqCheckActive {
-    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;color: #ff7b62;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+    color: #ff7b62;
   }
-  .border-red-err{
+
+  .border-red-err {
     border: 1px solid #ff7b62 !important;
   }
 
 
-  .box-shadow-red-err{
+  .box-shadow-red-err {
     box-shadow: 0 3px 11px -4px #ff7b62 !important;
   }
 
@@ -172,63 +284,94 @@ ul:nth-child(1){
     transition: all ease-in-out .5s;
   }
 }
-.btnCloseModal{
-  position: absolute;top: 20px;left: 20px;padding: 10px;transition: all ease-in-out .1s;
-  &:hover{
-    color: red;transition: all ease-in .1s;cursor: pointer;
+
+.btnCloseModal {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px;
+  transition: all ease-in-out .1s;
+
+  &:hover {
+    color: red;
+    transition: all ease-in .1s;
+    cursor: pointer;
   }
 }
-.col-right-pg-login-reset-password{
-width: 40%;
-height: 100%;
-position: relative;
-display: flex;
-justify-content: center;
-justify-items: center;
-align-items: center;
-align-self: center;
-    background-size: 80% 60% !important;
-    background-position: center !important;
+
+.col-right-pg-login-reset-password {
+  width: 40%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-self: center;
+  background-size: 80% 60% !important;
+  background-position: center !important;
 }
+
 .col-left-pg-login {
   padding: 35px;
-    width: 60%;background: transparent;height: 100%;position: relative;
-    .tab-bg-login{
-        width: 100%;height: 50px;
-        ul{
-            display: flex;justify-content: space-around;
-            li{
-                width: 50%;text-align: center;cursor: pointer;background: black;color: white;transition: all ease-in-out .2s;line-height: 3;
-                &:hover{
-                    background: rgba(0,0,0,.8);color: #cccccc;transition: all ease-in-out .2s;
-                }
-            }
-        }
-    }
+  width: 60%;
+  background: transparent;
+  height: 100%;
+  position: relative;
 
-    .ulImDirector{
-        width: 100%;
-        display: flex;
-        ul{
-            width: 100%;
-            display: flex;
-        }
-    }
+  .tab-bg-login {
+    width: 100%;
+    height: 50px;
 
-    .privacyContainer{
-        position: absolute;
-        width: 100%;
-        bottom: 70px;
-    }
-    .privacyContainer-condition{
-        position: relative;
-        bottom: unset !important;
-        margin-top: 40px !important;
-        p{
-            color: #000 !important;
+    ul {
+      display: flex;
+      justify-content: space-around;
+
+      li {
+        width: 50%;
+        text-align: center;
+        cursor: pointer;
+        background: black;
+        color: white;
+        transition: all ease-in-out .2s;
+        line-height: 3;
+
+        &:hover {
+          background: rgba(0, 0, 0, .8);
+          color: #cccccc;
+          transition: all ease-in-out .2s;
         }
+      }
     }
+  }
+
+  .ulImDirector {
+    width: 100%;
+    display: flex;
+
+    ul {
+      width: 100%;
+      display: flex;
+    }
+  }
+
+  .privacyContainer {
+    position: absolute;
+    width: 100%;
+    bottom: 70px;
+  }
+
+  .privacyContainer-condition {
+    position: relative;
+    bottom: unset !important;
+    margin-top: 40px !important;
+
+    p {
+      color: #000 !important;
+    }
+  }
 }
+
 #registerLoginModal {
   width: 100%;
   margin: auto;
@@ -264,27 +407,31 @@ align-self: center;
     bottom: -20px;
     right: 0;
   }
-@keyframes shake {
-  10%, 90% {
-    transform: translate3d(-1px, 0, 0);
+
+  @keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
   }
 
-  20%, 80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%, 50%, 70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
-  40%, 60% {
-    transform: translate3d(4px, 0, 0);
-  }
-}
   .containerOtpReqCheckActive {
-    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;color: #ff7b62;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+    color: #ff7b62;
   }
-  .border-red-err{
+
+  .border-red-err {
     border: 1px solid #ff7b62;
   }
 

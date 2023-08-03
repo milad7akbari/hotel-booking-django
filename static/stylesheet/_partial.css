@@ -71,6 +71,94 @@ ul:nth-child(1) {
   background: #ffc107;
   color: #F1F1F1;
 }
+#about-us {
+  width: 100%;
+  height: 500px;
+  float: right;
+}
+#policy {
+  direction: rtl;
+  margin: 20px auto;
+  width: 100%;
+  float: right;
+  height: 450px;
+  justify-content: space-around;
+  display: flex;
+}
+#policy .active-p-s-l {
+  margin-left: 20px !important;
+  transition: all ease-in-out 2s !important;
+}
+#policy .policy-title {
+  display: table;
+  width: 25%;
+  float: right;
+  height: 100%;
+  border-left: 10px solid;
+}
+#policy .policy-title p {
+  display: table-cell;
+  vertical-align: middle;
+}
+#policy .policy-title p span {
+  font-weight: bolder;
+}
+#policy .policy-description {
+  width: 65%;
+  float: left;
+  height: 100%;
+}
+#policy .policy-description p {
+  font-size: 14px;
+  text-align: justify;
+  direction: rtl;
+  line-height: 2.4;
+  padding: 10px;
+  margin-top: 25px;
+}
+#policy .span-margin-left {
+  margin-left: -70px !important;
+  transition: all ease-in-out 2s !important;
+}
+#about-us #about-us-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#about-us #about-us-container .item-col {
+  width: 50%;
+  height: 500px;
+}
+#about-us #about-us-container .titleContainerAbout {
+  text-align: right;
+}
+#about-us #about-us-container .titleContainerAbout p,
+#about-us #about-us-container .titleContainerAbout h2 {
+  padding: 50px 50px 0;
+}
+#about-us #about-us-container .titleContainerAbout p {
+  padding-top: 0;
+}
+#about-us #about-us-container .titleContainerAbout p:last-child {
+  line-height: 2.2;
+  font-size: 18px;
+  direction: rtl;
+  text-align: justify;
+  margin-top: 15px;
+}
+#about-us #about-us-container .logoContainerAbout {
+  width: 40%;
+  height: 485px;
+  float: left;
+  padding: 0 25px;
+  overflow: hidden;
+}
+#about-us #about-us-container .logoContainerAbout img {
+  width: 85%;
+  height: auto;
+  float: right;
+  margin: 50px;
+}
 .timeline li.pending-tl + li ._after {
   background: #ffc107;
 }

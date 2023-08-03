@@ -118,8 +118,8 @@ class Order(models.Model):
 
 
 class Order_detail(models.Model):
-    order = models.ForeignKey(Order, default=None, null=True, blank=True, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, default=None, null=True, blank=True, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, default=None, null=True, blank=True, on_delete=models.CASCADE,related_name='order_detail')
+    room = models.ForeignKey(Room, default=None, null=True, blank=True, on_delete=models.CASCADE,related_name='order_detail')
     name = models.CharField(null=False, default=1, max_length=255)
     quantity = models.SmallIntegerField(null=False, default=1)
     check_in_flag = models.SmallIntegerField(null=False, default=0)

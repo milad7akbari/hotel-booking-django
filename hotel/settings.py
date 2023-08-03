@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
 import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
@@ -22,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ih^&t1_!99d&e_qfg(i)jz_jha@*0$t#*vdd4&*#huk5(fzs&3'
+SECRET_KEY = 'django-insecure-a96f6^3jn$sb@()&l@837cocnc_d&snzoa$6cilvh%nh=-mrhw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -58,7 +58,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'hotel.urls'
-
+LOGOUT_REDIRECT_URL = '/'
+CSRF_COOKIE_DOMAIN = 'http://127.0.0.1'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -67,7 +68,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
+                'apps.base.context.header',
+                'apps.base.context.footer',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -123,6 +125,7 @@ USE_I18N = True
 
 USE_TZ = False
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -140,6 +143,6 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn', 'static_root')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

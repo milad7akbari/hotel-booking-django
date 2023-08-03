@@ -9,8 +9,11 @@
 
 {% block main %}
     <div id="_tracking">
-        <div class="w-75 bg-light p-3 border-radius-15 my-3 m-auto" style="">
+        <form action="{% url 'trackingSubmit' %}" id="_tracking_form" method="post" class="w-75 overflow-hidden position-relative bg-light p-3 border-radius-15 my-3 m-auto" style="">
+            {% csrf_token %}
+            <span class="position-absolute span_loader_ d-none w-100 h-100" style="top: 0;right: 0;background: rgba(0,0,0,.2);"></span>
             <h6 class="text-right fs-15 py-3 pr-3">{% trans 'پیگیری وضعیت:' %}</h6>
+            <p class="alert alert-danger errMsg d-none fs-13"></p>
             <div class="d-flex pb-3 flex-wrap _guest_container_form justify-content-between w-100" style="">
                 {% for field in form %}
                     <div class="mx-2 display-flex" style="width: 30%">
@@ -19,9 +22,9 @@
                     </div>
                 {% endfor %}
                 <div class="mx-2 display-flex" style="width: 30%">
-                    <button type="button" class="btn border-radius-15 btn-customize fs-14">{% trans 'جستوجو' %}</button>
+                    <button type="submit" class="btn border-radius-15 btn-customize fs-14">{% trans 'جستوجو' %}</button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 {% endblock %}

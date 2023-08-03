@@ -1,7 +1,10 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
-from .models import Slider, Meta, Provinces, Cities
+from .models import Slider, Meta, Provinces, Cities, Footer
 
+class FooterAdmin(admin.ModelAdmin):
+    model = Footer
+    list_display = ('name','value','date_upd','date_add')
 
 class SliderAdmin(TranslationAdmin):
     model = Slider
@@ -9,7 +12,7 @@ class SliderAdmin(TranslationAdmin):
 
 class MetaAdmin(TranslationAdmin):
     model = Meta
-    list_display = ('title', 'description', 'keywords')
+    list_display = ('page_name', 'title', 'description', 'keywords')
 
 
 class ProvincesAdmin(TranslationAdmin):
@@ -20,6 +23,7 @@ class CitiesAdmin(TranslationAdmin):
     model = Cities
     list_display = ('name',)
 
+
 # class HotelAdmin(TranslationAdmin):
 #     model = Hotel
 #     list_display = ('name', 'reference', 'stars', 'on_sale', 'active', 'date_add')
@@ -29,6 +33,7 @@ class CitiesAdmin(TranslationAdmin):
 #     model = Images
 #     list_display = ('pk', 'file', 'title', 'active', 'date_add')
 
+admin.site.register(Footer, FooterAdmin)
 admin.site.register(Provinces, ProvincesAdmin)
 admin.site.register(Cities, CitiesAdmin)
 admin.site.register(Slider, SliderAdmin)
