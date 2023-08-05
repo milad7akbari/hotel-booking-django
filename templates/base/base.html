@@ -17,6 +17,9 @@
     {% block css %}{% endblock %}
     <link rel="stylesheet" href="{% static "font/style.css" %}" type="text/css">
     <link rel="stylesheet" href="{% static "stylesheet/base.css" %}" type="text/css">
+    {% if request.LANGUAGE_CODE == 'en' %}
+    <link rel="stylesheet" href="{% static "stylesheet/dir_ltr.css" %}" type="text/css">
+    {% endif %}
     <link rel="stylesheet" href="{% static "stylesheet/bootstrap.min.css" %}" type="text/css">
     <link rel="stylesheet" href="{% static "font/moon.css" %}" type="text/css">
     <link rel="stylesheet" href="{% static "stylesheet/_partial.css" %}" type="text/css">

@@ -27,11 +27,15 @@ def hotelCategory(request):
             sort = 'stars'
         elif sorting_param == 'star-desc':
             sort = '-stars'
-    hotel = Hotel.objects.filter(active=1, room__price__isnull=False, room__active__exact=1).select_related(
+    if sorting_param == 'price-desc':
+        sort_price = '-price'
+    else:
+        sort_price = 'price'
+    hotel = Hotel.objects.filter(active=1).select_related(
         'default_cover', 'city').prefetch_related('facility_set' , Prefetch(
                 'room_set',
                 queryset=Room.objects.filter(
-                    Q(active=1))
+                    Q(active=1, price__isnull=False)).order_by(sort_price)
             ) , Prefetch(
                 'hotel_discount',
                 queryset=Discount.objects.filter(
@@ -48,13 +52,10 @@ def hotelCategory(request):
             hotel = hotel.filter(facility__title__in=facility_param).order_by(sort)
         if search_param is not None:
             hotel = hotel.filter(Q(name__contains=search_param) | Q(city__name__contains=search_param)).order_by(sort)
-    if sorting_param == 'price-desc':
-        sort_price = '-price'
-    else:
-        sort_price = 'price'
+
     for i in hotel:
         discount = i.hotel_discount.first()
-        price = i.room_set.order_by(sort_price).first().price
+        price = i.room_set.first().price
         if discount is not None:
             reduction_type = discount.reduction_type
             reduction = discount.reduction

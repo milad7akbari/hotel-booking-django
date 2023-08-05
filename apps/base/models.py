@@ -93,7 +93,7 @@ class Provinces(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __unicode__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = _('استان')
@@ -101,7 +101,7 @@ class Provinces(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class Cities(models.Model):
     def validate_image(self):
@@ -145,3 +145,20 @@ class Meta(models.Model):
 
     def __unicode__(self):
         return self.title
+
+class Pages(models.Model):
+    PTYPE = (('about-us','درباره ما'),('general_policy_page','قوانین و مقررات'),)
+    page_name = models.CharField(choices=PTYPE, max_length=255, blank=True)
+    description = models.TextField(blank=True)
+    date_upd = models.DateTimeField(auto_now=True)
+    date_add = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.page_name
+
+    class Meta:
+        verbose_name_plural = _('صفحه ها')
+        verbose_name = _('صفحه ها')
+
+    def __unicode__(self):
+        return self.page_name

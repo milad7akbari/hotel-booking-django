@@ -1,8 +1,9 @@
 {% load humanize %}
 {% load i18n %}
 {% load static %}
+{% if hotel|length > 0 %}
 <section id="_homeOnSale" class="my-3 p-3 w-100">
-    <p class="mb-3">هتل های تخفیف دار</p>
+    <p class="mb-3">{% trans 'هتل های تخفیف دار' %}</p>
     <div class="swiper p-2 _homeOnSaleItems w-100">
         <div class="swiper-wrapper">
             {% for h in hotel %}
@@ -48,3 +49,4 @@
 {#        <div class="swiper-pagination"></div>#}
     </div>
 </section>
+{% endif %}

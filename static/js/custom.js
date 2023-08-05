@@ -151,6 +151,7 @@ $(document).ready(function () {
                     $('._step_3').addClass('pending-tl')
                     $('.errMsg').html('')
                     $('._reservation_form_main').empty().html(data.html)
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             },
             error: function (xhr, desc, err) {

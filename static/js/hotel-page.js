@@ -42,7 +42,7 @@ $(document).ready(function () {
         $.ajax({
             type: "GET",
             data: {'get': get},
-            url: "/hotel-l/images/" + ref,
+            url: "/get/hotel-l/images/" + ref,
             success: function (data) {
                 $('#_partial').empty().html(data);
             }

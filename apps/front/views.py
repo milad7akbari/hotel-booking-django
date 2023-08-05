@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.utils import timezone
 from datetime import datetime
 from django.contrib.auth.models import User
-from apps.base.models import Forgot_password, Slider, Meta, Cities
+from apps.base.models import Forgot_password, Slider, Meta, Cities, Pages
 from apps.blog.models import Main
 from apps.front.forms import forgotPasswordForm, trackingForm, registerUserFromReservationForm, loginUserForm, \
     forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser, placeOrderForm
@@ -199,12 +199,11 @@ def addToCartDetails(request, ref, id_cart):
                 user = form_user.save(commit=False)
                 user.password = make_password('123', salt="Argon2PasswordHasher", hasher="default")
                 user.save()
-                login(request, user)
                 cart = Cart.objects.filter(hotel_id=hotel.pk, pk=id_cart, flag=1)
                 if cart.exists():
-                    cart.update(user_id=request.user.pk)
+                    cart.update(user_id=user.pk)
                 cart = Cart.objects.filter(
-                    Q(flag=1) & Q(pk=id_cart) & Q(hotel_id=hotel.pk) & Q(user_id=request.user.pk)).first()
+                    Q(flag=1) & Q(pk=id_cart) & Q(hotel_id=hotel.pk) & Q(user_id=user.pk)).first()
                 extra_person = Extra_person_rate.objects.filter(hotel_id=hotel.pk, active=1).exists()
                 check_in_out = Check_in_out_rate.objects.filter(hotel_id=hotel.pk, active=1).exists()
                 cart_detail = Cart_detail.objects.filter(cart_id=cart.pk, flag=1)
@@ -228,17 +227,18 @@ def addToCartDetails(request, ref, id_cart):
                     status = 1
                     info = getInfoFromCart_(cart.pk, cart.hotel_id)
 
-                    context = {
+                    context_render = {
                         'info': info,
                         'form_pay': placeOrderForm,
                         'ref': hotel.reference,
                         'cart': cart,
                     }
-                    html = render_to_string('cart/_reservation_payment_form.html', context=context, request=request)
+                    html = render_to_string('cart/_reservation_payment_form.html', context=context_render, request=request)
                     context = {
                         'status': status,
                         'html': html,
                     }
+                    login(request, user)
                     return JsonResponse(context)
             else:
                 status = -4
@@ -319,16 +319,12 @@ def addToCartDetails(request, ref, id_cart):
 
 
 def _hotels():
-    hotel = Hotel.objects.filter(active=1, room__price__isnull=False, room__active__exact=1).select_related(
+    hotel = Hotel.objects.filter(active=1, hotel_discount__active=1, hotel_discount__end_date__gt=timezone.now(), hotel_discount__start_date__lt=timezone.now()).select_related(
         'default_cover').prefetch_related(Prefetch(
         'room_set',
         queryset=Room.objects.filter(
-            Q(active=1))
-    ), Prefetch(
-        'hotel_discount',
-        queryset=Discount.objects.filter(
-            Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
-    )).order_by('?')[:6]
+            Q(active=1, price__isnull=False)).order_by('price')
+    ),'hotel_discount').order_by('?')[:6]
     for i in hotel:
         discount = i.hotel_discount.first()
         price = i.room_set.order_by('price').first().price
@@ -364,8 +360,10 @@ def _cities():
 
 def general_policy(request):
     meta = Meta.objects.filter(page_name='general_policy_page').first()
+    general_policy_page = Pages.objects.filter(page_name='general_policy_page').first()
 
     context = {
+        'general_policy_page': general_policy_page,
         'meta' : meta
     }
     return render(request, 'pages/general_policy.html', context)
@@ -373,8 +371,10 @@ def general_policy(request):
 
 def about_us(request):
     meta = Meta.objects.filter(page_name='general_policy_page').first()
+    about = Pages.objects.filter(page_name='about-us').first()
 
     context = {
+        'about': about,
         'meta': meta
     }
     return render(request, 'pages/about_us.html', context)
@@ -391,8 +391,8 @@ def trackingSubmit(request):
     if request.method == 'POST':
         err = True
         form = trackingForm(request.POST)
+        current_state = _('اطلاعات وارد شده صحیح نیست.')
         if form.is_valid():
-            order = _('اطلاعات وارد شده صحیح نیست.')
             reference = request.POST.get('reference')
             username = request.POST.get('username')
             if len(username) == 10:
@@ -408,15 +408,15 @@ def trackingSubmit(request):
                             current_state = _('در انتظار بررسی')
                             if order.current_state == 2:
                                 current_state = _('تایید شده است')
-                            order = current_state
             context = {
                 'err': err,
-                'order': order
+                'order': current_state
             }
             return JsonResponse(context)
         else:
             context = {
-                'err': True
+                'err': True,
+                'order': current_state
             }
             return JsonResponse(context)
 
@@ -748,9 +748,9 @@ def placeOrders(request, ref, cart_id):
                         obj_order_detail = Order_detail()
                         obj_order_detail.name = detail.room.title
                         obj_order_detail.quantity = detail.quantity
-                        obj_order_detail.check_in_rate = _partials(detail.check_in_flag, _partial)
-                        obj_order_detail.check_out_rate = _partials(detail.check_out_flag, _partial)
-                        obj_order_detail.extra_person_quantity = _partials(detail.extra_person_quantity, _partial, True)
+                        obj_order_detail.check_in_flag = detail.check_in_flag
+                        obj_order_detail.check_out_flag = detail.check_out_flag
+                        obj_order_detail.extra_person_quantity = detail.extra_person_quantity
                         obj_order_detail.base_price = detail.room.base_price
                         obj_order_detail.total_price_dis_incl = _total_price_dis_incl(detail, info['hotel_discount'])
                         obj_order_detail.room = detail.room

@@ -8,6 +8,9 @@
 .desc_good_bad p {
   font-size: 13px !important;
 }
+.filterSortingRooms .w-25-date-picker {
+  width: 25%;
+}
 #finalAmount {
   outline: none !important;
 }

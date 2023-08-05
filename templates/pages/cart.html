@@ -16,22 +16,22 @@
             <ul class="timeline w-100 p-0 m-0 display-flex justify-content-center">
                 <li class="{% if step.step >= 1 %}active-tl{% endif %}">
                     <span class="_before"></span>
-                    <span class="fs-14">انتخاب هتل</span>
+                    <span class="fs-14">{% trans 'انتخاب هتل' %}</span>
                     <span class="_after"></span>
                 </li>
                 <li class="_step_2 {% if step.step == 1 %}pending-tl{% elif  step.step >= 2 %}active-tl{% endif %}">
                     <span class="_before"></span>
-                    <span class="fs-14">وارد کردن مشخصات مسافر</span>
+                    <span class="fs-14">{% trans 'وارد کردن مشخصات مسافر' %}</span>
                     <span class="_after"></span>
                 </li>
                 <li class="_step_3 {% if step.step == 2 %}pending-tl{% elif  step.step >= 3 %}active-tl{% endif %}">
                     <span class="_before"></span>
-                    <span class="fs-14">پرداخت</span>
+                    <span class="fs-14">{% trans 'صحت سنجی' %}</span>
                     <span class="_after"></span>
                 </li>
                 <li class="_step_4 {% if step.step >= 3 %}active-tl{% endif %}">
                     <span class="_before"></span>
-                    <span class="fs-14">صدور واچر</span>
+                    <span class="fs-14">{% trans 'ارسال درخواست' %}</span>
                     <span class="_after"></span>
                 </li>
             </ul>

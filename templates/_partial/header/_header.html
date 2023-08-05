@@ -19,7 +19,6 @@
                 <label class="li"><i class="p-3">{{ 'date'|currentDate }}</i></label>
 
                 <form class="li" action="{% url 'set_language' %}" method="post">
-                    {% csrf_token %}
                     {% if request.LANGUAGE_CODE == 'fa' %}
                         <button class="border-0 bg-transparent fs-14" type="submit" name="language" value="en"><span class="bg-customize fs-12 p-2 text-white border-radius-15">EN</span></button>
                     {% else %}

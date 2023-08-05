@@ -21,7 +21,22 @@
   ##Device = Low Resolution Tablets, Mobiles (Landscape)
   ##Screen = B/w 481px to 767px
 */
+@media (min-width: 767px) {
+  .filterContainer {
+    display: block !important;
+  }
+}
 @media (max-width: 767px) {
+  .filterSortingRooms .w-25-date-picker {
+    width: 49%;
+  }
+  #_confirmation ._confirmation_container {
+    width: 100% !important;
+    padding: 15px !important;
+  }
+  #_confirmation ._confirmation_container ._support_ {
+    width: 85% !important;
+  }
   #policy {
     height: unset !important;
   }

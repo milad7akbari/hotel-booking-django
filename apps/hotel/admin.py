@@ -67,13 +67,13 @@ class ImagesAdmin(admin.ModelAdmin):
 
 
 
-class Room_imagesInline(admin.TabularInline):
-    model = Room_images
-    show_change_link = True
 
 
 class Room_coverAdmin(admin.ModelAdmin):
     model = Room_cover
+
+class Room_imagesAdmin(admin.ModelAdmin):
+    model = Room_images
 
 
 class Room_facilityInline(admin.TabularInline):
@@ -88,11 +88,10 @@ class ReviewsAdmin(admin.ModelAdmin):
 
 class DiscountAdmin(admin.ModelAdmin):
     model = Discount
-    list_display = ('title', 'room', 'reduction_type', 'reduction', 'start_date', 'end_date', 'active', 'date_add')
-    def room(self, obj):
-        return obj.room.title
+    list_display = ('title', 'reduction_type', 'reduction', 'start_date', 'end_date', 'active', 'date_add')
 
 
+admin.site.register(Room_images, Room_imagesAdmin)
 admin.site.register(Room, RoomAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(Room_cover, Room_coverAdmin)

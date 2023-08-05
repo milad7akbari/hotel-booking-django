@@ -73,7 +73,7 @@
                         </div>
                     </div>
 
-                    <div data-price="{{ cart.room.price }}"
+                    <div data-price="{{ r.room.price }}"
                          class="hotelPricing roomListItem d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center" style="width: 195px">
                         {% if r.room.reduction > 0 %}
                             <div class="position-relative align-items-center d-flex justify-content-center w-100" style="height: 55px">
@@ -112,7 +112,7 @@
                                     <input type="checkbox" value="0" name="check_in_flag" checked class=""
                                            style="width: 0;height: 0;visibility: hidden">
                                     <label>
-                                        <label class="w-100 fs-13">ورود زود هنگام</label>
+                                        <label class="w-100 fs-13">{% trans 'ورود زود هنگام' %}</label>
                                         <span class="fs-13 text-muted">{{ cart.hotel.check_in_out_rate.rate|floatformat:"0"|intcomma:False }} تومان </span>
                                     </label>
                                 </label>
@@ -123,20 +123,20 @@
                                     <input type="checkbox" value="0" name="check_out_flag" checked
                                            style="width: 0;height: 0;visibility: hidden">
                                     <label>
-                                        <label class="w-100 fs-13">خروج دیر هنگام</label>
+                                        <label class="w-100 fs-13">{% trans 'خروج دیر هنگام' %}</label>
                                         <span class="fs-13 text-muted">{{ cart.hotel.check_in_out_rate.rate|floatformat:"0"|intcomma:False }} تومان </span>
                                     </label>
                                 </label>
                             </div>
                         {% endif %}
 
-                        {% if cart.hotel.extra_person_rate.rate > 0 %}
+                        {% if cart.hotel.extra_person_rate.rate > 0 and r.room.extra_person > 0 %}
                             <div class="w-100 text-center">
-                                <span class="fs-13">تعداد نفر اضافه: </span>
+                                <span class="fs-13">{% trans 'تعداد نفر اضافه: ' %}</span>
                                 <select autocomplete="off" name="extra_person_flag" data-person="0"
                                         data-price="{{ cart.hotel.extra_person_rate.rate }}"
                                         class="form-select _extra_person_opt w-75 mx-auto text-center form-select-sm">
-                                    <option value="0">نیاز ندارم</option>
+                                    <option value="0">{% trans 'نیاز ندارم' %}</option>
                                     {% with ''|center:r.room.extra_person as range %}
                                         {% for i in range %}
                                             <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
@@ -144,6 +144,8 @@
                                     {% endwith %}
                                 </select>
                             </div>
+                            {% else %}
+                            <input type="hidden" name="extra_person_flag" value="0">
                         {% endif %}
                     </div>
                     <div class="w-100" style="">

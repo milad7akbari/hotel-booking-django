@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 <section id="_homeBlog" class="my-3 p-3 w-100 bg-light" >
-    <p class="mb-3">تازه های وبلاگ</p>
+    <p class="mb-3">{% trans 'تازه های وبلاگ' %}</p>
     <div class="swiper _homeBlogItems p-2" style="height: 350px;width: 90%;">
         <div class="swiper-wrapper">
             {% for b in blogs_related %}
