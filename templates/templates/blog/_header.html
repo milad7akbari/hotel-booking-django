@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load static %}
+<header id="_blog_header" style="max-width: 1400px;margin: auto">
+    <div class="header_bottom_container _blog_header_div align-items-center display-flex w-100 pb-2">
+        <div class="text-center mx-4 display-flex align-items-center justify-content-center fs-15">
+            <a href="{% url 'home_page' %} " style="height: 60px" class=" cursor-pointer text-success">
+                <img src="{% static 'img/logo-w-text.png' %}" style="width: 100%;height: 100%">
+            </a>
+        </div>
+        <label class="btnShowMenuBlog d-none mx-4 display-flex align-items-center justify-content-center fs-25 icon-menu"></label>
+        <ul class="p-0 justify-content-center w-100 m-auto py-2" style="height: 85px;">
+            <li class="d-flex mx-4 align-items-center text-center justify-content-center  fs-15"><a href="/" class="px-3 border-bottom cursor-pointer">{% trans 'رزرو هتل' %}</a></li>
+            {% for c in header_category %}
+                <li class="d-flex mx-4 align-items-center justify-content-center text-center fs-15"><a href="{% url 'blogMainPage' c.pk %}" class="px-3 border-bottom cursor-pointer">{{ c.title|truncatewords:3 }}</a></li>
+            {% endfor %}
+            <li class="d-flex mx-4 align-items-center display-flex justify-content-center align-items-baseline text-center fs-15">
+                <form action="{% url 'set_language' %}" method="post" class=" d-flex align-items-center h-100">
+                    {% csrf_token %}
+                    <button class="border-0 bg-transparent" type="submit" name="language" value="en"><b>EN</b></button>
+                    <button class="border-0 bg-transparent" type="submit" name="language" value="fa"><b>FA</b></button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</header>

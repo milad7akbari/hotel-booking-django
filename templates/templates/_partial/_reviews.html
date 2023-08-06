@@ -1,0 +1,45 @@
+<ul class="d-flex px-0 mx-auto flex-wrap justify-content-between">
+    {% for r in reviews %}
+        <li class="m-1 p-0 w-100">
+            <div class="single-review card d-flex border-radius-15">
+                <div class="card-top p-4">
+                    <div class="">
+                        <div class="reviewer-meta media-body align-self-center ml-4">
+                            {% if r.user__first_name is not None %}
+                                <h6 class="reviewer-name mb-2">{{ r.user__first_name }} {{ r.user__last_name|truncatechars:2 }}</h6>
+                            {% endif %}
+                        </div>
+                        <sup class="review-icon">
+                            {% with ''|center:r.stars as range %}
+                                {% for _ in range %}
+                                    <span class="icon-star-full text-warning"></span>
+                                {% endfor %}
+                            {% endwith %}
+                        </sup>
+                    </div>
+                    <p class="fs-15 fw-bold mt-2 mb-3">{{ r.title }}</p>
+                    <div class="review-text">
+                        <p class="fs-13 text-justify">{{ r.short_desc }}</p>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-sm-12 my-2 col-lg-5">
+                            <div class="review-text text-center desc_good_bad desc_good">{{ r.desc_good|linebreaks }}</div>
+                        </div>
+                        <div class="col-sm-12 my-2 col-lg-5">
+                            <div class="review-text text-center desc_good_bad desc_bad">{{ r.desc_bad|linebreaks }}</div>
+                        </div>
+                    </div>
+                    {% if  r.reviews_reply__short_desc is not None %}
+                        <div class="d-flex p-3 flex-wrap my-2 justify-content-between border-radius-15"
+                             style="border: 1px solid #cccccc">
+                            <label class="w-100 mb-3 text-success fs-12">جواب هتل تیک</label>
+                            <div class="review-text">
+                                <p class="fs-13 text-justify">{{ r.reviews_reply__short_desc }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

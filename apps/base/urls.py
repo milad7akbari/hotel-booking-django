@@ -20,13 +20,14 @@ from setuptools import namespaces
 
 from apps.front.views import getLoginForm, searchHotelCity, addToCartDetails, confirmation, registerNewUser, loginUser, \
     forgotPassword, forgotPasswordByToken, \
-    forgotPasswordConfirm,  placeOrders, trackingSubmit
+    forgotPasswordConfirm,  placeOrders, trackingSubmit, addCouponToCart
 
 from apps.hotel.views import imagesHotel
 
 
 urlpatterns = [
     path('hotel-l/images/<str:ref>', imagesHotel),
+    path('addCouponToCart/<int:cart_id>', addCouponToCart, name='addCouponToCart'),
     path('tracking-request/show', trackingSubmit, name='trackingSubmit'),
     path('hotel-l/search', searchHotelCity, name='searchHotelCity'),
     path('cart/place-order/<str:ref>/<int:cart_id>', placeOrders, name='placeOrders'),

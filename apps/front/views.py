@@ -1,6 +1,7 @@
 import re
 import secrets
 import uuid
+from turtledemo.penrose import f
 
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -19,7 +20,8 @@ from apps.front.forms import forgotPasswordForm, trackingForm, registerUserFromR
     forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser, placeOrderForm
 from django.utils.translation import gettext_lazy as _
 
-from apps.front.models import Cart, Cart_detail, Guest, Step, Order_detail, Order
+from apps.front.models import Cart, Cart_detail, Guest, Step, Order_detail, Order, Cart_rule, Cart_cart_rule, \
+    Order_cart_rule
 from apps.hotel.models import Hotel, Room, Discount, Check_in_out_rate, Extra_person_rate
 
 
@@ -184,8 +186,19 @@ def getInfoFromCart_(cart_pk, hotel_pk):
         else:
             i.price = price * diff
             total_amount += price
-
-    cart.total_amount = total_amount
+    coupon = Cart_cart_rule.objects.filter(cart_id=cart_pk).select_related('cart_rule')
+    cart.c_total_amount_bef = total_amount
+    cart.coupon = coupon.exists()
+    if coupon.exists():
+        coupon = coupon.first()
+        c_reduction_type = coupon.cart_rule.reduction_type
+        c_reduction = coupon.cart_rule.reduction
+        if c_reduction_type == 2:
+            cart.total_amount = total_amount - c_reduction
+        if c_reduction_type == 1:
+            cart.total_amount = ((100 - c_reduction) / 100) * total_amount
+    else:
+        cart.total_amount = total_amount
     return cart
 
 
@@ -420,6 +433,57 @@ def trackingSubmit(request):
             }
             return JsonResponse(context)
 
+@login_required()
+def addCouponToCart(request, cart_id):
+    if request.method == 'POST':
+        err = True
+        cart_amount = 0
+        cart_amount_bef = 0
+        msg = _('کد وارد شده صحیح نیست.')
+        coupon = request.POST.get('coupon')
+        if len(coupon) > 5:
+            check = Cart_rule.objects.filter(code=coupon, user=request.user, quantity__gt=0, active=1, start_date__lt=timezone.now(), end_date__gt=timezone.now())
+            if check.exists():
+                check = check.first()
+                cart = Cart.objects.filter(flag=1, pk=cart_id , user=request.user)
+                cart_first = cart.first()
+                count = Cart_cart_rule.objects.filter(cart_id=cart_id)
+                amount = getInfoFromCart_(cart_first.pk, cart_first.hotel_id)
+                cart_amount = round(amount.total_amount)
+                cart_amount_bef = cart_amount
+
+                if check.minimum_amount < amount.total_amount:
+                    if not count.exists():
+                        total = Cart_cart_rule.objects.filter(cart_rule_id=check.pk)
+                        print(total.count())
+                        if total.count() < check.quantity and cart.exists():
+                            obj = Cart_cart_rule()
+                            obj.cart_id = cart_id
+                            obj.cart_rule_id = check.pk
+                            obj.save()
+                            reduction_type = check.reduction_type
+                            reduction = check.reduction
+                            if reduction_type == 2:
+                                cart_amount = cart_amount - reduction
+                            if reduction_type == 1:
+                                cart_amount = ((100 - reduction) / 100) * cart_amount
+                            err = False
+                            msg = _('کد تخفیف اعمال شد')
+                        else:
+                            msg = _('این کد تخفیف قبلا استفاده شده است')
+                    else:
+                        msg = _('این کد تخفیف قبلا استفاده شده است')
+                else:
+                    msg = _(f"حداقل مقدار سبد خرید برای اعمال کد تخفیف {cart_amount:,} تومان  می باشد.")
+
+
+        context = {
+            'cart_amount_bef': f'{round(cart_amount_bef):,}',
+            'cart_amount': f'{round(cart_amount):,}',
+            'err': err,
+            'msg': msg
+        }
+        return JsonResponse(context)
 
 def home_page(request):
     slider = Slider.objects.filter(active=1).order_by('?')[:3]
@@ -650,6 +714,7 @@ def calcOrderInfo(cart, hotel, extra_person, check_in_out):
     total_products = cart.cart_detail.all().count()
     total_amount_dis_incl = 0
     total_amount_dis_excl = 0
+    total_amount_dis_incl_bef = 0
     extra_person_rate = 0
     check_in_out_rate = 0
     nights = (cart.check_out - cart.check_in).days
@@ -688,7 +753,21 @@ def calcOrderInfo(cart, hotel, extra_person, check_in_out):
         if extra_person_quantity > 0:
             total_amount_dis_incl += extra_person_rate * extra_person_quantity
             total_amount_dis_excl += extra_person_rate * extra_person_quantity
+    coupon = Cart_cart_rule.objects.filter(cart=cart).select_related('cart_rule')
+    coupon_exists = coupon.exists()
+    if coupon_exists:
+        coupon = coupon.first()
+        c_reduction_type = coupon.cart_rule.reduction_type
+        c_reduction = coupon.cart_rule.reduction
+        total_amount_dis_incl_bef = total_amount_dis_incl
+        if c_reduction_type == 2:
+            total_amount_dis_incl = total_amount_dis_incl - c_reduction
+        if c_reduction_type == 1:
+            total_amount_dis_incl = ((100 - c_reduction) / 100) * total_amount_dis_incl
     context = {
+        'total_amount_dis_incl_bef': total_amount_dis_incl_bef,
+        'coupon': coupon,
+        'coupon_exists': coupon_exists,
         'hotel_discount': hotel_discount,
         'total_products': total_products,
         'total_amount_dis_incl': total_amount_dis_incl,
@@ -740,9 +819,8 @@ def placeOrders(request, ref, cart_id):
                     order_obj.total_amount_dis_incl = info['total_amount_dis_incl']
                     order_obj.total_amount_dis_excl = info['total_amount_dis_excl']
                     order_obj.total_room = info['total_products']
-                    order_obj.reference = str(uuid.uuid1())[:7] + str(cart_obj.user.pk) + str(cart_obj.pk)
+                    order_obj.reference = str(cart_obj.user.pk) + str(uuid.uuid1())[:7] + str(cart_obj.pk)
                     order_obj.save()
-                    _partial = _partial_hotel(hotel)
                     obj_cart_detail = Cart_detail.objects.filter(cart=cart_obj).select_related('room', 'cart').all()
                     for detail in obj_cart_detail:
                         obj_order_detail = Order_detail()
@@ -758,6 +836,13 @@ def placeOrders(request, ref, cart_id):
                         obj_order_detail.order = order_obj
                         obj_order_detail.save()
                     stepChangeStatus(cart_obj.pk, 3)
+                    if info['coupon_exists']:
+                        obj_coupon = Order_cart_rule()
+                        obj_coupon.order = order_obj
+                        obj_coupon.cart_rule = info['coupon'].cart_rule
+                        obj_coupon.value = info['total_amount_dis_incl_bef'] - info['total_amount_dis_incl']
+                        obj_coupon.save()
+                    _partial = _partial_hotel(hotel)
                     cart_exists.update(flag=2)
                     url = reverse('confirmation', kwargs={'reference': order_obj.reference}),
                     status = 1

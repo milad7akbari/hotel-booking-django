@@ -1,0 +1,63 @@
+{% extends 'customer/base/base.html' %}
+{% load func_customer %}
+{% load jalali_tags %}
+{% load i18n %}
+{% load static %}
+{% block customer_main %}
+<div class="d-flex justify-content-between flex-wrap">
+    <div class="headerOrders w-100">
+        <ul class="py-3 bg-muted w-100 mb-2 p-0 d-flex justify-content-between">
+            <li style="width: 10%" class="fs-13 text-center">#</li>
+            <li style="width: 25%" class="fs-13 text-center">نام هتل</li>
+            <li style="width: 10%" class="fs-13 text-center">موافقت با قوانین</li>
+            <li style="width: 10%" class="fs-13 text-center">وضعیت</li>
+            <li style="width: 10%" class="fs-13 text-center">فاکتور</li>
+            <li style="width: 10%" class="fs-13 text-center">تعدا اتاق ها</li>
+            <li style="width: 25%" class="fs-13 text-center">تاریخ ایجاد</li>
+        </ul>
+        {% for o in orders %}
+            <ul class="p-0 cursor-pointer w-100 align-items-center my-2 d-flex justify-content-between">
+                <li style="width: 10%" class="text-center fs-13"><a href="{% url 'orderDetail' o.pk %}">{{ o.reference }}</a></li>
+                <li style="width: 25%" class="text-center fs-13">{{ o.hotel.name }}</li>
+                <li style="width: 10%" class="text-center fs-13">{% if o.agree_rule %}{% trans 'دارم' %}{% else %}{% trans 'ندارم' %}{% endif %}</li>
+                <li style="width: 10%" class="text-center fs-13">{{ o.current_state|currentState }}</li>
+                <li style="width: 10%" class="text-center fs-13">{% if o.has_invoice %}{% trans 'دارم' %}{% else %}{% trans 'ندارم' %}{% endif %}</li>
+                <li style="width: 10%" class="text-center fs-13">{{ o.total_room }}</li>
+                <li style="width: 25%" class="text-center fs-13">{{ o.date_add|to_jalali:"%Y-%m-%d" }}</li>
+            </ul>
+{#            {% if  forloop.counter == 2 %}#}
+{#                <ul class="p-0 flex-wrap cursor-pointer w-75 mx-auto align-items-center my-4 border-radius-5 d-flex justify-content-between">#}
+{#                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">#}
+{#                        <label class="fs-13 fw-bold" style="width: 150px">هتل</label>#}
+{#                        <label class="fs-14" style="width: 150px">اسپیناس پالاس</label>#}
+{#                    </li>#}
+{#                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">#}
+{#                        <label class="fs-13 fw-bold" style="width: 150px">قیمت پرداخت شده</label>#}
+{#                        <label class="fs-14" style="width: 150px">154,000 تومان</label>#}
+{#                    </li>#}
+{#                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">#}
+{#                        <label class="fs-13 fw-bold" style="width: 150px">ورود</label>#}
+{#                        <label class="fs-14" style="width: 150px">42-05-05</label>#}
+{#                    </li>#}
+{#                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">#}
+{#                        <label class="fs-13 fw-bold" style="width: 150px">خروج</label>#}
+{#                        <label class="fs-14" style="width: 150px">42-05-05</label>#}
+{#                    </li>#}
+{#                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">#}
+{#                        <label class="fs-13 fw-bold" style="width: 150px">وورد زود هنگام</label>#}
+{#                        <label class="fs-14" style="width: 150px">دارد</label>#}
+{#                    </li>#}
+{#                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">#}
+{#                        <label class="fs-13 fw-bold" style="width: 150px">خروج دیرهنگام</label>#}
+{#                        <label class="fs-14" style="width: 150px">دارد</label>#}
+{#                    </li>#}
+{#                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">#}
+{#                        <label class="fs-13 fw-bold" style="width: 150px">قیمت پرداخت شده</label>#}
+{#                        <label class="fs-14" style="width: 150px">154,000 تومان</label>#}
+{#                    </li>#}
+{#                </ul>#}
+{#            {% endif %}#}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

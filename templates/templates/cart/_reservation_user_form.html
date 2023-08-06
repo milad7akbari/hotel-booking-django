@@ -1,0 +1,23 @@
+{% load function %}
+{% load humanize %}
+{% load i18n %}
+{% load static %}
+<div class="w-100 my-5">
+    <div class="w-100 my-2 bg-white py-2">
+        <p class="fs-15 text-center p-1">{% trans 'چنانچه عضو سایت هستید برای تسریع در فرایند رزرو لاگین کنید با مشخصات رزرو کننده را وارد کنید. ' %}<span
+                class="btn-link btnRegisterLoginPasswd ">{% trans 'لاگین' %}</span></p>
+    </div>
+    <p class="alert alert-danger fs-13 d-none errMsgReservationUserInfo"></p>
+    <div class="p-3 mt-3 d-flex justify-content-between align-items-center fs-16">
+        <p>مشخصات رزرو کننده</p>
+    </div>
+    <div class="d-flex w-100 justify-content-between __frm_user_reservation" style="">
+        {% for field in form %}
+            <div class="input-group mx-2" style="width: 25%">
+                <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+</div>

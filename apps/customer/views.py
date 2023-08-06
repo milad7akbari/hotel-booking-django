@@ -16,7 +16,7 @@ def panelOrders(request):
     return render(request, 'customer/orders.html', context)
 
 def orderDetail(request, id):
-    orders = Order.objects.filter(pk=id).select_related('hotel', 'user').prefetch_related(
+    orders = Order.objects.filter(pk=id).select_related('hotel', 'user', 'order_cart_rule').prefetch_related(
         'order_detail').first()
     context = {
         'order': orders

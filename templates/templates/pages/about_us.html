@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% load function %}
+{% block title %} {{ meta.title }} {% endblock %}
+{% block meta_desc %} {{ meta.description }} {% endblock %}
+{% block meta_keywords %} {{ meta.keywords }} {% endblock %}
+
+{% load i18n %}
+{% load static %}
+
+{% block main %}
+    <div id="_rules">
+        <div id="about-us">
+            <div id="about-us-container">
+                <div class="item-col logoContainerAbout">
+                    <img title="" alt="" src="{% static 'img/logo.png' %}">
+                </div>
+                <div class="item-col titleContainerAbout">
+                    <h2>{% trans 'درباره' %}</h2>
+                    <p>{% trans 'ما' %}</p>
+                    <p>{{ about.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

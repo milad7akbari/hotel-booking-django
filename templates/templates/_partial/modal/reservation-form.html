@@ -1,0 +1,164 @@
+{% load static %}
+{% load i18n %}
+<form method="POST" class="w-100" id="registerNewCustomers" action="{% url 'registerNewUser' %}">
+    {% csrf_token %}
+    <p class="alert alert-danger fs-13 d-none errMsg"></p>
+    <div class="roomsListHotel">
+        <ul class="p-0 d-flex flex-wrap m-0">
+            {% for i in "x"|rjust:"2" %}
+                <li class="w-100 my-3 border-bottom pb-1 d-flex flex-wrap" style="min-height: 150px">
+                    <div class="imgCover overflow-hidden border-radius-5 position-relative w-25">
+                        <span class="icon-images fs-25 position-absolute text-white " style="top: 10px;right: 10px"></span>
+                        {% if  forloop.counter == 1 %}
+                        <img class="w-100 h-100" src="https://img.freepik.com/premium-photo/rear-view-woman-stretching-her-hand-after-waking-up-bed_23-2148033285.jpg?size=626&ext=jpg&uid=R102099051&ga=GA1.2.1206123025.1673342393&semt=ais">
+
+                        {% endif %}
+                        {% if  forloop.counter == 2 %}
+                        <img class="w-100 h-100" src="https://img.freepik.com/free-photo/comfortable-pillow-bed_74190-6276.jpg?size=626&ext=jpg&uid=R102099051&ga=GA1.2.1206123025.1673342393&semt=ais">
+
+                        {% endif %}
+                        {% if  forloop.counter == 3 %}
+                        <img class="w-100 h-100" src="https://img.freepik.com/free-photo/luxury-classic-modern-bedroom-suite-hotel_105762-1787.jpg?size=626&ext=jpg&uid=R102099051&ga=GA1.2.1206123025.1673342393&semt=ais">
+
+                        {% endif %}
+                    </div>
+                    <div class="hotel-info py-1 px-2 w-50" style="border-left: 1px solid #eee">
+                        <label class="fs-17 my-1">سه تخته</label>
+                        <div class="facilityHotels flex-wrap border-bottom py-1 mt-1 d-flex">
+                            <label style="min-width: 50px;" class="border-radius-5 d-flex align-items-center d-flex bg-muted m-1 p-3">
+                                <span class="icon-man-woman px-1 fs-18"></span>
+                                <span class="w-100 d-block px-1 text-center fs-13">سه تخته</span>
+                            </label>
+                            <label style="min-width: 50px;" class="border-radius-5 d-flex align-items-center d-flex bg-muted m-1 p-3">
+                                <span class="icon-filter px-1 icon-users fs-18"></span>
+                                <span class="w-100 d-block px-1 text-center fs-13">دو نفره</span>
+                            </label>
+                        </div>
+                        <div class="facilityHotels flex-wrap py-1 mt-1 d-flex">
+                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
+                                <span class="w-100 d-block text-center fs-12">طبقه اول</span>
+                            </label>
+                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
+                                <span class="w-100 d-block text-center fs-12">ویو</span>
+                            </label>
+                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
+                                <span class="w-100 d-block text-center fs-12">سه تخته</span>
+                            </label>
+                            <label style="min-width: 50px;" class="border-radius-5 bg-muted m-1 p-1">
+                                <span class="w-100 d-block text-center fs-12">اتاق بچه</span>
+                            </label>
+                        </div>
+                        <div class="noteHotels mt-3 d-flex">
+                            <p class="fs-12 text-muted" style="line-height: 2">توضیحات کلی هتل در حد همین
+                                چند جملنی جمله ای که یادداشت نوشتم در اینجا قرار میگیرد!</p>
+                        </div>
+                    </div>
+                    <div class="hotelPricing d-flex w-25 flex-wrap align-items-center position-relative align-content-between justify-content-center"
+                         style="width: 195px">
+                        <div class="pricing d-flex align-items-center">
+                            <div class="position-relative align-items-center d-flex justify-content-center w-100"
+                             style="height: 55px">
+                            <label class="justify-content-center mx-2 w-100 d-flex flex-wrap" style="line-height: 1">
+                                <p class="fs-25 w-100 text-center my-2 d-flex align-items-center justify-content-center">
+                                    <span>1,152,000</span>&nbsp;
+                                    <span class="text-muted fs-12">تومان</span>
+                                </p>
+                            </label>
+                            <label class="justify-content-center mx-2 w-100 d-flex flex-wrap"
+                                   style="line-height: 1">
+                                <p class="fs-18 w-100 text-center my-2 d-flex align-items-center justify-content-center">
+                                    <span style="text-decoration: line-through;color: red" class=" w-100 ">1,152,000</span>&nbsp;
+                                </p>
+                            </label>
+                            </div>
+                        </div>
+                        <div class="w-100 d-flex text-center">
+                            <label for="enterId" class="inputContainer align-items-center d-flex flex-wrap justify-content-center w-50">
+                                <input type="checkbox" id="enterId">
+                                <label>
+                                    <label class="w-100 fs-13">ورود زود هنگام</label>
+                                    <span class="fs-13 text-muted">154,000 تومان</span>
+                                </label>
+                            </label>
+                            <label for="exitId" class="inputContainer  align-items-center d-flex flex-wrap justify-content-center w-50">
+                                <input type="checkbox" id="exitId">
+                                <label>
+                                    <label class="w-100 fs-13">خروج دیر هنگام</label>
+                                    <span class="fs-13 text-muted">154,000 تومان</span>
+                                </label>
+                            </label>
+                        </div>
+                        <div class="w-100 text-center">
+                            <span class="fs-13">تعداد نفر اضافه: </span>
+                            <select class="form-select w-75 mx-auto text-center form-select-sm">
+                              <option value="0">نیاز ندارم</option>
+                              <option value="1">1 نفر</option>
+                              <option value="2">2 نفر</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="p-3 mt-3 d-flex justify-content-between align-items-center fs-16">
+        <p>مشخصات رزرو کننده</p>
+        <label for="businessAccount" class="fs-13 align-items-center d-flex">
+            <input id="businessAccount" type="checkbox">
+            <span class="text-primary mx-1">دریافت فاکتور رسمی</span>
+        </label>
+    </div>
+    <div class="d-flex flex-wrap w-75 mx-4" style="">
+        {% for field in form %}
+            <div class="input-group mx-2" style="width: 45%">
+                <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+    <p class="p-3 mt-3 fs-16">مشخصات مهمان</p>
+    <div class="d-flex pb-3 flex-wrap w-100 mx-4" style="">
+        {% for field in form_1 %}
+            <div class="input-group mx-2" style="width: 30%">
+                <label class=" fs-13 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex pb-3 flex-wrap border-top py-3 w-100 mx-4" style="">
+        <div class="input-group d-flex justify-content-center mx-2" style="width: 45%">
+            <label class="icon d-flex p-3 border-radius-5 w-75 position-relative" for="mellat" style="border: 2px solid #0b5ed7">
+                <input type="radio" id="mellat" class="position-absolute invisible" name="paymentMethod" style="top: 5px;right: 5px">
+                <label class="imgPayMethod" style="width: 55px;height: 55px">
+                    <img src="{% static 'img/logo-w-text.png' %}" class="w-100 h-100">
+                </label>
+                <label class="d-flex mx-2 flex-wrap">
+                    <b>بانک ملت</b>
+                    <span class="fs-13 w-100">پرداخت با به پرداخت ملت</span>
+                </label>
+            </label>
+        </div>
+        <div class="input-group d-flex justify-content-center mx-2" style="width: 45%">
+            <label class="icon d-flex p-3 border-radius-5 w-75 position-relative" for="mellat" style="border: 1px solid #aaa">
+                <input type="radio" id="mellat" class="position-absolute invisible" name="paymentMethod" style="top: 5px;right: 5px">
+                <label class="imgPayMethod" style="width: 55px;height: 55px">
+                    <img src="{% static 'img/logo-w-text.png' %}" class="w-100 h-100">
+                </label>
+                <label class="d-flex mx-2 flex-wrap">
+                    <b>فیش بانکی</b>
+                    <span class="fs-13 w-100">پرداخت افلاین</span>
+                </label>
+            </label>
+        </div>
+    </div>
+    <label for="agree" class="p-4">
+        <input type="checkbox" id="agree">
+        <span class="fs-13">با پرداخت رزرو با قوانین رزرو اینترنتی هتل تیک و قوانین لغو رزرو هتل موافقت کرده‌اید.</span>
+    </label>
+    <div class="d-flex pb-3 flex-wrap border-top py-3 w-100 mx-4" style="">
+        <div class="input-group  mx-2" style="width: 30%">
+            <a href="{% url 'confirmation' %}" style="" type="submit" class="fs-15 btn-primary text-white btn w-100 py-2 px-3 border-0 text-center">{% trans 'پرداخت و دریافت واچر' %}</a>
+        </div>
+    </div>
+</form>

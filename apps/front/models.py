@@ -140,3 +140,62 @@ class Order_detail(models.Model):
 
     def __str__(self):
         return self.pk
+
+
+
+class Cart_rule(models.Model):
+    TYPE_DISCOUNT = ((1, 'درصد'), (2, 'مقدار'),)
+    YES_NO = ((1, 'Yes'), (2, 'No'),)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=0, null=True)
+    title = models.CharField(max_length=255, blank=True, verbose_name=_("عنوان تخفیف"))
+    code = models.CharField(max_length=255, blank=True, verbose_name=_("کد تخفیف"), unique=True)
+    start_date = models.DateTimeField(default=0, null=True, verbose_name=_("تاریخ شروع"))
+    end_date = models.DateTimeField(default=0, null=True, verbose_name=_("تاریخ پایان"))
+    quantity = models.SmallIntegerField(default=0, null=True, verbose_name=_("موجودی"))
+    minimum_amount = models.DecimalField(null=True, max_digits=12, decimal_places=2, verbose_name=_("حداقل مبلغ خرید"))
+    reduction_type = models.SmallIntegerField(choices=TYPE_DISCOUNT,null=False, default=1, verbose_name=_("نوع تخفیف"))
+    reduction = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("مقدار"))
+    highlight = models.SmallIntegerField(choices=YES_NO,null=False, default=0, verbose_name=_("نمایان برای مشتری"))
+    active = models.SmallIntegerField(choices=YES_NO,null=False, default=1, verbose_name=_("فعال"))
+    date_upd = models.DateTimeField(auto_now=True)
+    date_add = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.title)
+
+    class Meta:
+        verbose_name_plural = _('تخفیف مشتریان')
+        verbose_name = _('تخفیف مشتریان')
+
+    def __unicode__(self):
+        return str(self.title)
+
+class Order_cart_rule(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, default=0, null=True)
+    cart_rule = models.ForeignKey(Cart_rule, on_delete=models.CASCADE, null=True)
+    value = models.DecimalField(null=True, max_digits=12, decimal_places=2, verbose_name=_("حداقل مبلغ خرید"))
+    date_add = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.value)
+
+    class Meta:
+        verbose_name_plural = _('تخفیفات ثبت شده')
+        verbose_name = _('تخفیفات ثبت شده')
+
+    def __unicode__(self):
+        return str(self.value)
+
+class Cart_cart_rule(models.Model):
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, null=True)
+    cart_rule = models.ForeignKey(Cart_rule, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return str(self.cart.pk)
+
+    class Meta:
+        verbose_name_plural = _('تخفیف مشتریان')
+        verbose_name = _('تخفیف مشتریان')
+
+    def __unicode__(self):
+        return str(self.cart.pk)

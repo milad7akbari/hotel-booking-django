@@ -1,0 +1,29 @@
+{% extends 'base/base.html' %}
+{% load function %}
+{% block title %} {{ meta.title }} {% endblock %}
+{% block meta_desc %} {{ meta.description }} {% endblock %}
+{% block meta_keywords %} {{ meta.keywords }} {% endblock %}
+
+{% load i18n %}
+{% load static %}
+
+{% block main %}
+    <div id="_rules">
+        <div id="policy">
+            <div class="policy-title commonCol">
+                <p style="overflow: hidden">
+                    <span class="span-margin-left text-center d-block float-left ml-3 fs20">{% trans 'قوانین' %}<br> {% trans 'و' %} <br> {% trans 'مقررات' %} </span>
+                </p>
+            </div>
+            <div class="policy-description commonCol">
+                <p>{{ general_policy_page.description }}</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.span-margin-left').addClass('active-p-s-l').removeClass('span-margin-left');
+        });
+
+    </script>
+{% endblock %}

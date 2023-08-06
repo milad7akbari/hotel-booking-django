@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+
+{% block main %}
+    <style>
+    #page404 .hit-the-floor, #Page404 p {
+        color: #fff;
+        font-size: 12em;
+        font-weight: bold;
+        text-shadow: 0 1px 0 #ccc,
+        0 2px 0 #c9c9c9,
+        0 3px 0 #bbb,
+        0 4px 0 #b9b9b9,
+        0 5px 0 #aaa,
+        0 6px 1px rgba(0, 0, 0, .1),
+        0 0 5px rgba(0, 0, 0, .1),
+        0 1px 3px rgba(0, 0, 0, .3),
+        0 3px 5px rgba(0, 0, 0, .2),
+        0 5px 10px rgba(0, 0, 0, .25),
+        0 10px 10px rgba(0, 0, 0, .2),
+        0 20px 20px rgba(0, 0, 0, .15);
+        line-height: .9;
+    }
+
+    #Page404 .hit-the-floor {
+        text-align: center;
+    }
+
+</style>
+<div id="page404" class="w-100 my-5 text-center">
+    <div class="hit-the-floor">403</div>
+    <div class="hit-the-floor mt-5" style="color: #000;font-size: 2em">CSRF TOKEN FAILED</div>
+</div>
+{% endblock %}
