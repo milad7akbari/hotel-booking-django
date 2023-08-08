@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from apps.base.models import User
-from apps.front.models import Guest, Order, Cart_cart_rule
+from apps.front.models import  Order, Cart_cart_rule, Cart_guest
 
 
 class forgotPasswordForm(forms.Form):
@@ -174,7 +174,7 @@ class registerGuestFromReservationForm(forms.ModelForm):
             self.errors['err'] = 1
 
     class Meta:
-        model = Guest
+        model = Cart_guest
         fields = ['room', 'cart_detail', 'fullname', 'mobile', 'nationality']
         CHOICES = (
             ('1', _('ایرانی')),

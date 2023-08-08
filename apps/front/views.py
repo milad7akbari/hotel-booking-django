@@ -14,14 +14,16 @@ from django.urls import reverse
 from django.utils import timezone
 from datetime import datetime
 from django.contrib.auth.models import User
-from apps.base.models import Forgot_password, Slider, Meta, Cities, Pages
+from jdatetime import timedelta
+
+from apps.base.models import Forgot_password, Slider, Meta, Cities, Pages, Configuration
 from apps.blog.models import Main
 from apps.front.forms import forgotPasswordForm, trackingForm, registerUserFromReservationForm, loginUserForm, \
     forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser, placeOrderForm
 from django.utils.translation import gettext_lazy as _
 
-from apps.front.models import Cart, Cart_detail, Guest, Step, Order_detail, Order, Cart_rule, Cart_cart_rule, \
-    Order_cart_rule
+from apps.front.models import Cart, Cart_detail, Cart_guest, Step, Order_detail, Order, Cart_rule, Cart_cart_rule, \
+    Order_cart_rule, Order_detail_guest
 from apps.hotel.models import Hotel, Room, Discount, Check_in_out_rate, Extra_person_rate
 
 
@@ -154,7 +156,7 @@ def getInfoFromCart_(cart_pk, hotel_pk):
     ),
         Prefetch(
             'cart_detail',
-            queryset=Cart_detail.objects.filter(flag=1).prefetch_related('room', 'guest')
+            queryset=Cart_detail.objects.filter(flag=1).prefetch_related('room', 'cart_guest')
         )).first()
 
     extra_person = Extra_person_rate.objects.filter(hotel_id=hotel_pk, active=1).first()
@@ -222,7 +224,7 @@ def addToCartDetails(request, ref, id_cart):
                 cart_detail = Cart_detail.objects.filter(cart_id=cart.pk, flag=1)
                 if cart_detail.exists():
                     for idx, c in enumerate(cart_detail.all()):
-                        Guest.objects.filter(cart_detail_id=c.pk).update(flag=3)
+                        Cart_guest.objects.filter(cart_detail_id=c.pk).update(flag=3)
                         obj_cart = Cart_detail.objects.get(pk=c.pk)
                         if check_in_out:
                             obj_cart.check_out_flag = request.POST.getlist('check_out_flag')[idx]
@@ -233,7 +235,7 @@ def addToCartDetails(request, ref, id_cart):
                         fullname = request.POST.getlist('fullname')[idx]
                         mobile = request.POST.getlist('mobile')[idx]
                         nationality = request.POST.getlist('nationality')[idx]
-                        obj = Guest(room=c.room, cart_detail=c, fullname=fullname, mobile=mobile,
+                        obj = Cart_guest(room=c.room, cart_detail=c, fullname=fullname, mobile=mobile,
                                     nationality=nationality)
                         obj.save()
                     stepChangeStatus(cart.pk, 2)
@@ -283,7 +285,7 @@ def addToCartDetails(request, ref, id_cart):
                 cart_detail = Cart_detail.objects.filter(cart_id=cart.pk, flag=1)
                 if cart_detail.exists():
                     for idx, c in enumerate(cart_detail.all()):
-                        Guest.objects.filter(cart_detail_id=c.pk).update(flag=3)
+                        Cart_guest.objects.filter(cart_detail_id=c.pk).update(flag=3)
                         obj_cart = Cart_detail.objects.get(pk=c.pk)
                         if check_in_out:
                             obj_cart.check_out_flag = request.POST.getlist('check_out_flag')[idx]
@@ -294,7 +296,7 @@ def addToCartDetails(request, ref, id_cart):
                         fullname = request.POST.getlist('fullname')[idx]
                         mobile = request.POST.getlist('mobile')[idx]
                         nationality = request.POST.getlist('nationality')[idx]
-                        obj = Guest(room=c.room, cart_detail=c, fullname=fullname, mobile=mobile,
+                        obj = Cart_guest(cart_id=cart.pk,room=c.room, cart_detail=c, fullname=fullname, mobile=mobile,
                                     nationality=nationality)
                         obj.save()
                     stepChangeStatus(cart.pk, 2)
@@ -338,6 +340,39 @@ def _hotels():
         queryset=Room.objects.filter(
             Q(active=1, price__isnull=False)).order_by('price')
     ),'hotel_discount').order_by('?')[:6]
+    for i in hotel:
+        discount = i.hotel_discount.first()
+        price = i.room_set.order_by('price').first().price
+        if discount is not None:
+            reduction_type = discount.reduction_type
+            reduction = discount.reduction
+            i.reduction = discount.reduction
+            i.reduction_type = reduction_type
+            i.price_bef = price
+            if reduction_type == 2:
+                i.price = price - reduction
+            if reduction_type == 1:
+                i.price = ((100 - reduction) / 100) * price
+        else:
+            i.price = price
+    return hotel
+
+
+def newHotel():
+    diff = Configuration.objects.filter(name='new').first()
+    if diff is None:
+        diff = 2
+    else:
+        diff = diff.value
+    new_date = datetime.today() - timedelta(days=int(diff))
+    hotel = Hotel.objects.filter(active=1,date_add__gt=new_date).select_related(
+        'default_cover').prefetch_related(Prefetch(
+        'room_set',
+        queryset=Room.objects.filter(
+            Q(active=1, price__isnull=False)).order_by('price')
+    ),Prefetch('hotel_discount',
+                queryset=Discount.objects.filter(
+                    Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now())))).order_by('?')[:6]
     for i in hotel:
         discount = i.hotel_discount.first()
         price = i.room_set.order_by('price').first().price
@@ -488,6 +523,7 @@ def addCouponToCart(request, cart_id):
 def home_page(request):
     slider = Slider.objects.filter(active=1).order_by('?')[:3]
     hotel = _hotels()
+    hotels_new = newHotel()
     blogs_related = _blogs()
     city = _cities()
     meta = Meta.objects.filter(page_name='hotels').first()
@@ -495,6 +531,7 @@ def home_page(request):
     context = {
         'blogs_related': blogs_related,
         'city': city,
+        'hotels_new': hotels_new,
         'hotel': hotel,
         'slider': slider,
         'meta': meta,
@@ -658,7 +695,13 @@ def registerNewUser(request):
             user = form.save(commit=False)
             user.password = make_password(form.cleaned_data['password'], salt="Argon2PasswordHasher", hasher="default")
             user = form.save()
+            secure_key = 0
+            if request.session.session_key:
+                secure_key = request.session.session_key
             login(request, user)
+            cart = Cart.objects.filter(flag=1, secure_key=secure_key)
+            if cart.exists():
+                cart.update(user_id=request.user.pk)
             context = {
                 "result": _('ثبت نام موفقیت آمیز بود!'),
                 "err": False,
@@ -835,6 +878,16 @@ def placeOrders(request, ref, cart_id):
                         obj_order_detail.total_price_dis_excl = detail.room.price
                         obj_order_detail.order = order_obj
                         obj_order_detail.save()
+
+                        obj_cart_detail_guest = Cart_guest.objects.filter(cart_detail=detail, flag=1).first()
+                        obj_order_detail_guest = Order_detail_guest()
+                        obj_order_detail_guest.room = obj_cart_detail_guest.room
+                        obj_order_detail_guest.order_detail = obj_order_detail
+                        obj_order_detail_guest.fullname = obj_cart_detail_guest.fullname
+                        obj_order_detail_guest.mobile = obj_cart_detail_guest.mobile
+                        obj_order_detail_guest.nationality = obj_cart_detail_guest.nationality
+                        obj_order_detail_guest.save()
+
                     stepChangeStatus(cart_obj.pk, 3)
                     if info['coupon_exists']:
                         obj_coupon = Order_cart_rule()

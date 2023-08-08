@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django.shortcuts import render
 
 from apps.front.models import Order
@@ -16,8 +17,7 @@ def panelOrders(request):
     return render(request, 'customer/orders.html', context)
 
 def orderDetail(request, id):
-    orders = Order.objects.filter(pk=id).select_related('hotel', 'user', 'order_cart_rule').prefetch_related(
-        'order_detail').first()
+    orders = Order.objects.filter(pk=id).select_related('hotel', 'user', 'order_cart_rule').prefetch_related('order_detail__order_detail_guest','order_detail').first()
     context = {
         'order': orders
     }

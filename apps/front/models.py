@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -50,12 +51,12 @@ class Cart_detail(models.Model):
         return self.pk
 
 
-class Guest(models.Model):
+class Cart_guest(models.Model):
     FLAG = ((2, 'Done'), (3, 'Delete'),)
     NATIONALITY = ((1, _('ایرانی')), (2, _('غیر ایرانی')),)
-    room = models.ForeignKey(Room, default=None, null=True, blank=True, on_delete=models.CASCADE, related_name='guest')
-    cart_detail = models.ForeignKey(Cart_detail, default=None, null=True, blank=True, on_delete=models.CASCADE,
-                                    related_name='guest')
+    room = models.ForeignKey(Room, default=None, null=True, blank=True, on_delete=models.CASCADE, related_name='cart_guest')
+    cart = models.ForeignKey(Cart, default=None, null=True, blank=True, on_delete=models.CASCADE, related_name='cart_guest')
+    cart_detail = models.ForeignKey(Cart_detail, default=None, null=True, blank=True, on_delete=models.CASCADE, related_name='cart_guest')
     fullname = models.CharField(default=None, null=True, max_length=255)
     mobile = models.CharField(default=None, null=True, max_length=255)
     nationality = models.SmallIntegerField(choices=NATIONALITY, null=True)
@@ -64,14 +65,15 @@ class Guest(models.Model):
     date_add = models.DateTimeField(auto_now_add=True, null=True)
 
     def __unicode__(self):
-        return self.pk
+        return str(self.fullname)
 
     class Meta:
         verbose_name_plural = _("مسافر")
         verbose_name = _("مسافر")
 
     def __str__(self):
-        return self.pk
+        return str(self.fullname)
+
 
 
 class Step(models.Model):
@@ -142,8 +144,35 @@ class Order_detail(models.Model):
         return self.pk
 
 
+class Order_detail_guest(models.Model):
+    FLAG = ((2, 'Done'), (3, 'Delete'),)
+    NATIONALITY = ((1, _('ایرانی')), (2, _('غیر ایرانی')),)
+    room = models.ForeignKey(Room, default=None, null=True, blank=True, on_delete=models.CASCADE, related_name='order_detail_guest')
+    order_detail = models.OneToOneField(Order_detail, default=None, null=True, on_delete=models.CASCADE, related_name='order_detail_guest')
+    fullname = models.CharField(default=None, null=True, max_length=255)
+    mobile = models.CharField(default=None, null=True, max_length=255)
+    nationality = models.SmallIntegerField(choices=NATIONALITY, null=True)
+    date_add = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __unicode__(self):
+        return str(self.fullname)
+
+    class Meta:
+        verbose_name_plural = _("مسافر")
+        verbose_name = _("مسافر")
+
+    def __str__(self):
+        return str(self.fullname)
+
 
 class Cart_rule(models.Model):
+    def save(self, *args, **kwargs):
+        replacers = {'$', "/", "+", "="}
+        ref = make_password(str(self.pk), salt="Argon2PasswordHasher", hasher="default")
+        for r in replacers:
+            ref = ref.replace(r, '')
+        self.code = ref[-7:]
+        super(Cart_rule, self).save(*args, **kwargs)
     TYPE_DISCOUNT = ((1, 'درصد'), (2, 'مقدار'),)
     YES_NO = ((1, 'Yes'), (2, 'No'),)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=0, null=True)

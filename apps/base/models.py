@@ -162,3 +162,20 @@ class Pages(models.Model):
 
     def __unicode__(self):
         return self.page_name
+
+class Configuration(models.Model):
+    PTYPE = (('new','شرط برای هتل جدید'),)
+    name = models.CharField(choices=PTYPE, max_length=255, blank=True)
+    value = models.CharField(max_length=255, blank=True)
+    date_upd = models.DateTimeField(auto_now=True)
+    date_add = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = _('کانفیگ')
+        verbose_name = _('کانفیگ')
+
+    def __unicode__(self):
+        return self.name
