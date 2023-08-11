@@ -5,7 +5,8 @@ from apps.front.models import Cart_rule
 
 class Cart_ruleAdmin(admin.ModelAdmin):
     model = Cart_rule
-    list_display = ('title', 'reduction_type', 'reduction', 'start_date', 'end_date', 'active', 'date_add')
+    list_filter = ('active',)
+    list_display = ('title', 'reduction_type', 'reduction', 'start_date', 'end_date', 'active')
     readonly_fields = ('code',)
 
 

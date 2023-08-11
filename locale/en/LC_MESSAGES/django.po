@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-04 18:50+0430\n"
+"POT-Creation-Date: 2023-08-11 17:01+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,48 +17,171 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\Hotel_Test\settings.py:123
+#: .\Hotel_Test\settings.py:116
 msgid "Persian"
 msgstr "فارسی"
 
-#: .\Hotel_Test\settings.py:124
+#: .\Hotel_Test\settings.py:117
 msgid "English"
 msgstr "انگلیسی"
 
-#: .\apps\base\models.py:33
+#: .\Hotel_Test\urls.py:26 .\Hotel_Test\urls.py:27
+#: .\templates\pages\home.html:23
+msgid "هتل تیک"
+msgstr "Tik Hotel"
+
+#: .\apps\base\models.py:34
 #, python-format
 msgid "حداکثر حجم فایل %sMB"
 msgstr ""
 
-#: .\apps\base\models.py:36
+#: .\apps\base\models.py:37
 msgid "حداکثر حجم فایل 1MB"
 msgstr "Maximum file size %MB"
 
-#: .\apps\base\models.py:46 .\apps\base\models.py:47
+#: .\apps\base\models.py:38 .\apps\base\models.py:138 .\apps\blog\models.py:22
+#: .\apps\blog\models.py:41 .\apps\blog\models.py:65 .\apps\hotel\forms.py:44
+#: .\apps\hotel\forms.py:54 .\apps\hotel\models.py:91
+#: .\apps\hotel\models.py:124 .\apps\hotel\models.py:149
+#: .\apps\hotel\models.py:242 .\apps\hotel\models.py:266
+#: .\apps\hotel\models.py:304 .\apps\hotel\models.py:329
+#: .\apps\hotel\models.py:349
+msgid "عنوان"
+msgstr "Title"
+
+#: .\apps\base\models.py:39 .\apps\blog\models.py:25 .\apps\blog\models.py:43
+#: .\apps\blog\models.py:67 .\apps\front\models.py:33
+#: .\apps\front\models.py:188 .\apps\hotel\models.py:64
+#: .\apps\hotel\models.py:93 .\apps\hotel\models.py:126
+#: .\apps\hotel\models.py:151 .\apps\hotel\models.py:168
+#: .\apps\hotel\models.py:185 .\apps\hotel\models.py:202
+#: .\apps\hotel\models.py:219 .\apps\hotel\models.py:244
+#: .\apps\hotel\models.py:277 .\apps\hotel\models.py:306
+#: .\apps\hotel\models.py:331 .\apps\hotel\models.py:353
+#: .\apps\hotel\models.py:395
+#, fuzzy
+#| msgid "موبایل"
+msgid "فعال"
+msgstr "Active"
+
+#: .\apps\base\models.py:40 .\apps\base\models.py:58 .\apps\base\models.py:77
+#: .\apps\base\models.py:141 .\apps\base\models.py:159
+#: .\apps\base\models.py:177 .\apps\blog\models.py:26 .\apps\blog\models.py:44
+#: .\apps\blog\models.py:68 .\apps\front\models.py:17
+#: .\apps\front\models.py:64 .\apps\front\models.py:107
+#: .\apps\hotel\models.py:65 .\apps\hotel\models.py:94
+#: .\apps\hotel\models.py:127 .\apps\hotel\models.py:152
+#: .\apps\hotel\models.py:169 .\apps\hotel\models.py:186
+#: .\apps\hotel\models.py:203 .\apps\hotel\models.py:220
+#: .\apps\hotel\models.py:245 .\apps\hotel\models.py:278
+#: .\apps\hotel\models.py:307 .\apps\hotel\models.py:332
+#: .\apps\hotel\models.py:354 .\apps\hotel\models.py:372
+#: .\apps\hotel\models.py:396
+#, fuzzy
+#| msgid "تاریخ ورود"
+msgid "تاریخ آپدیت"
+msgstr "date update"
+
+#: .\apps\base\models.py:41 .\apps\base\models.py:59 .\apps\base\models.py:78
+#: .\apps\base\models.py:95 .\apps\base\models.py:121
+#: .\apps\base\models.py:142 .\apps\base\models.py:160
+#: .\apps\base\models.py:178 .\apps\blog\models.py:27 .\apps\blog\models.py:45
+#: .\apps\blog\models.py:69 .\apps\front\admin.py:63 .\apps\front\models.py:18
+#: .\apps\front\models.py:41 .\apps\front\models.py:65
+#: .\apps\front\models.py:108 .\apps\front\models.py:133
+#: .\apps\front\models.py:155 .\apps\front\models.py:190
+#: .\apps\front\models.py:206 .\apps\hotel\admin.py:147
+#: .\apps\hotel\admin.py:165 .\apps\hotel\admin.py:192
+#: .\apps\hotel\models.py:66 .\apps\hotel\models.py:95
+#: .\apps\hotel\models.py:128 .\apps\hotel\models.py:153
+#: .\apps\hotel\models.py:170 .\apps\hotel\models.py:187
+#: .\apps\hotel\models.py:204 .\apps\hotel\models.py:221
+#: .\apps\hotel\models.py:246 .\apps\hotel\models.py:279
+#: .\apps\hotel\models.py:308 .\apps\hotel\models.py:333
+#: .\apps\hotel\models.py:355 .\apps\hotel\models.py:373
+#: .\apps\hotel\models.py:397
+#, fuzzy
+#| msgid "تاریخ ورود"
+msgid "تاریخ ایجاد"
+msgstr "date add"
+
+#: .\apps\base\models.py:47 .\apps\base\models.py:48
 msgid "اسلایدر"
 msgstr "Slider"
 
-#: .\apps\base\models.py:61 .\apps\base\models.py:62
+#: .\apps\base\models.py:55 .\apps\front\models.py:11
+#: .\apps\front\models.py:93 .\apps\hotel\admin.py:143
+#: .\apps\hotel\models.py:347
+#, fuzzy
+#| msgid "متا"
+msgid "مشتری"
+msgstr "Customer"
+
+#: .\apps\base\models.py:56
+#, fuzzy
+#| msgid "تلفن: "
+msgid "توکن"
+msgstr "Token"
+
+#: .\apps\base\models.py:57
+#, fuzzy
+#| msgid "وضعبت"
+msgid "وضعیت"
+msgstr "status"
+
+#: .\apps\base\models.py:62 .\apps\base\models.py:63
 #, fuzzy
 #| msgid "فراموشی کلمه عبور"
 msgid "فراموشی پسورد"
 msgstr "Forgot password"
 
-#: .\apps\base\models.py:79 .\apps\base\models.py:80
+#: .\apps\base\models.py:75 .\apps\base\models.py:175
+#: .\apps\front\forms.py:138 .\apps\front\forms.py:143
+#: .\apps\front\models.py:124
+msgid "نام"
+msgstr "Name"
+
+#: .\apps\base\models.py:76 .\apps\base\models.py:176
+#: .\apps\front\models.py:186 .\apps\hotel\models.py:392
+msgid "مقدار"
+msgstr "value"
+
+#: .\apps\base\models.py:81 .\apps\base\models.py:82
 msgid "فوتر"
 msgstr "Footer"
 
-#: .\apps\base\models.py:99 .\apps\base\models.py:100
+#: .\apps\base\models.py:92
+#, fuzzy
+#| msgid "نام اتاق:"
+msgid "نام استان"
+msgstr "Province name"
+
+#: .\apps\base\models.py:93 .\apps\base\models.py:119
+msgid "عرض جغرافیایی"
+msgstr "Lat"
+
+#: .\apps\base\models.py:94 .\apps\base\models.py:120
+msgid "طول جغرافیایی"
+msgstr "Lang"
+
+#: .\apps\base\models.py:101 .\apps\base\models.py:102
+#: .\apps\base\models.py:115
 msgid "استان"
 msgstr "Province"
 
-#: .\apps\base\models.py:111
+#: .\apps\base\models.py:113
 #, fuzzy
 #| msgid "حداکثر حجم فایل %sMB"
 msgid "حداکثر حجم فایل %MB"
 msgstr "Maximum file size %MB"
 
-#: .\apps\base\models.py:115 .\apps\blog\models.py:62
+#: .\apps\base\models.py:116
+#, fuzzy
+#| msgid "نام هتل یا شهر"
+msgid "نام شهر"
+msgstr "City name"
+
+#: .\apps\base\models.py:118 .\apps\blog\models.py:64
 #: .\apps\hotel\models.py:89 .\apps\hotel\models.py:123
 #: .\apps\hotel\models.py:241 .\apps\hotel\models.py:302
 #, fuzzy
@@ -66,44 +189,91 @@ msgstr "Maximum file size %MB"
 msgid "Maximum file size allowed is 1Mb"
 msgstr "Maximum file size %MB"
 
-#: .\apps\base\models.py:123 .\apps\base\models.py:124
+#: .\apps\base\models.py:118 .\apps\blog\models.py:24 .\apps\blog\models.py:64
+#: .\apps\hotel\models.py:302
+#, fuzzy
+#| msgid "موبایل"
+msgid "فایل"
+msgstr "File"
+
+#: .\apps\base\models.py:127 .\apps\base\models.py:128
 #: .\apps\hotel\models.py:51
 msgid "شهر"
 msgstr "City"
 
-#: .\apps\base\models.py:143 .\apps\base\models.py:144
+#: .\apps\base\models.py:137 .\apps\base\models.py:157
+#, fuzzy
+#| msgid "نام هتل یا شهر"
+msgid "نام صفحه"
+msgstr "Page name"
+
+#: .\apps\base\models.py:139 .\apps\base\models.py:158
+#: .\apps\blog\models.py:23 .\apps\blog\models.py:42 .\apps\hotel\forms.py:46
+#: .\apps\hotel\forms.py:55
+msgid "توضیحات"
+msgstr "Desc"
+
+#: .\apps\base\models.py:140
+msgid "کلید واژه"
+msgstr "Key Word"
+
+#: .\apps\base\models.py:148 .\apps\base\models.py:149
 msgid "متا"
 msgstr "Meta"
 
-#: .\apps\base\models.py:160 .\apps\base\models.py:161
+#: .\apps\base\models.py:166 .\apps\base\models.py:167
 #, fuzzy
 #| msgid "صفحه اصلی"
 msgid "صفحه ها"
-msgstr "Home"
+msgstr "Pages"
+
+#: .\apps\base\models.py:184 .\apps\base\models.py:185
+#, fuzzy
+#| msgid "نکات منفی"
+msgid "کانفیگ"
+msgstr "Config"
 
 #: .\apps\blog\models.py:24
 msgid "اگر Yes باشد در هدر سایت در بخش بلاگ ها نمایش داده خواهد شد!"
-msgstr "If yes, it will be displayed in the header of the site in the blogs section!"
-
+msgstr ""
+"If yes, it will be displayed in the header of the site in the blogs section!"
 
 #: .\apps\blog\models.py:30 .\apps\blog\models.py:31
 msgid "دسته بندی بلاگ"
 msgstr "Category"
 
-#: .\apps\blog\models.py:47 .\apps\blog\models.py:48
+#: .\apps\blog\models.py:39
+#, fuzzy
+#| msgid "دسته بندی ها"
+msgid "دسته بندی"
+msgstr "Categories"
+
+#: .\apps\blog\models.py:40
+#, fuzzy
+#| msgid "کارت"
+msgid "کاور"
+msgstr "Cover"
+
+#: .\apps\blog\models.py:48 .\apps\blog\models.py:49
 #, fuzzy
 #| msgid "وبلاگ"
 msgid "بلاگ"
 msgstr "Blogs"
 
-#: .\apps\blog\models.py:59 .\apps\hotel\models.py:86
+#: .\apps\blog\models.py:61 .\apps\hotel\models.py:86
 #: .\apps\hotel\models.py:120 .\apps\hotel\models.py:238
 #: .\apps\hotel\models.py:299
 #, python-format
 msgid "Max file size is %sMB"
 msgstr ""
 
-#: .\apps\blog\models.py:78 .\apps\blog\models.py:79
+#: .\apps\blog\models.py:66
+#, fuzzy
+#| msgid "نیاز دارم"
+msgid "یادداشت"
+msgstr "I need"
+
+#: .\apps\blog\models.py:80 .\apps\blog\models.py:81
 msgid "فایل های بلاگ"
 msgstr "Blogs File"
 
@@ -111,13 +281,31 @@ msgstr "Blogs File"
 #, fuzzy
 #| msgid "آدرس و اطلاعات تماس"
 msgid "در انتظار تایید"
-msgstr "Address and contact information "
+msgstr "Pending"
 
 #: .\apps\customer\templatetags\func_customer.py:12
 #, fuzzy
 #| msgid "تایید و ادامه"
 msgid "تایید شد"
-msgstr "Confirm and continue"
+msgstr "Confirmed"
+
+#: .\apps\front\admin.py:64
+#, fuzzy
+#| msgid "قیمت با تخفیف:"
+msgid "مبلغ با تخفیف"
+msgstr "Price with discount:"
+
+#: .\apps\front\admin.py:93
+#, fuzzy
+#| msgid "پسورد"
+msgid "ورود شمسی"
+msgstr "Check in"
+
+#: .\apps\front\admin.py:98
+#, fuzzy
+#| msgid "خروج: "
+msgid "خروج شمسی"
+msgstr "Check out"
 
 #: .\apps\front\forms.py:13 .\apps\front\forms.py:18
 #: .\templates\_partial\modal\register\forgot-password.html:13
@@ -125,115 +313,115 @@ msgid "موبایل یا ایمیل"
 msgstr "Mobile or Email"
 
 #: .\apps\front\forms.py:20 .\apps\front\forms.py:36 .\apps\front\forms.py:39
-#: .\apps\front\forms.py:91 .\apps\front\forms.py:96
+#: .\apps\front\forms.py:92 .\apps\front\forms.py:97
 msgid "پسورد"
 msgstr "Password"
 
-#: .\apps\front\forms.py:25 .\apps\hotel\models.py:45
+#: .\apps\front\forms.py:25 .\apps\front\models.py:96
+#: .\apps\hotel\models.py:45
 msgid "رفرنس"
 msgstr "Ref"
 
-#: .\apps\front\forms.py:27 .\apps\front\forms.py:87 .\apps\front\forms.py:94
-#: .\apps\front\forms.py:139 .\apps\front\forms.py:144
+#: .\apps\front\forms.py:27 .\apps\front\forms.py:88 .\apps\front\forms.py:95
+#: .\apps\front\forms.py:140 .\apps\front\forms.py:145
+#: .\apps\front\models.py:61 .\apps\front\models.py:153
 msgid "موبایل"
 msgstr "Mobile"
 
-#: .\apps\front\forms.py:55 .\apps\front\forms.py:63 .\apps\front\forms.py:119
-#: .\apps\front\forms.py:127 .\apps\front\forms.py:166
-#: .\apps\front\forms.py:169
+#: .\apps\front\forms.py:56 .\apps\front\forms.py:64 .\apps\front\forms.py:120
+#: .\apps\front\forms.py:128 .\apps\front\forms.py:167
+#: .\apps\front\forms.py:170
 msgid "موبایل اشتباه است!"
 msgstr "Mobile is wrong!"
 
-#: .\apps\front\forms.py:60
+#: .\apps\front\forms.py:61
 msgid "موبایل وجود دارد!"
 msgstr "Mobile Exists!"
 
-#: .\apps\front\forms.py:68 .\apps\front\forms.py:76
+#: .\apps\front\forms.py:69 .\apps\front\forms.py:77
 msgid "ایمیل اشتباه است!"
 msgstr "Email is wrong!"
 
-#: .\apps\front\forms.py:74
+#: .\apps\front\forms.py:75
 msgid "ایمیل وجود دارد!"
 msgstr "Email Exists!"
 
-#: .\apps\front\forms.py:89 .\apps\front\forms.py:95
+#: .\apps\front\forms.py:90 .\apps\front\forms.py:96
 msgid "ایمیل"
 msgstr "Email"
 
-#: .\apps\front\forms.py:107
+#: .\apps\front\forms.py:108
 #, fuzzy
 #| msgid "ایمیل اشتباه است!"
 msgid "نام اشتباه است!"
 msgstr "Email is wrong!"
 
-#: .\apps\front\forms.py:110
+#: .\apps\front\forms.py:111
 #, fuzzy
 #| msgid "موبایل اشتباه است!"
 msgid "نام خانوادگی اشتباه است!"
 msgstr "Mobile is wrong!"
 
-#: .\apps\front\forms.py:124
+#: .\apps\front\forms.py:125
 #, fuzzy
 #| msgid "موبایل وجود دارد!"
 msgid "موبایل وجود دارد لاگین کنید!"
 msgstr "Mobile Exists!"
 
-#: .\apps\front\forms.py:137 .\apps\front\forms.py:142
-msgid "نام"
-msgstr "Name"
-
-#: .\apps\front\forms.py:138 .\apps\front\forms.py:143
+#: .\apps\front\forms.py:139 .\apps\front\forms.py:144
 msgid "نام خانوادگی"
 msgstr "Family"
 
-#: .\apps\front\forms.py:156
+#: .\apps\front\forms.py:157
 #, fuzzy
 #| msgid "کدملی اشتباه است!"
 msgid "نام کامل اشتباه است!"
 msgstr "National Code is wrong!"
 
-#: .\apps\front\forms.py:159
+#: .\apps\front\forms.py:160
 #, fuzzy
 #| msgid "کدملی اشتباه است!"
 msgid "ملیت اشتباه است!"
 msgstr "National Code is wrong!"
 
-#: .\apps\front\forms.py:179 .\apps\front\models.py:55
-#: .\templates\cart\_summery.html:177
+#: .\apps\front\forms.py:180 .\apps\front\models.py:56
+#: .\apps\front\models.py:149 .\templates\cart\_summery.html:179
 #, fuzzy
 #| msgid "ایمیل"
 msgid "ایرانی"
 msgstr "Iranian"
 
-#: .\apps\front\forms.py:180 .\apps\front\models.py:55
-#: .\templates\cart\_summery.html:178
+#: .\apps\front\forms.py:181 .\apps\front\models.py:56
+#: .\apps\front\models.py:149 .\templates\cart\_summery.html:180
 #, fuzzy
 #| msgid "بروزرسانی"
 msgid "غیر ایرانی"
 msgstr "foreigner"
 
-#: .\apps\front\forms.py:184 .\apps\front\forms.py:191
+#: .\apps\front\forms.py:185 .\apps\front\forms.py:192
+#: .\apps\front\models.py:60 .\apps\front\models.py:152
 msgid "نام کامل"
 msgstr "Full Name"
 
-#: .\apps\front\forms.py:186 .\apps\front\forms.py:192
+#: .\apps\front\forms.py:187 .\apps\front\forms.py:193
 #, fuzzy
 #| msgid "تلفن: "
 msgid "تلفن"
 msgstr "Phone: "
 
-#: .\apps\front\forms.py:188 .\apps\front\forms.py:193
+#: .\apps\front\forms.py:189 .\apps\front\forms.py:194
+#: .\apps\front\models.py:62 .\apps\front\models.py:154
 #, fuzzy
 #| msgid "کدملی"
 msgid "ملیت"
 msgstr "National Code"
 
-#: .\apps\front\forms.py:202 .\apps\front\forms.py:204
-#: .\apps\front\forms.py:207
+#: .\apps\front\forms.py:203 .\apps\front\forms.py:205
+#: .\apps\front\forms.py:208
 msgid "دریافت فاکتور رسمی"
 msgstr "Receive an official invoice "
 
-#: .\apps\front\forms.py:208
+#: .\apps\front\forms.py:209
 msgid ""
 " با پرداخت سفارش با قوانین رزرو اینترنتی هتل تیک و قوانین لغو رزرو هتل "
 "موافقت می کنم!"
@@ -241,67 +429,334 @@ msgstr ""
 "By paying the order, I agree with Hotel Tick's online booking rules and "
 "cancellation rules "
 
-#: .\apps\front\models.py:23 .\apps\front\models.py:24
+#: .\apps\front\models.py:10
+#, fuzzy
+#| msgid "آدرس و اطلاعات تماس"
+msgid "در انتظار تکمیل"
+msgstr "Address and contact information "
+
+#: .\apps\front\models.py:10 .\apps\front\models.py:122
+#, fuzzy
+#| msgid "سفارش ها"
+msgid "سفارش"
+msgstr "Orders"
+
+#: .\apps\front\models.py:10
+msgid "حذف"
+msgstr "Delete"
+
+#: .\apps\front\models.py:12 .\apps\front\models.py:95
+#: .\apps\hotel\admin.py:83 .\apps\hotel\admin.py:96 .\apps\hotel\admin.py:139
+#: .\apps\hotel\models.py:389
+#, fuzzy
+#| msgid "هتل ها"
+msgid "هتل"
+msgstr "Hotels"
+
+#: .\apps\front\models.py:13 .\templates\cart\_summery.html:16
+#, fuzzy
+#| msgid "پسورد"
+msgid "ورود"
+msgstr "check-in"
+
+#: .\apps\front\models.py:14 .\templates\cart\_summery.html:20
+msgid "خروج"
+msgstr "check-out"
+
+#: .\apps\front\models.py:15
+msgid "کد"
+msgstr "Code"
+
+#: .\apps\front\models.py:16 .\apps\front\models.py:40
+#: .\apps\front\models.py:63
+#, fuzzy
+#| msgid "وبلاگ"
+msgid "فلگ"
+msgstr "Flag"
+
+#: .\apps\front\models.py:24 .\apps\front\models.py:25
+#: .\apps\front\models.py:34 .\apps\front\models.py:58
 msgid "کارت"
 msgstr "Cart"
 
-#: .\apps\front\models.py:46 .\apps\front\models.py:47
+#: .\apps\front\models.py:33
+msgid "منقضی شد"
+msgstr "Expired"
+
+#: .\apps\front\models.py:33
+#, fuzzy
+#| msgid "مبلغ پرداخت شده:"
+msgid "پرداخت شده"
+msgstr "Amount paid:"
+
+#: .\apps\front\models.py:35 .\apps\front\models.py:57
+#: .\apps\front\models.py:123 .\apps\front\models.py:150
+#: .\apps\hotel\admin.py:109 .\apps\hotel\admin.py:122
+#: .\apps\hotel\admin.py:160 .\apps\hotel\models.py:303
+#, fuzzy
+#| msgid "استان"
+msgid "اتاق"
+msgstr "Room"
+
+#: .\apps\front\models.py:36 .\apps\front\models.py:125
+#: .\templates\cart\_reservation_payment_form.html:35
+#: .\templates\hotel\hotel_page.html:149
+msgid "تعداد"
+msgstr "Count"
+
+#: .\apps\front\models.py:37 .\apps\front\models.py:126
+#: .\templates\cart\_summery.html:115
+#, fuzzy
+#| msgid "ورود یا ثبت نام"
+msgid "ورود زود هنگام"
+msgstr "Early check-in:"
+
+#: .\apps\front\models.py:38
+#, fuzzy
+#| msgid "خروج دیر هنگام:"
+msgid "خروج دیر هتگام"
+msgstr "Late departure:"
+
+#: .\apps\front\models.py:39 .\apps\hotel\models.py:173
+#: .\apps\hotel\models.py:174 .\apps\hotel\models.py:275
+msgid "نفر اضافه"
+msgstr "extra person"
+
+#: .\apps\front\models.py:47 .\apps\front\models.py:48
+#: .\apps\front\models.py:59
 #, fuzzy
 #| msgid "حساب کاربری"
 msgid "جزئیات کارت"
 msgstr "Cart Detail"
 
-#: .\apps\front\models.py:70 .\apps\front\models.py:71
+#: .\apps\front\models.py:71 .\apps\front\models.py:72
+#: .\apps\front\models.py:161 .\apps\front\models.py:162
 #, fuzzy
 #| msgid "پسورد"
 msgid "مسافر"
 msgstr "Passenger"
 
-#: .\apps\front\models.py:113 .\apps\front\models.py:114
+#: .\apps\front\models.py:94
+#, fuzzy
+#| msgid "پسورد"
+msgid "سبد"
+msgstr "Cart"
+
+#: .\apps\front\models.py:97
+msgid "وضعیت فعلی"
+msgstr "Current State"
+
+#: .\apps\front\models.py:98
+#, fuzzy
+#| msgid "مبلغ پرداخت شده:"
+msgid "نوع پرداخت"
+msgstr "Amount paid:"
+
+#: .\apps\front\models.py:99
+#, fuzzy
+#| msgid "مبلغ پرداخت شده:"
+msgid "مبلغ پرداخت شده"
+msgstr "Amount paid:"
+
+#: .\apps\front\models.py:100
+#, fuzzy
+#| msgid "نرخ ورود و خروج"
+msgid "مبلغ ورود و خروح"
+msgstr "Entry and exit rates"
+
+#: .\apps\front\models.py:101
+#, fuzzy
+#| msgid "نفر اضافه"
+msgid "مبلغ نفر اضافه"
+msgstr "extra person"
+
+#: .\apps\front\models.py:102 .\apps\front\models.py:130
+#, fuzzy
+#| msgid "قیمت بدون تخفیف:"
+msgid "قیمت بدون تخفیف"
+msgstr "Price without discount:"
+
+#: .\apps\front\models.py:103 .\apps\front\models.py:131
+#, fuzzy
+#| msgid "قیمت با تخفیف:"
+msgid "قیمت با تخفیف"
+msgstr "Price with discount:"
+
+#: .\apps\front\models.py:104
+#, fuzzy
+#| msgid "تایید و ادامه"
+msgid "تعدا اتاق"
+msgstr "Number of rooms"
+
+#: .\apps\front\models.py:105
+#, fuzzy
+#| msgid "دریافت فاکتور رسمی"
+msgid "فاکتور رسمی"
+msgstr "Receive an official invoice "
+
+#: .\apps\front\models.py:106
+#, fuzzy
+#| msgid "قوانین کنسل"
+msgid "قبول قوانین"
+msgstr "Condition"
+
+#: .\apps\front\models.py:114 .\apps\front\models.py:115
 msgid "سفارش ها"
 msgstr "Orders"
 
-#: .\apps\front\models.py:138 .\apps\front\models.py:139
+#: .\apps\front\models.py:127 .\templates\cart\_summery.html:126
+#, fuzzy
+#| msgid "خروج دیر هنگام:"
+msgid "خروج دیر هنگام"
+msgstr "Late departure:"
+
+#: .\apps\front\models.py:128 .\templates\cart\_summery.html:61
+#: .\templates\hotel\hotel_page.html:104
+#, fuzzy
+#| msgid "تایید و ادامه"
+msgid "افراد اضافه"
+msgstr "extra people"
+
+#: .\apps\front\models.py:129
+#, fuzzy
+#| msgid "قیمت پابه"
+msgid "فیمت پایه"
+msgstr "base price"
+
+#: .\apps\front\models.py:132 .\apps\front\models.py:189
+#, fuzzy
+#| msgid "تاریخ ورود"
+msgid "تاریخ اپدیت"
+msgstr "Check Out"
+
+#: .\apps\front\models.py:140 .\apps\front\models.py:141
 msgid "جزئیات سفارش ها"
+msgstr "Orders Detail"
+
+#: .\apps\front\models.py:151
+#, fuzzy
+#| msgid "جزئیات سفارش ها"
+msgid "جزئیات سفارش"
 msgstr "Order Detail"
 
-#: .\apps\front\views.py:29
+#: .\apps\front\models.py:179 .\apps\hotel\models.py:390
+msgid "عنوان تخفیف"
+msgstr "Title discount"
+
+#: .\apps\front\models.py:180
+#: .\templates\cart\_reservation_payment_form.html:112
+#, fuzzy
+#| msgid "نوع تخفیف"
+msgid "کد تخفیف"
+msgstr "Discount Type"
+
+#: .\apps\front\models.py:181 .\apps\hotel\admin.py:182
+#: .\apps\hotel\models.py:393
+#, fuzzy
+#| msgid "تاریخ ورود"
+msgid "تاریخ شروع"
+msgstr "Check In"
+
+#: .\apps\front\models.py:182 .\apps\hotel\admin.py:187
+#: .\apps\hotel\models.py:394
+#, fuzzy
+#| msgid "تاریخ ورود"
+msgid "تاریخ پایان"
+msgstr "Check Out"
+
+#: .\apps\front\models.py:183
+#, fuzzy
+#| msgid "پسورد"
+msgid "موجودی"
+msgstr "Quantity"
+
+#: .\apps\front\models.py:184 .\apps\front\models.py:205
+#, fuzzy
+#| msgid "سبد خرید"
+msgid "حداقل مبلغ خرید"
+msgstr "Min Cart Amount"
+
+#: .\apps\front\models.py:185 .\apps\hotel\models.py:391
+msgid "نوع تخفیف"
+msgstr "Discount Type"
+
+#: .\apps\front\models.py:187
+#, fuzzy
+#| msgid " تومان برای هر شب"
+msgid "نمایان برای مشتری"
+msgstr "Highlight"
+
+#: .\apps\front\models.py:196 .\apps\front\models.py:197
+#: .\apps\front\models.py:226 .\apps\front\models.py:227
+#, fuzzy
+#| msgid "هتل ها"
+msgid "تخفیف مشتریان"
+msgstr "Dicounts"
+
+#: .\apps\front\models.py:212 .\apps\front\models.py:213
+#, fuzzy
+#| msgid "هتل ها"
+msgid "تخفیفات ثبت شده"
+msgstr "Dicounts Register"
+
+#: .\apps\front\views.py:32
 msgid "اطلاعاتی یافت نشد"
 msgstr "No Data found"
 
-#: .\apps\front\views.py:44
+#: .\apps\front\views.py:47
 msgid "لینک بازیابی پسورد به موبایل شما ارسال شد! "
 msgstr "The password recovery link has been sent to your mobile!"
 
-#: .\apps\front\views.py:46
+#: .\apps\front\views.py:49
 msgid "لینک بازیابی پسورد به ایمیل شما ارسال شد! "
 msgstr "The password recovery link has been sent to your email!"
 
-#: .\apps\front\views.py:96
+#: .\apps\front\views.py:99
 msgid "مشکل در بروزرسانی اطلاعات"
 msgstr "Problem updating information"
 
-#: .\apps\front\views.py:109
+#: .\apps\front\views.py:112
 msgid "تغییر پسورد موفقیت آمیز بود"
 msgstr "Password change was successful"
 
-#: .\apps\front\views.py:399
+#: .\apps\front\views.py:441
 msgid "اطلاعات وارد شده صحیح نیست."
 msgstr "The information entered is not correct."
 
-#: .\apps\front\views.py:412
+#: .\apps\front\views.py:455
 #, fuzzy
 #| msgid "حساب کاربری"
 msgid "در انتظار بررسی"
-msgstr "Panel"
+msgstr "Pending"
 
-#: .\apps\front\views.py:414
+#: .\apps\front\views.py:457
 #, fuzzy
 #| msgid "تایید و ادامه"
 msgid "تایید شده است"
 msgstr "Confirm and continue"
 
-#: .\apps\front\views.py:603 .\apps\hotel\views.py:156
+#: .\apps\front\views.py:476
+#, fuzzy
+#| msgid "اطلاعات وارد شده صحیح نیست."
+msgid "کد وارد شده صحیح نیست."
+msgstr "The information entered is not correct."
+
+#: .\apps\front\views.py:505
+#, fuzzy
+#| msgid "هتل ها"
+msgid "کد تخفیف اعمال شد"
+msgstr "Discounts Approved"
+
+#: .\apps\front\views.py:507 .\apps\front\views.py:509
+msgid "این کد تخفیف قبلا استفاده شده است"
+msgstr "Code Already Used"
+
+#: .\apps\front\views.py:511
+msgid ""
+"حداقل مقدار سبد خرید برای اعمال کد تخفیف {cart_amount:,} تومان  می باشد."
+msgstr "Min Cart amount Required"
+
+#: .\apps\front\views.py:705 .\apps\hotel\views.py:157
 msgid "ثبت نام موفقیت آمیز بود!"
 msgstr "Registration was successful!"
 
@@ -324,20 +779,9 @@ msgid "توضیحات کمتر از ده کاراکتر است"
 msgstr "The Desc is less than ten characters"
 
 #: .\apps\hotel\forms.py:42 .\apps\hotel\forms.py:53
+#: .\apps\hotel\models.py:348
 msgid "ستاره"
 msgstr "Stars"
-
-#: .\apps\hotel\forms.py:44 .\apps\hotel\forms.py:54 .\apps\hotel\models.py:91
-#: .\apps\hotel\models.py:124 .\apps\hotel\models.py:149
-#: .\apps\hotel\models.py:242 .\apps\hotel\models.py:266
-#: .\apps\hotel\models.py:304 .\apps\hotel\models.py:329
-#: .\apps\hotel\models.py:349
-msgid "عنوان"
-msgstr "Title"
-
-#: .\apps\hotel\forms.py:46 .\apps\hotel\forms.py:55
-msgid "توضیحات"
-msgstr "Desc"
 
 #: .\apps\hotel\forms.py:48 .\apps\hotel\forms.py:56
 #: .\apps\hotel\models.py:351
@@ -430,19 +874,7 @@ msgstr "With early check-in and check-out"
 
 #: .\apps\hotel\models.py:63
 msgid "دارای صبحانه"
-msgstr ""
-
-#: .\apps\hotel\models.py:64 .\apps\hotel\models.py:93
-#: .\apps\hotel\models.py:126 .\apps\hotel\models.py:151
-#: .\apps\hotel\models.py:168 .\apps\hotel\models.py:185
-#: .\apps\hotel\models.py:202 .\apps\hotel\models.py:219
-#: .\apps\hotel\models.py:244 .\apps\hotel\models.py:277
-#: .\apps\hotel\models.py:306 .\apps\hotel\models.py:331
-#: .\apps\hotel\models.py:353 .\apps\hotel\models.py:395
-#, fuzzy
-#| msgid "موبایل"
-msgid "فعال"
-msgstr "Active"
+msgstr "Has Breakfast"
 
 #: .\apps\hotel\models.py:72 .\apps\hotel\models.py:73
 #: .\templates\_partial\home\_home_header.html:25
@@ -476,11 +908,6 @@ msgstr "Hotel facilities"
 #: .\apps\hotel\models.py:200 .\apps\hotel\models.py:269
 msgid "قیمت"
 msgstr "Price"
-
-#: .\apps\hotel\models.py:173 .\apps\hotel\models.py:174
-#: .\apps\hotel\models.py:275
-msgid "نفر اضافه"
-msgstr "extra person"
 
 #: .\apps\hotel\models.py:190 .\apps\hotel\models.py:191
 #, fuzzy
@@ -543,7 +970,7 @@ msgstr "Room facilities"
 #, fuzzy
 #| msgid "درباره ما"
 msgid "دیدگاه ها"
-msgstr "About Us"
+msgstr "Review"
 
 #: .\apps\hotel\models.py:371
 msgid "وضعبت"
@@ -553,37 +980,13 @@ msgstr "status"
 msgid "جواب دیدگاه ها"
 msgstr "The answer to the views"
 
-#: .\apps\hotel\models.py:390
-msgid "عنوان تخفیف"
-msgstr "Title discount"
-
-#: .\apps\hotel\models.py:391
-msgid "نوع تخفیف"
-msgstr "Discount Type"
-
-#: .\apps\hotel\models.py:392
-msgid "مقدار"
-msgstr "value"
-
-#: .\apps\hotel\models.py:393
-#, fuzzy
-#| msgid "تاریخ ورود"
-msgid "تاریخ شروع"
-msgstr "Check In"
-
-#: .\apps\hotel\models.py:394
-#, fuzzy
-#| msgid "تاریخ ورود"
-msgid "تاریخ پایان"
-msgstr "Check Out"
-
-#: .\apps\hotel\models.py:419 .\apps\hotel\models.py:420
+#: .\apps\hotel\models.py:403 .\apps\hotel\models.py:404
 #, fuzzy
 #| msgid "هتل ها"
 msgid "تخفیف ها"
 msgstr "Dicounts"
 
-#: .\apps\hotel\templatetags\function.py:33
+#: .\apps\hotel\templatetags\function.py:38
 msgid "{(cart.check_out - cart.check_in).days} شب "
 msgstr "{(cart.check_out - cart.check_in).days} Night "
 
@@ -654,27 +1057,43 @@ msgstr "Login or register "
 msgid "حساب کاربری"
 msgstr "Panel"
 
-#: .\templates\_partial\header\_header.html:34
+#: .\templates\_partial\header\_header.html:33
 #: .\templates\_partial\home\_home_header.html:23
 msgid "صفحه اصلی"
 msgstr "Home"
 
-#: .\templates\_partial\header\_header.html:36
+#: .\templates\_partial\header\_header.html:35
 msgid "همه هتل ها"
 msgstr "Hotels"
 
-#: .\templates\_partial\header\_header.html:48
+#: .\templates\_partial\header\_header.html:47
 msgid "پیگیری رزرو"
 msgstr "Follow up booking"
 
-#: .\templates\_partial\header\_header.html:50
+#: .\templates\_partial\header\_header.html:49
 msgid "سبد خرید"
 msgstr "Cart"
 
-#: .\templates\_partial\header\_header.html:52
+#: .\templates\_partial\header\_header.html:51
 #: .\templates\_partial\home\_home_header.html:38
 msgid "درباره ما"
 msgstr "About Us"
+
+#: .\templates\_partial\home\_home_.html:7
+#, fuzzy
+#| msgid "عنوان تخفیف"
+msgid "هتل های تخفیف دار"
+msgstr "Title discount"
+
+#: .\templates\_partial\home\_home_.html:9
+#, fuzzy
+#| msgid "عنوان تخفیف"
+msgid "هتل های جدید"
+msgstr "Title discount"
+
+#: .\templates\_partial\home\_home_.html:45
+msgid " تومان برای هر شب"
+msgstr "Tomans for each night"
 
 #: .\templates\_partial\home\_home_blog.html:4
 #, fuzzy
@@ -699,16 +1118,6 @@ msgstr "The best hotel in the cities"
 #: .\templates\_partial\home\_home_header.html:37
 msgid "وبلاگ"
 msgstr "Blogs"
-
-#: .\templates\_partial\home\_home_on_sale.html:6
-#, fuzzy
-#| msgid "عنوان تخفیف"
-msgid "هتل های تخفیف دار"
-msgstr "Title discount"
-
-#: .\templates\_partial\home\_home_on_sale.html:41
-msgid " تومان برای هر شب"
-msgstr "Tomans for each night"
 
 #: .\templates\_partial\modal\register\forgot-password.html:7
 msgid " برای بازیابی کلمه عبور شماره موبایل یا ایمیل خود را وارد کنید."
@@ -763,7 +1172,7 @@ msgid "Log in"
 msgstr "Log in"
 
 #: .\templates\blog\_header.html:12
-#: .\templates\cart\_reservation_payment_form.html:116
+#: .\templates\cart\_reservation_payment_form.html:139
 msgid "رزرو هتل"
 msgstr "hotel reservation"
 
@@ -815,11 +1224,6 @@ msgstr "Room name:"
 msgid "تعداد درخواستی: "
 msgstr "The number of requests:"
 
-#: .\templates\cart\_reservation_payment_form.html:35
-#: .\templates\hotel\hotel_page.html:154
-msgid "تعداد"
-msgstr "Number"
-
 #: .\templates\cart\_reservation_payment_form.html:38
 msgid "قیمت: "
 msgstr "Price"
@@ -829,14 +1233,16 @@ msgstr "Price"
 #: .\templates\cart\_reservation_payment_form.html:58
 #: .\templates\cart\_reservation_payment_form.html:71
 #: .\templates\cart\_reservation_payment_form.html:84
-#: .\templates\cart\_reservation_payment_form.html:104
+#: .\templates\cart\_reservation_payment_form.html:105
+#: .\templates\cart\_reservation_payment_form.html:122
 #: .\templates\cart\_summery.html:102
 #: .\templates\customer\order_detail.html:35
 #: .\templates\customer\order_detail.html:39
-#: .\templates\customer\order_detail.html:66
-#: .\templates\customer\order_detail.html:70
+#: .\templates\customer\order_detail.html:44
+#: .\templates\customer\order_detail.html:73
+#: .\templates\customer\order_detail.html:77
 #: .\templates\hotel\_list_hotels.html:76
-#: .\templates\hotel\hotel_page.html:149 .\templates\hotel\hotel_page.html:155
+#: .\templates\hotel\hotel_page.html:144 .\templates\hotel\hotel_page.html:150
 #, fuzzy
 #| msgid "تلفن: "
 msgid "تومان"
@@ -869,6 +1275,22 @@ msgstr "Early check-in:"
 msgid "خروج زود هنگام: "
 msgstr "Early check-our:"
 
+#: .\templates\cart\_reservation_payment_form.html:102
+#, fuzzy
+#| msgid "مبلغ پرداخت شده:"
+msgid "قابل پرداخت"
+msgstr "Amount paid:"
+
+#: .\templates\cart\_reservation_payment_form.html:110
+#, fuzzy
+#| msgid "موبایل"
+msgid "اعمال"
+msgstr "Active"
+
+#: .\templates\cart\_reservation_payment_form.html:119
+msgid "قابل پرداخت با محاسبه کوپن"
+msgstr ""
+
 #: .\templates\cart\_reservation_user_form.html:7
 msgid ""
 "چنانچه عضو سایت هستید برای تسریع در فرایند رزرو لاگین کنید با مشخصات رزرو "
@@ -886,42 +1308,14 @@ msgstr "Login"
 msgid "خلاصه رزرو شما به شرح زیر می باشد."
 msgstr "The summary of your reservation is as follows."
 
-#: .\templates\cart\_summery.html:16
-#, fuzzy
-#| msgid "پسورد"
-msgid "ورود"
-msgstr "check-in"
-
-#: .\templates\cart\_summery.html:20
-msgid "خروج"
-msgstr "check-out"
-
-#: .\templates\cart\_summery.html:56 .\templates\hotel\hotel_page.html:104
+#: .\templates\cart\_summery.html:56 .\templates\hotel\hotel_page.html:99
 msgid "نفره"
 msgstr "person"
 
-#: .\templates\cart\_summery.html:61 .\templates\hotel\hotel_page.html:109
-#, fuzzy
-#| msgid "تایید و ادامه"
-msgid "افراد اضافه"
-msgstr "extra people"
-
 #: .\templates\cart\_summery.html:104 .\templates\hotel\_list_hotels.html:78
-#: .\templates\hotel\hotel_page.html:151
+#: .\templates\hotel\hotel_page.html:146
 msgid "هر شب"
 msgstr "per night"
-
-#: .\templates\cart\_summery.html:115
-#, fuzzy
-#| msgid "ورود یا ثبت نام"
-msgid "ورود زود هنگام"
-msgstr "Early check-in:"
-
-#: .\templates\cart\_summery.html:126
-#, fuzzy
-#| msgid "خروج دیر هنگام:"
-msgid "خروج دیر هنگام"
-msgstr "Late departure:"
 
 #: .\templates\cart\_summery.html:135
 #, fuzzy
@@ -929,11 +1323,11 @@ msgstr "Late departure:"
 msgid "تعداد نفر اضافه: "
 msgstr "Additional person: "
 
-#: .\templates\cart\_summery.html:150
+#: .\templates\cart\_summery.html:152
 msgid "مشخصات مسافر:"
 msgstr "Passenger info:"
 
-#: .\templates\cart\_summery.html:194
+#: .\templates\cart\_summery.html:196
 msgid "مرحله بعدی"
 msgstr "next step"
 
@@ -947,8 +1341,8 @@ msgstr "Options"
 
 #: .\templates\customer\order_detail.html:22
 #: .\templates\customer\order_detail.html:24
-#: .\templates\customer\order_detail.html:54
-#: .\templates\customer\order_detail.html:58
+#: .\templates\customer\order_detail.html:61
+#: .\templates\customer\order_detail.html:65
 #: .\templates\customer\orders.html:22 .\templates\customer\orders.html:24
 #, fuzzy
 #| msgid "درباره ما"
@@ -957,9 +1351,9 @@ msgstr "I need"
 
 #: .\templates\customer\order_detail.html:22
 #: .\templates\customer\order_detail.html:24
-#: .\templates\customer\order_detail.html:54
-#: .\templates\customer\order_detail.html:58
-#: .\templates\customer\order_detail.html:62
+#: .\templates\customer\order_detail.html:61
+#: .\templates\customer\order_detail.html:65
+#: .\templates\customer\order_detail.html:69
 #: .\templates\customer\orders.html:22 .\templates\customer\orders.html:24
 msgid "ندارم"
 msgstr "I don't need"
@@ -969,36 +1363,58 @@ msgid "مبلغ پرداخت شده:"
 msgstr "Amount paid:"
 
 #: .\templates\customer\order_detail.html:34
-#: .\templates\customer\order_detail.html:65
+#: .\templates\customer\order_detail.html:72
 msgid "قیمت بدون تخفیف:"
 msgstr "Price without discount:"
 
 #: .\templates\customer\order_detail.html:38
-#: .\templates\customer\order_detail.html:69
+#: .\templates\customer\order_detail.html:76
 msgid "قیمت با تخفیف:"
 msgstr "Price with discount:"
 
-#: .\templates\customer\order_detail.html:45
+#: .\templates\customer\order_detail.html:43
+msgid "مبلغ کوپن:"
+msgstr ""
+
+#: .\templates\customer\order_detail.html:52
 msgid "نام اتاق:"
 msgstr "room name"
 
-#: .\templates\customer\order_detail.html:49
+#: .\templates\customer\order_detail.html:56
 msgid "تعداد:"
 msgstr "quantity"
 
-#: .\templates\customer\order_detail.html:53
+#: .\templates\customer\order_detail.html:60
 #, fuzzy
 #| msgid "ورود یا ثبت نام"
 msgid "ورود زود هنگام:"
 msgstr "Early check-in:"
 
-#: .\templates\customer\order_detail.html:57
+#: .\templates\customer\order_detail.html:64
 msgid "خروج دیر هنگام:"
 msgstr "Late departure:"
 
-#: .\templates\customer\order_detail.html:61
+#: .\templates\customer\order_detail.html:68
 msgid "نفر اضافه:"
 msgstr "extra person"
+
+#: .\templates\customer\order_detail.html:80
+#, fuzzy
+#| msgid "نام کامل"
+msgid "نام کامل مسافر:"
+msgstr "Full Name"
+
+#: .\templates\customer\order_detail.html:84
+#, fuzzy
+#| msgid "پسورد"
+msgid "تلفن مسافر:"
+msgstr "Passenger"
+
+#: .\templates\customer\order_detail.html:88
+#, fuzzy
+#| msgid "مشخصات مسافر:"
+msgid "ملیت مسافر:"
+msgstr "Passenger info:"
 
 #: .\templates\customer\personality.html:7
 msgid "نام:"
@@ -1038,6 +1454,12 @@ msgstr "Check In"
 #| msgid "تاریخ ورود"
 msgid "تاریخ خروج"
 msgstr "Check In"
+
+#: .\templates\hotel\_list_hotels.html:82 .\templates\hotel\hotel_page.html:39
+#, fuzzy
+#| msgid "تایید و ادامه"
+msgid "مشاهده اتاق ها"
+msgstr "View the rooms"
 
 #: .\templates\hotel\home.html:18
 msgid "مشاهده فیلتر"
@@ -1095,53 +1517,59 @@ msgstr "The least star"
 msgid "بیشترین ستاره"
 msgstr "The most stars"
 
-#: .\templates\hotel\hotel_page.html:37
-#, fuzzy
-#| msgid "تایید و ادامه"
-msgid "مشاهده اتاق ها"
-msgstr "View the rooms"
-
-#: .\templates\hotel\hotel_page.html:52
+#: .\templates\hotel\hotel_page.html:54
 msgid "امکانات هتل"
 msgstr "hotel facilities"
 
-#: .\templates\hotel\hotel_page.html:62
+#: .\templates\hotel\hotel_page.html:64
 msgid "لیست اتاق ها"
 msgstr "List of rooms"
 
-#: .\templates\hotel\hotel_page.html:64 .\templates\hotel\hotel_page.html:66
+#: .\templates\hotel\hotel_page.html:66 .\templates\hotel\hotel_page.html:68
 msgid "لطفا تاریخ ورود و خروج را بررسی کنید"
 msgstr "Please check the check-in and check-out dates"
 
-#: .\templates\hotel\hotel_page.html:170
+#: .\templates\hotel\hotel_page.html:74
+#, fuzzy
+#| msgid "امتیاز را انتخاب کنید!"
+msgid "ورود و خروج را انتخاب کنید"
+msgstr "Choose the score!"
+
+#: .\templates\hotel\hotel_page.html:75
+#, fuzzy
+#| msgid "نرخ ورود و خروج"
+msgid "تاریخ ورود و خروج"
+msgstr "Entry and exit rates"
+
+#: .\templates\hotel\hotel_page.html:165
 msgid "ادامه و رزرو"
 msgstr "Continue and reserve"
 
-#: .\templates\hotel\hotel_page.html:184
+#: .\templates\hotel\hotel_page.html:179
 #, fuzzy
 #| msgid "قوانین و خبر رسانی ها"
 msgid "قوانین کنسلی"
 msgstr "Cancellation rules"
 
-#: .\templates\hotel\hotel_page.html:198
+#: .\templates\hotel\hotel_page.html:193
 msgid "قابل توجه رزرو کنندکان"
 msgstr "Attention bookers"
 
-#: .\templates\hotel\hotel_page.html:211
+#: .\templates\hotel\hotel_page.html:206
 #, fuzzy
 #| msgid "ورود به سامانه"
 msgid "ورود و خروج"
 msgstr "check-in and check-out"
 
-#: .\templates\hotel\hotel_page.html:230
+#: .\templates\hotel\hotel_page.html:225
 msgid "لوکیشن و مراکز نزدیک آن"
 msgstr "Location and nearby centers"
 
-#: .\templates\hotel\hotel_page.html:255
+#: .\templates\hotel\hotel_page.html:250
 msgid "نظرات"
 msgstr "Comments"
 
-#: .\templates\hotel\hotel_page.html:259 .\templates\hotel\hotel_page.html:291
+#: .\templates\hotel\hotel_page.html:254 .\templates\hotel\hotel_page.html:286
 msgid "ثبت نظر"
 msgstr "Register a comment"
 
@@ -1186,9 +1614,14 @@ msgid "درخواست شما موفقیت آمیز بود!"
 msgstr "Registration was successful!"
 
 #: .\templates\pages\confirmation.html:15
+#, fuzzy
+#| msgid ""
+#| "تیم ما اطلاعات رزرو و جزیات پرداختی و را بررسی و به شما اطلاع خواهند داد."
 msgid ""
-"تیم ما اطلاعات رزرو و جزیات پرداختی و را بررسی و به شما اطلاع خواهند داد."
-msgstr "Our team will check and inform you about the reservation information and payment details."
+"تیم ما اطلاعات رزرو و جزییات پرداختی و را بررسی و به شما اطلاع خواهند داد."
+msgstr ""
+"Our team will check and inform you about the reservation information and "
+"payment details."
 
 #: .\templates\pages\confirmation.html:24
 msgid "شماره تماس تیم پشتیبانی هتل تیک:"
@@ -1215,10 +1648,6 @@ msgstr "AND"
 #| msgid "مقدار"
 msgid "مقررات"
 msgstr "Rule"
-
-#: .\templates\pages\home.html:23
-msgid "هتل تیک"
-msgstr "Tik Hotel"
 
 #: .\templates\pages\home.html:24 .\templates\pages\home.html:25
 msgid "از بهترین های رزرو در ایران به صورت گروهی و سریع"

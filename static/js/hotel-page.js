@@ -20,9 +20,9 @@ $(document).ready(function () {
             const count = $(this).val();
             const price = $(this).parent().attr('data-price');
             final += count * price;
-            if (final > 0){
+            if (final > 0) {
                 $('#finalAmount').next().removeClass('d-none');
-            }else{
+            } else {
                 $('#finalAmount').next().addClass('d-none');
             }
         });
@@ -48,7 +48,8 @@ $(document).ready(function () {
             }
         });
     }
-    $('#datepicker12from').datepicker({
+
+    /*$('#datepicker12from').datepicker({
         minDate: '0',
         changeMonth: true,
         dateFormat: 'yy-mm-dd',
@@ -82,7 +83,7 @@ $(document).ready(function () {
             var b = moment([check_in[0], check_in[1], check_in[2]]);
             checkCalcDiff(a.diff(b, 'days'))
         },
-    });
+    });*/
 
     // $('.check-in-inp').persianDatepicker({
     //     persianDigit: true,
@@ -114,4 +115,27 @@ $(document).ready(function () {
             });
         }
     }
+
+    new Vue({
+        el: '#_app',
+        components: {
+            datePicker
+        }, methods: {
+            submit(date) {
+                let start = date[0];
+                let end = date[1];
+                this.dayCount = end.diff(start, 'date');
+                checkCalcDiff(this.dayCount)
+                let from = start.toDate().toISOString().split('T')[0];
+                let to = end.toDate().toISOString().split('T')[0];
+                $('.alt-field-check-in-inp').val(from)
+                $('.alt-field-check-out-inp').val(to)
+            },
+            open() {
+                $('.countOrderRoomPerson option:first-child').each(function () {
+                    $(this).prop('selected', true)
+                });
+            },
+        }
+    })
 })

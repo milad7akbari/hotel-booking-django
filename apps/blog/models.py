@@ -17,41 +17,43 @@ def file_category(self, filename):
 
 
 class Category(models.Model):
+
     TYPE_CHOICES = ((1, 'Yes'), (0, 'No'),)
-    title = models.CharField(null=True, max_length=256)
-    desc = models.TextField(null=True)
-    flag = models.SmallIntegerField(default=0, choices=TYPE_CHOICES,
-                                    help_text=_('اگر Yes باشد در هدر سایت در بخش بلاگ ها نمایش داده خواهد شد!'))
-    active = models.SmallIntegerField(null=False, default=0)
-    date_upd = models.DateTimeField(auto_now=True)
-    date_add = models.DateTimeField(auto_now_add=True, null=True)
+    title = models.CharField(null=True, max_length=256, verbose_name=_('عنوان'))
+    desc = models.TextField(null=True, verbose_name=_('توضیحات'))
+    flag = models.SmallIntegerField(default=0, choices=TYPE_CHOICES, help_text=_('اگر Yes باشد در هدر سایت در بخش بلاگ ها نمایش داده خواهد شد!'), verbose_name=_('فایل'))
+    active = models.SmallIntegerField(choices=TYPE_CHOICES, null=False, default=0, verbose_name=_('فعال'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     class Meta:
         verbose_name_plural = _("دسته بندی بلاگ")
         verbose_name = _("دسته بندی بلاگ")
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 
 class Main(models.Model):
-    category_blog = models.ForeignKey(Category, default=None, on_delete=models.CASCADE)
-    default_image = models.ForeignKey('Files', null=True, on_delete=models.CASCADE)
-    title = models.CharField(null=False, blank=False, default=0, max_length=256)
-    desc = models.TextField(null=True)
-    active = models.SmallIntegerField(null=False, default=0)
-    date_upd = models.DateTimeField(auto_now=True)
-    date_add = models.DateTimeField(auto_now_add=True, null=True)
+    FLAG = ((1, 'Yes'), (0, 'No'),)
+    category_blog = models.ForeignKey(Category, default=None, on_delete=models.CASCADE, verbose_name=_('دسته بندی'))
+    default_image = models.ForeignKey('Files', null=True, on_delete=models.CASCADE, verbose_name=_('کاور'))
+    title = models.CharField(null=False, blank=False, default=0, max_length=256, verbose_name=_('عنوان'))
+    desc = models.TextField(null=True, verbose_name=_('توضیحات'))
+    active = models.SmallIntegerField(choices=FLAG,null=False, default=0, verbose_name=_('فعال'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     class Meta:
         verbose_name_plural =  _("بلاگ")
         verbose_name = _("بلاگ")
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 
 class Files(models.Model):
+    FLAG = ((1, 'Yes'), (0, 'No'),)
     def validate_image(self):
         filesize = self.file.size
         megabyte_limit = 1
@@ -59,12 +61,12 @@ class Files(models.Model):
             raise ValidationError(_("Max file size is %sMB") % str(megabyte_limit))
 
     file = models.ImageField(upload_to=file_category, blank=True, null=True, validators=[validate_image],
-                             help_text=_('Maximum file size allowed is 1Mb'))
-    title = models.CharField(null=True, max_length=256)
-    note = models.CharField(null=True, max_length=256)
-    active = models.SmallIntegerField(null=False, default=0)
-    date_upd = models.DateTimeField(auto_now=True)
-    date_add = models.DateTimeField(auto_now_add=True, null=True)
+                             help_text=_('Maximum file size allowed is 1Mb'), verbose_name=_('فایل'))
+    title = models.CharField(null=True, max_length=256, verbose_name=_('عنوان'))
+    note = models.CharField(null=True, max_length=256,blank=True, verbose_name=_('یادداشت'))
+    active = models.SmallIntegerField(choices=FLAG,null=False, default=0, verbose_name=_('فعال'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def file_uploaded(self):
         ext = self.file.url.split('.')[-1].lower()
@@ -79,4 +81,4 @@ class Files(models.Model):
         verbose_name = _("فایل های بلاگ")
 
     def __str__(self):
-        return self.note
+        return str(self.note)

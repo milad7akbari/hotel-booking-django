@@ -9,16 +9,20 @@ class FooterAdmin(admin.ModelAdmin):
 
 class SliderAdmin(TranslationAdmin):
     model = Slider
+    list_filter = ('active',)
     list_display = ('pk', 'file', 'title', 'active', 'date_add')
 
 class MetaAdmin(TranslationAdmin):
     model = Meta
+    list_filter = ('page_name',)
     list_display = ('page_name', 'title', 'description', 'keywords')
 
 class PagesAdmin(TranslationAdmin):
     model = Pages
+    list_filter = ('page_name',)
     list_display = ('page_name', 'description')
 
+from django_summernote.utils import get_attachment_model
 
 class ConfigurationAdmin(admin.ModelAdmin):
     model = Configuration
@@ -27,11 +31,12 @@ class ConfigurationAdmin(admin.ModelAdmin):
 
 class ProvincesAdmin(TranslationAdmin):
     model = Provinces
-    list_display = ('name',)
+    list_display = ('name','latitude','longitude','created_at',)
 
 class CitiesAdmin(TranslationAdmin):
     model = Cities
-    list_display = ('name',)
+    list_select_related = ('provinces', )
+    list_display = ( 'name', 'provinces','file', 'latitude', 'longitude','created_at')
 
 
 # class HotelAdmin(TranslationAdmin):
@@ -46,6 +51,7 @@ class CitiesAdmin(TranslationAdmin):
 admin.site.register(Configuration, ConfigurationAdmin)
 admin.site.register(Pages, PagesAdmin)
 admin.site.register(Footer, FooterAdmin)
+admin.site.unregister(get_attachment_model())
 admin.site.register(Provinces, ProvincesAdmin)
 admin.site.register(Cities, CitiesAdmin)
 admin.site.register(Slider, SliderAdmin)

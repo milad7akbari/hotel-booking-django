@@ -1,7 +1,6 @@
 import re
 import secrets
 import uuid
-from turtledemo.penrose import f
 
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -918,7 +917,6 @@ def _partials(check_in_out, _partial, person_flag=False):
         return _partial.check_in_out_rate.rate
     else:
         return 0
-
 
 def _partial_hotel(hotel):
     return Hotel.objects.select_related('extra_person_rate', 'check_in_out_rate').get(pk=hotel.pk)

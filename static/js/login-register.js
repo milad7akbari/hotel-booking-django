@@ -45,6 +45,7 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
                 } else {
                     $('.errMsg').addClass('d-block alert-success').removeClass('d-none alert-danger').html(data.result)
                     $('.btnRegisterLoginPasswd').find('label').html('<a href="/panel">حساب کاربری</a>').removeClass('btnRegisterLoginPasswd')
+                    $("._reservation_user_form_container").remove();
                     setTimeout(function () {
                         $("#registerLoginModal").remove();
                     } , 1000)

@@ -9,12 +9,12 @@
 {% block css %}
     <link rel="stylesheet" href="{% static "stylesheet/hotel.css" %}" type="text/css">
     <link rel="stylesheet" href="{% static "stylesheet/swiper.min.css" %}" type="text/css">
-    <link rel="stylesheet" href="{% static "datepicker/persian-datepicker.min.css" %}" type="text/css">
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "/js/swiper.min.js" %}"></script>
+    <script src="{% static 'js/vue.min.js' %}"></script>
+    <script src="{% static 'js/date-picker.min.js' %}"></script>
     <script type="text/javascript" src="{% static "/js/hotel-page.js" %}"></script>
-    <script type="text/javascript" src="{% static "/datepicker/persian-date.min.js" %}"></script>
 {% endblock %}
 {% block main %}
     <div class="m-auto hotelPageContainer" style="width: 90%">
@@ -66,20 +66,13 @@
                         <p class="alert alert-warning fs-13 w-100">{% trans 'لطفا تاریخ ورود و خروج را بررسی کنید' %}</p>
                     {% endif %}
                 </div>
-                <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3">
-                    <div class="d-flex w-100 filterRooms align-items-center justify-content-center border-radius-25 px-3 py-3"
+               <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3" id="_app">
+                    <div class="d-flex w-100 filterRooms align-items-center flex-wrap justify-content-center border-radius-25 px-3 py-3"
                          style="border-bottom: 1px solid #ccc">
-                        <div class="w-25-date-picker position-relative mx-1">
-                            <label class="w-100 text-center position-absolute my-1 fs-15" style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ ورود</label>
-                            <input id="datepicker12from" type="text" class="w-100 fs-13 border-radius-25 text-center" placeholder="" readonly value="0">
-                        </div>
-                        <div class="w-25-date-picker position-relative mx-1" style="display: none">
-                            <label class="w-100 text-center position-absolute my-1 fs-15" style="top: -30px;background: #fff;width: 85px !important;right: 0;left: 0;margin: auto;">تاریخ خروج</label>
-                            <input id="datepicker12to" type="text" class="w-100 fs-13 border-radius-25 text-center" placeholder="" readonly value="0">
-                        </div>
+                        <p class="fs-14 w-100 mb-3 text-center">{% trans 'ورود و خروج را انتخاب کنید' %}</p>
+                        <date-picker @open="open" @close="close" @submit="submit" color="green" :auto-submit="true" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{% trans 'تاریخ ورود و خروج' %}" locale="fa,en" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="date_from_to" :modal="true" />
                     </div>
-
-                </div>
+               </div>
                 <div class="roomsListHotel" id="roomsListContainer">
                     <form method="post" id="frmAddToCart" action="{% url 'addToCart' hotel.reference %}" class="p-0 d-flex flex-wrap m-0">
                         {% csrf_token %}
@@ -297,16 +290,5 @@
                 </div>
         </div>
     </div>
-    {% block js_bottom %}
-        <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
-        <script>
-            $(document).ready(function () {
-                $("#datepicker12to").val('تاریخ ورود را وارد کنید');
-                $("#datepicker12from").val(moment().locale('fa').format('YYYY-MM-DD'));
-                $("#check-out-inp").val(moment().locale('en').format('YYYY-MM-DD'));
-                $("#check-in-inp").val(moment().locale('en').format('YYYY-MM-DD'));
-            });
-        </script>
-    {% endblock %}
 
 {% endblock %}

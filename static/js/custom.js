@@ -188,6 +188,34 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('submit', '#addCouponToCart', function (e) {
+        $('.errMsgCoupon').html('')
+        if ($('#coupon').val().length <= 5){
+            $('#coupon').addClass('border-red-err box-shadow-red-err text-danger');
+            return false
+        }
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr("action"),
+            type: 'POST',
+            dataType: "JSON",
+            data: $(this).serialize(),
+            success: function (data) {
+                if (!data.err) {
+                    $('#coupon').parent().remove()
+                    $('.containerFinalAmountForPay .final_amount_coupon b').html(data.cart_amount).addClass('mx-3 text-success')
+                    $('.containerFinalAmountForPay .bef_amount_coupon').html(data.cart_amount_bef).addClass('mx-3')
+                    $('.errMsgCoupon').removeClass('d-none text-danger').addClass('d-block text-success').html(data.msg)
+                } else {
+                    $('.errMsgCoupon').removeClass('d-none text-success').addClass('d-block text-danger').html(data.msg)
+                }
+            },
+            error: function (xhr, desc, err) {
+                $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
+            }
+        });
+    });
+
     $(document).on('submit', '#_tracking_form', function (e) {
         $('.span_loader_').removeClass('d-none').addClass('d-block')
         $('.errMsg').removeClass('alert-success').addClass('d-none alert-danger').html('')
@@ -196,10 +224,12 @@ $(document).ready(function () {
         let pattern_guest = /^(\+98|0)?9\d{9}$/i
         if (!pattern_guest.test($('#id_username').val())) {
             $('#id_username').addClass('border-red-err text-danger');
+            $('.span_loader_').addClass('d-none').removeClass('d-block')
             return false
         }
         if ($('#id_reference').val() < 8) {
             $('#id_reference').addClass('border-red-err text-danger');
+            $('.span_loader_').addClass('d-none').removeClass('d-block')
             return false
         }
         e.preventDefault();
@@ -212,7 +242,9 @@ $(document).ready(function () {
                 $('.span_loader_').addClass('d-none').removeClass('d-block')
                 if (!data.err) {
                     $('.errMsg').removeClass('d-none alert-danger').addClass('d-block alert-success').html(data.order)
-                } else $('.errMsg').removeClass('d-none').addClass('d-block').html(data.order)
+                } else {
+                    $('.errMsg').removeClass('d-none').addClass('d-block').html(data.order)
+                }
             },
             error: function (xhr, desc, err) {
                 $('.span_loader_').addClass('d-none').removeClass('d-block')

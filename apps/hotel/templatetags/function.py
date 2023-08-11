@@ -1,8 +1,9 @@
-import datetime
+from datetime import datetime
 
 from django import template
 from django.utils.translation import gettext_lazy as _
 from jalali_date import datetime2jalali
+from jdatetime import timedelta
 
 register = template.Library()
 
@@ -26,7 +27,11 @@ def getDiscount(room):
 
 @register.filter(name='currentDate')
 def currentDate(date):
-    return datetime2jalali(datetime.datetime.now()).strftime('%Y-%m-%d')
+    return datetime2jalali(datetime.now()).strftime('%Y-%m-%d')
+
+@register.filter(name='currentDatePlusMonth')
+def currentDatePlusMonth(date):
+    return datetime2jalali(datetime.today() + timedelta(days=45)).strftime('%Y-%m-%d')
 
 @register.filter(name='diffDays')
 def diffDays(cart):

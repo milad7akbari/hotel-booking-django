@@ -76,6 +76,18 @@
                         <label class="fs-13 fw-bold" style="width: 150px">{% trans 'قیمت با تخفیف:' %}</label>
                         <label class="fs-14" style="width: 150px">{{ detail.total_price_dis_incl|floatformat:"0"|intcomma:False }} {% trans 'تومان' %}</label>
                     </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">{% trans 'نام کامل مسافر:' %}</label>
+                        <label class="fs-14" style="width: 150px">{{ detail.order_detail_guest.fullname }}</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">{% trans 'تلفن مسافر:' %}</label>
+                        <label class="fs-14" style="width: 150px">{{ detail.order_detail_guest.mobile }}</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">{% trans 'ملیت مسافر:' %}</label>
+                        <label class="fs-14" style="width: 150px">{{ detail.order_detail_guest.nationality }}</label>
+                    </li>
                 </ul>
             {% endfor %}
     </div>
