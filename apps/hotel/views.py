@@ -1,3 +1,5 @@
+import datetime
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Min, Count, Q, Prefetch
 from django.http import JsonResponse, HttpResponseNotFound
@@ -8,7 +10,8 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.base.models import Cities, Meta
 from apps.hotel.forms import reviewsForm
-from apps.hotel.models import Hotel, Facility, Close_spots, Images, Room, Room_images, Reviews, Discount
+from apps.hotel.models import Hotel, Facility, Close_spots, Images, Room, Room_images, Reviews, Discount, \
+    Calender_pricing, Room_pricing
 
 
 def hotelCategory(request):
@@ -32,16 +35,15 @@ def hotelCategory(request):
     else:
         sort_price = 'price'
     hotel = Hotel.objects.filter(active=1).select_related(
-        'default_cover', 'city').prefetch_related('facility_set' , Prefetch(
-                'room_set',
-                queryset=Room.objects.filter(
-                    Q(active=1, price__isnull=False)).order_by(sort_price)
-            ) , Prefetch(
-                'hotel_discount',
-                queryset=Discount.objects.filter(
-                    Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
-            )).annotate(count_reviews=Count('reviews', distinct=True, filter=Q(reviews__active=1))).order_by(sort)
-
+        'default_cover', 'city').prefetch_related('facility_set', Prefetch(
+        'room_set',
+        queryset=Room.objects.filter(
+            Q(active=1, price__isnull=False)).order_by(sort_price)
+    ), Prefetch(
+        'hotel_discount',
+        queryset=Discount.objects.filter(
+            Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
+    )).annotate(count_reviews=Count('reviews', distinct=True, filter=Q(reviews__active=1))).order_by(sort)
 
     if city_param is not None or facility_param is not None or search_param is not None:
         if city_param is not None:
@@ -102,21 +104,25 @@ def hotelCategory(request):
 
 # Discount.objects.filter(active=True, start_date__lt=datetime.datetime.now() , end_date__gt=datetime.datetime.now()).values('reduction')
 def hotelPage(request, ref, title):
-
     diff = request.GET.get('diff')
-    hotel = Hotel.objects.filter(active=1, reference=ref).select_related('default_cover', 'city').prefetch_related(Prefetch(
-                'hotel_discount',
-                queryset=Discount.objects.filter(
-                    Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
-            )).first()
+    hotel = Hotel.objects.filter(active=1, reference=ref).select_related('default_cover', 'city').prefetch_related(
+        Prefetch(
+            'hotel_discount',
+            queryset=Discount.objects.filter(
+                Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
+        )).first()
     if hotel is not None:
         room = Room.objects.filter(active=1, hotel_id=hotel.pk).select_related('default_cover').prefetch_related(
-            'room_images_set',Prefetch(
+            'room_images_set', Prefetch(
                 'hotel__hotel_discount',
                 queryset=Discount.objects.filter(
                     Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
             ),
-            'room_facility_set')
+            'room_facility_set', Prefetch(
+                'room_pricing',
+                queryset=Room_pricing.objects.filter(
+                    Q(calender_pricing__start_date__lt=datetime.date.today()) & Q(calender_pricing__end_date__gt=datetime.date.today()))
+            ), )
         facility = Facility.objects.filter(hotel_id=hotel.pk, active=1).all()
         close_spots = Close_spots.objects.filter(hotel_id=hotel.pk, active=1).all()
         reviews = Reviews.objects.filter(hotel_id=hotel.pk, active=1).values('title', 'desc_good', 'desc_bad',
@@ -126,19 +132,23 @@ def hotelPage(request, ref, title):
                                                                              'date_add')
         for i in room:
             discount = i.hotel.hotel_discount.first()
-            price = i.price
-            if discount is not None:
-                reduction_type = discount.reduction_type
-                reduction = discount.reduction
-                i.reduction = discount.reduction
-                i.reduction_type = reduction_type
-                i.price_bef = price
-                if reduction_type == 2:
-                    i.price = price - reduction
-                if reduction_type == 1:
-                    i.price = ((100 - reduction) / 100) * price
+            cale = i.room_pricing.first()
+            if cale is not None:
+                price = cale.price
+                if discount is not None:
+                    reduction_type = discount.reduction_type
+                    reduction = discount.reduction
+                    i.reduction = discount.reduction
+                    i.reduction_type = reduction_type
+                    i.price_bef = price
+                    if reduction_type == 2:
+                        i.price = price - reduction
+                    if reduction_type == 1:
+                        i.price = ((100 - reduction) / 100) * price
+                else:
+                    i.price = price
             else:
-                i.price = price
+                i.price = -1
         context = {
             'diff': diff,
             'form': reviewsForm,

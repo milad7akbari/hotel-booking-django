@@ -43,28 +43,31 @@ class Hotel(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
     TYPE_HOTEL = ((1, 'آنلاین'), (2, 'آفلاین'),)
     name = models.CharField(null=True, max_length=255, verbose_name=_("نام هتل"))
-    reference = models.CharField(null=True, max_length=255,  verbose_name=_("رفرنس"))
+    reference = models.CharField(null=True, max_length=255, verbose_name=_("رفرنس"))
     long_desc = models.TextField(null=True, verbose_name=_("توضیحات بلند"))
     short_desc = models.TextField(null=True, blank=True, verbose_name=_("توضیحات کوتاه"))
     rule_cancelable = models.TextField(null=True, blank=True, verbose_name=_("قوانین کنسل"))
     rule_enter = models.TextField(null=True, blank=True, verbose_name=_("قوانین ورود و خروج"))
     city = models.ForeignKey(Cities, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("شهر"))
     address = models.CharField(null=True, max_length=255, verbose_name=_("آدرس"))
-    latitude = models.DecimalField(null=True,blank=True, max_digits=12, decimal_places=8)
-    longitude = models.DecimalField(null=True,blank=True, max_digits=12, decimal_places=8)
+    latitude = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=8)
+    longitude = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=8)
     phone_number = models.CharField(null=True, max_length=255, verbose_name=_("شماره تلفن"))
-    email = models.EmailField(null=True,blank=True, max_length=255, verbose_name=_("ایمیل"))
+    email = models.EmailField(null=True, blank=True, max_length=255, verbose_name=_("ایمیل"))
     number_rooms = models.SmallIntegerField(null=False, default=0, verbose_name=_("تعداد اتاق ها"))
     number_floor = models.SmallIntegerField(null=False, default=0, verbose_name=_("تعداد طبقه"))
     stars = models.PositiveSmallIntegerField(choices=TYPE_STARS, default=1, verbose_name=_("ستاره ها"))
-    default_cover = models.ForeignKey('Cover', on_delete=models.CASCADE, blank=True, null=True, verbose_name=_("عکس پیش فرض"))
-    meta_keywords = models.CharField(default=None, blank=True, max_length=255, help_text="some tag, espinas, international, etc...", verbose_name=_("متا کیبورد"))
-    has_early_check_in_out = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("دارای ورود و خروج زود هنگام"))
+    default_cover = models.ForeignKey('Cover', on_delete=models.CASCADE, blank=True, null=True,
+                                      verbose_name=_("عکس پیش فرض"))
+    meta_keywords = models.CharField(default=None, blank=True, max_length=255,
+                                     help_text="some tag, espinas, international, etc...", verbose_name=_("متا کیبورد"))
+    has_early_check_in_out = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1,
+                                                      verbose_name=_("دارای ورود و خروج زود هنگام"))
     type = models.SmallIntegerField(choices=TYPE_HOTEL, null=False, default=1, verbose_name=_("نوع هتل"))
     has_breakfast = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("دارای صبحانه"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
-    upd_add = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    upd_add = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def __str__(self):
         return str(self.name)
@@ -89,8 +92,8 @@ class Images(models.Model):
     file = models.ImageField(upload_to=file, null=False, default=None, validators=[validate_image],
                              help_text=_('Maximum file size allowed is 1Mb'))
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("نام هتل"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def file_uploaded(self):
         ext = self.file.url.split('.')[-1].lower()
@@ -119,8 +122,8 @@ class Cover(models.Model):
 
     file = models.ImageField(upload_to=file, blank=True, null=True, validators=[validate_image],
                              help_text=_('Maximum file size allowed is 1Mb'))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def file_uploaded(self):
         ext = self.file.url.split('.')[-1].lower()
@@ -143,23 +146,26 @@ class Facility(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("نام هتل"))
     title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     class Meta:
-        verbose_name_plural =  _("امکانات  هتل ها")
-        verbose_name =  _("امکانات  هتل ها")
+        verbose_name_plural = _("امکانات  هتل ها")
+        verbose_name = _("امکانات  هتل ها")
 
     def __str__(self):
         return str(self.title)
 
 
+
+
 class Extra_person_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
-    hotel = models.OneToOneField(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name='extra_person_rate', verbose_name=_("نام هتل"))
+    hotel = models.OneToOneField(Hotel, on_delete=models.SET_NULL, blank=True, null=True,
+                                 related_name='extra_person_rate', verbose_name=_("نام هتل"))
     rate = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     class Meta:
         verbose_name_plural = _("نفر اضافه")
@@ -171,10 +177,11 @@ class Extra_person_rate(models.Model):
 
 class Breakfast_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
-    hotel = models.OneToOneField(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name='breakfast_rate', verbose_name=_("نام هتل"))
+    hotel = models.OneToOneField(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name='breakfast_rate',
+                                 verbose_name=_("نام هتل"))
     rate = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     class Meta:
         verbose_name_plural = _("نرخ صبحانه")
@@ -186,10 +193,11 @@ class Breakfast_rate(models.Model):
 
 class Check_in_out_rate(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
-    hotel = models.OneToOneField(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name='check_in_out_rate', verbose_name=_("نام هتل"))
+    hotel = models.OneToOneField(Hotel, on_delete=models.SET_NULL, blank=True, null=True,
+                                 related_name='check_in_out_rate', verbose_name=_("نام هتل"))
     rate = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     class Meta:
         verbose_name_plural = _("نرخ ورود و خروج")
@@ -204,8 +212,8 @@ class Close_spots(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("نام هتل"))
     short_desc = models.CharField(null=True, max_length=512, verbose_name=_("توضیحات کوتاه"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     class Meta:
         verbose_name_plural = _("مکان های نزدیک")
@@ -226,8 +234,8 @@ class Room_cover(models.Model):
 
     file = models.ImageField(upload_to=file_room, blank=True, null=True, validators=[validate_image],
                              help_text=_('Maximum file size allowed is 1Mb'))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def file_uploaded(self):
         ext = self.file.url.split('.')[-1].lower()
@@ -249,21 +257,20 @@ class Room(models.Model):
     TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
     title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("نام هتل"))
-    base_price = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت پابه"))
-    price = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت"))
     capacity = models.SmallIntegerField(null=False, default=0, verbose_name=_("ظرفیت"))
     extra_person = models.SmallIntegerField(null=False, default=0, verbose_name=_("نفر اضافه"))
-    default_cover = models.ForeignKey(Room_cover, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("عکس پس زمینه"))
+    default_cover = models.ForeignKey(Room_cover, on_delete=models.SET_NULL, blank=True, null=True,
+                                      verbose_name=_("عکس پس زمینه"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
-    upd_add = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    upd_add = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def __str__(self):
-        return str(self.title)
+        return str(self.hotel.name + '----' + self.title )
 
     class Meta:
-        verbose_name_plural =_("اتاق ها")
-        verbose_name =_("اتاق ها")
+        verbose_name_plural = _("اتاق ها")
+        verbose_name = _("اتاق ها")
 
     def __unicode__(self):
         return _("اتاق ها")
@@ -282,8 +289,8 @@ class Room_images(models.Model):
                              help_text=_('Maximum file size allowed is 1Mb'), verbose_name=_("فایل"))
     room = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("اتاق"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def file_uploaded(self):
         ext = self.file.url.split('.')[-1].lower()
@@ -306,8 +313,8 @@ class Room_facility(models.Model):
     room = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True)
     title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     class Meta:
         verbose_name_plural = _("امکانات اتاق ها")
@@ -328,8 +335,8 @@ class Reviews(models.Model):
     desc_good = models.TextField(null=True, blank=True, verbose_name=_("نکات مثبت"))
     desc_bad = models.TextField(null=True, blank=True, verbose_name=_("نکات منفی"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def __unicode__(self):
         return self.title
@@ -341,12 +348,13 @@ class Reviews(models.Model):
     def __str__(self):
         return str(self.title)
 
+
 class Reviews_reply(models.Model):
     TYPE_TRUE = ((1, 'نمایان'), (0, 'مخفی'),)
     reviews = models.ForeignKey(Reviews, on_delete=models.SET_NULL, blank=True, null=True)
     short_desc = models.TextField(null=True, blank=True, default=None, verbose_name=_("توضیحات کوتاه"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def __unicode__(self):
         return self.short_desc
@@ -362,15 +370,16 @@ class Reviews_reply(models.Model):
 class Discount(models.Model):
     TYPE_TRUE = ((1, 'فعال'), (0, 'غیرفعال'),)
     TYPE_DISCOUNT = ((1, 'درصد'), (2, 'مقدار'),)
-    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name="hotel_discount", verbose_name=_("هتل"))
+    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name="hotel_discount",
+                              verbose_name=_("هتل"))
     title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان تخفیف"))
-    reduction_type = models.SmallIntegerField(choices=TYPE_DISCOUNT,null=False, default=1, verbose_name=_("نوع تخفیف"))
+    reduction_type = models.SmallIntegerField(choices=TYPE_DISCOUNT, null=False, default=1, verbose_name=_("نوع تخفیف"))
     reduction = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("مقدار"))
     start_date = models.DateTimeField(null=False, default=0, verbose_name=_("تاریخ شروع"))
     end_date = models.DateTimeField(null=False, default=0, verbose_name=_("تاریخ پایان"))
     active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
-    date_upd = models.DateTimeField(auto_now=True,verbose_name=_('تاریخ آپدیت'))
-    date_add = models.DateTimeField(auto_now_add=True, null=True,verbose_name=_('تاریخ ایجاد'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
     def __unicode__(self):
         return self.title
@@ -381,3 +390,36 @@ class Discount(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+class Calender_pricing(models.Model):
+    title = models.CharField(null=True, max_length=255, verbose_name=_("عنوان"))
+    start_date = models.DateField(null=True, verbose_name=_('تاریخ آپدیت'))
+    end_date = models.DateField(null=True, verbose_name=_('تاریخ آپدیت'))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
+
+    class Meta:
+        verbose_name_plural = _("تقویم قیمت ها")
+        verbose_name = _("تقویم قیمت ها")
+
+    def __str__(self):
+        return str(self.title)
+
+
+class Room_pricing(models.Model):
+    TYPE_TRUE = ((1, 'Yes'), (0, 'NO'),)
+    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, related_name="hotel_pricing", verbose_name=_("هتل"))
+    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, related_name="room_pricing", verbose_name=_("اتاق"))
+    calender_pricing = models.ForeignKey(Calender_pricing, on_delete=models.SET_NULL, null=True, related_name="calender_pricing", verbose_name=_("تاریخ"))
+    base = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت هتل"))
+    price = models.DecimalField(null=True, max_digits=12, decimal_places=2, default=0, verbose_name=_("قیمت مشتری"))
+    active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=1, verbose_name=_("فعال"))
+    date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
+
+    class Meta:
+        verbose_name_plural = _("قیمت گذاری ها")
+        verbose_name = _("قیمت گذاری ها")
+
+    def __str__(self):
+        return str(self.hotel)
