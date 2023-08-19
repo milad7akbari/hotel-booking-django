@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static "stylesheet/base.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/bootstrap.min.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/_partial.css" %}" type="text/css">
+</head>
+<body>
+<div class="coupon-card m-2">
+    <h6 class="fs-13">کد تخفیف شما مشتری عزیز</h6>
+    <div class="coupon-row dir-ltr">
+        <span class="text-white cpnCode fs-14">{{ some_params }}</span>
+        <span class="cpnBtn fs-13"></span>
+    </div>
+    <p class="text-white fs-13"></p>
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+</div>
+</body>
+</html>

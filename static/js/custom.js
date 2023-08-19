@@ -15,10 +15,7 @@ $(document).ready(function () {
         final = a2e(final)
         thiss.val(final)
     }
-    $(document).on('keyup', '.id_mobile', function (e) {
-        en_digit($(this))
-    });
-    $(document).on('keyup', '.id_username', function (e) {
+    $(document).on('keyup', 'input', function (e) {
         en_digit($(this))
     });
 

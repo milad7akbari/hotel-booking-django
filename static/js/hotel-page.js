@@ -37,6 +37,18 @@ $(document).ready(function () {
     $(document).on('click', '.btnHideImages', function () {
         $('#_partial').empty();
     });
+    $(document).on('change', '#_filter_rooms_', function () {
+        const capacity_selected = $(this).val();
+        $('.roomListContainer').addClass('d-none');
+        $('.roomListContainer').each(function () {
+            const capacity = $(this).attr('data-capacity');
+            if (capacity <= capacity_selected && (capacity === 1 || capacity === 2)){
+                $(this).removeClass('d-none').addClass('d-block')
+            }else if (capacity >= capacity_selected) {
+                $(this).removeClass('d-none').addClass('d-block')
+            }
+        });
+    });
 
     function modalImages(ref, get) {
         $.ajax({
@@ -117,19 +129,41 @@ $(document).ready(function () {
     }
 
     new Vue({
-        el: '#_app',
+        el: '#_app_start',
         components: {
             datePicker
         }, methods: {
             submit(date) {
-                let start = date[0];
-                let end = date[1];
-                this.dayCount = end.diff(start, 'date');
-                checkCalcDiff(this.dayCount)
-                let from = start.toDate().toISOString().split('T')[0];
-                let to = end.toDate().toISOString().split('T')[0];
-                $('.alt-field-check-in-inp').val(from)
-                $('.alt-field-check-out-inp').val(to)
+                $('#_app_to').show()
+                $('.diff_front_').addClass('d-none')
+            },
+            open() {
+                $('#_app_to').hide()
+                $('.containerMsgDiv').empty()
+                $('.countOrderRoomPerson option:first-child').each(function () {
+                    $(this).prop('selected', true)
+                });
+            },
+        }
+    })
+
+
+    new Vue({
+        el: '#_app_to',
+        components: {
+            datePicker
+        }, methods: {
+            submit(date) {
+                const start = $('input[name="check-in"]').val();
+                const end = date.toDate().toISOString().split('T')[0];
+                const date1 = new Date(start);
+                const date2 = new Date(end);
+                const diffTime = date2 - date1;
+                this.dayCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                $('.diff_front_').removeClass('d-none').html($('.diff_front_').attr('data-lang') + ' ' + this.dayCount + ' شب ')
+                if (this.dayCount > 0){
+                    checkCalcDiff(this.dayCount)
+                }else $('.containerMsgDiv').empty().append('<p class="alert alert-warning fs-13 w-100">'+$('.containerMsgDiv').attr('data-msg-lang')+'</p>')
             },
             open() {
                 $('.countOrderRoomPerson option:first-child').each(function () {
@@ -138,4 +172,5 @@ $(document).ready(function () {
             },
         }
     })
+
 })

@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block meta_desc %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" href="{% static "img/logo-w-text.ico" %}">
+    <script type="text/javascript" src="{% static "js/jquery-3.6.3.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/login-register.js" %}"></script>
+    {% block js %}{% endblock %}
+    <script src="{% static "js/custom.js" %}"></script>
+{#    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>#}
+    {% block sliderHomePage %}{% endblock %}
+    {% block css %}{% endblock %}
+    <link rel="stylesheet" href="{% static "font/style.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/base.css" %}" type="text/css">
+    {% if request.LANGUAGE_CODE == 'en' %}
+    <link rel="stylesheet" href="{% static "stylesheet/dir_ltr.css" %}" type="text/css">
+    {% endif %}
+    <link rel="stylesheet" href="{% static "stylesheet/bootstrap.min.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "font/moon.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/_partial.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "stylesheet/responsive/_partial.css" %}" type="text/css">
+    {% if not user.is_authenticated %}
+        <link rel="stylesheet" href="{% static "stylesheet/responsive/notLoggedIn.css" %}" type="text/css">
+    {% else %}
+        <link rel="stylesheet" href="{% static "stylesheet/responsive/loggedIn.css" %}" type="text/css">
+    {% endif %}
+</head>
+<body>
+    <div id="_confirmation" class="w-100 bg-white">
+        <div class="d-flex flex-wrap justify-content-center m-auto p-5 align-items-center _confirmation_container">
+            <h4 class="mb-0 w-100 text-center text-success">
+                <img src="{% static 'img/logo.png' %}" width="150px">
+            </h4>
+            <h4 class="mb-0 w-100 text-center text-success fs-12 mt-2">(مخصوص ارائه به هتل)</h4>
+            <h4 class="mb-0 w-100 text-center  fs-16 mt-3">کد رسید:148af81c72 </h4>
+            <p class="mb-0 fs-14 border-bottom text-success"> {{ reference }} </p>
+            <ul class="p-0 flex-wrap cursor-pointer w-75 mx-auto align-items-center my-4 border-radius-5 d-flex justify-content-between">
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">نام اتاق:</label>
+                        <label class="fs-14" style="width: 150px">اتاق دو نفره</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">نام هتل:</label>
+                        <label class="fs-14" style="width: 150px">هتل استقلال</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">تعداد:</label>
+                        <label class="fs-14" style="width: 150px">2</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">ورود زود هنگام:</label>
+                        <label class="fs-14" style="width: 150px">دارم</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">خروج دیر هنگام:</label>
+                        <label class="fs-14" style="width: 150px">ندارم</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">نفر اضافه:</label>
+                        <label class="fs-14" style="width: 150px">1</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">قیمت بدون تخفیف:</label>
+                        <label class="fs-14" style="width: 150px">4,323 تومان</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">قیمت با تخفیف:</label>
+                        <label class="fs-14" style="width: 150px">4,107 تومان</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">نام کامل مسافر:</label>
+                        <label class="fs-14" style="width: 150px">میلاد اکبری</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">تلفن مسافر:</label>
+                        <label class="fs-14" style="width: 150px">9398200979</label>
+                    </li>
+                    <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
+                        <label class="fs-13 fw-bold" style="width: 150px">ملیت مسافر:</label>
+                        <label class="fs-14" style="width: 150px">1</label>
+                    </li>
+                </ul>
+        </div>
+    </div>
+</body>
+</html>

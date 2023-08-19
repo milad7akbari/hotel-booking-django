@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db import models
+from django.forms import Textarea
 from django_summernote.admin import SummernoteModelAdmin
 from modeltranslation.admin import TranslationAdmin
 from .models import Main, Files, Category
@@ -7,11 +9,14 @@ from .models import Main, Files, Category
 class FilesAdmin(TranslationAdmin):
     model = Files
     list_filter = ('active',)
-    list_display = ('pk', 'file', 'title', 'note', 'active', 'date_add')
+    list_display = ('pk', 'file', 'title', 'active', 'date_add')
 
 
 class CategoryAdmin(TranslationAdmin):
     model = Category
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 80, })},
+    }
     list_filter = ('active',)
     list_display = ('pk', 'title', 'desc', 'flag', 'active', 'date_add')
 

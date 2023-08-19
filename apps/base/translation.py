@@ -18,22 +18,6 @@ class CitiesTranslationOptions(TranslationOptions):
     fields = ('description',)
     required_languages = ('en', 'fa')
 
-@register(Slider)
-class SliderTranslationOptions(TranslationOptions):
-    fields = ('title',)
-    required_languages = ('en', 'fa')
-
-
-# @register(Images)
-# class ImagesTranslationOptions(TranslationOptions):
-#     fields = ('title',)
-#     required_languages = ('en', 'fa')
-
-# @register(Hotel)
-# class HotelTranslationOptions(TranslationOptions):
-#     fields = ('title',)
-#     required_languages = ('en', 'fa')
-
 
 @register(Meta)
 class MetaTranslationOptions(TranslationOptions):

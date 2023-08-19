@@ -104,6 +104,20 @@ class registerUserFromReservationForm(forms.ModelForm):
         username = self.cleaned_data['username']
         firstname = self.cleaned_data['first_name']
         lastname = self.cleaned_data['last_name']
+        email = self.cleaned_data['email']
+        if len(email) > 0:
+            regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+            if not re.fullmatch(regex, email):
+                self.errors['email'] = _('ایمیل اشتباه است!')
+                errors_flag = 1
+            else:
+                chk = User.objects.filter(Q(email=email)).first()
+                if chk is not None:
+                    errors_flag = 1
+                    self.errors['email'] = _('ایمیل وجود دارد!')
+        else:
+            self.errors['email'] = _('ایمیل اشتباه است!')
+            errors_flag = 1
         if len(firstname) < 2:
             self.errors['first_name'] = _('نام اشتباه است!')
             errors_flag = 1
@@ -133,16 +147,18 @@ class registerUserFromReservationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username']
+        fields = ['first_name', 'last_name', 'username', 'email']
         widgets = {
             'first_name': forms.TextInput(attrs={"class": ' fs-14 py-1 w-100', "placeholder": _('نام')}),
             'last_name': forms.TextInput(attrs={"class": ' fs-14 py-1 w-100', "placeholder": _('نام خانوادگی')}),
             'username': forms.NumberInput(attrs={"class": ' fs-14 py-1 w-100', "placeholder": _('موبایل')}),
+            'email': forms.EmailInput(attrs={"class": ' fs-14 py-1 w-100', "placeholder": _('ایمیل')}),
         }
         labels = {
             'first_name': _('نام'),
             'last_name': _('نام خانوادگی'),
             'username': _('موبایل'),
+            'email': _('ایمیل'),
         }
 
 
@@ -175,7 +191,7 @@ class registerGuestFromReservationForm(forms.ModelForm):
 
     class Meta:
         model = Cart_guest
-        fields = ['room', 'cart_detail', 'fullname', 'mobile', 'nationality']
+        fields = ['fullname', 'mobile', 'nationality']
         CHOICES = (
             ('1', _('ایرانی')),
             ('2', _('غیر ایرانی')),

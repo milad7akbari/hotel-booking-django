@@ -89,7 +89,7 @@ class Step(models.Model):
 class Order(models.Model):
     YES_NO = ((True, 'دارم'), (False, 'ندارم'),)
     PTYPE = ((1, 'رزرو'), (2, 'فیش بانکی'), (3, 'آنلاین'),)
-    CURRENTSTATE = ((1, 'در انتظار تایید'), (2, 'تایید از سوی کارمندان'),)
+    CURRENTSTATE = ((1, 'در انتظار تایید'), (2, 'تایید شد'), (3, 'ارسال رسید به هتل ها'),)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='order',verbose_name=_('مشتری'))
     cart = models.OneToOneField(Cart, on_delete=models.SET_NULL, blank=True, null=True, related_name='order',verbose_name=_('سبد'))
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name='order',verbose_name=_('هتل'))
@@ -116,7 +116,18 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.pk)
+class PendingOrder(Order):
+    class Meta:
+        proxy = True
+        verbose_name = _("رزرو موقت")
+        verbose_name_plural = _("رزرو موقت")
 
+
+class AcceptOrder(Order):
+    class Meta:
+        proxy = True
+        verbose_name = _("رزرو تایید شده")
+        verbose_name_plural = _("رزرو تایید شده")
 
 class Order_detail(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True,related_name='order_detail',verbose_name=_('سفارش'))
@@ -177,7 +188,7 @@ class Cart_rule(models.Model):
     YES_NO = ((1, 'Yes'), (2, 'No'),)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, verbose_name=_("عنوان تخفیف"))
-    code = models.CharField(max_length=255, blank=True, verbose_name=_("کد تخفیف"), unique=True)
+    code = models.CharField(max_length=255, blank=True, verbose_name=_("کد تخفیف"))
     start_date = models.DateTimeField(default=0, null=True, verbose_name=_("تاریخ شروع"))
     end_date = models.DateTimeField(default=0, null=True, verbose_name=_("تاریخ پایان"))
     quantity = models.SmallIntegerField(default=0, null=True, verbose_name=_("موجودی"))

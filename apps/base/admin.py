@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db import models
+from django.forms import Textarea
 from modeltranslation.admin import TranslationAdmin
 from .models import Slider, Meta, Provinces, Cities, Footer, Pages, Configuration
 
@@ -7,13 +9,16 @@ class FooterAdmin(admin.ModelAdmin):
     model = Footer
     list_display = ('name','value','date_upd','date_add')
 
-class SliderAdmin(TranslationAdmin):
+class SliderAdmin(admin.ModelAdmin):
     model = Slider
     list_filter = ('active',)
-    list_display = ('pk', 'file', 'title', 'active', 'date_add')
+    list_display = ('pk', 'file', 'active', 'date_add')
 
 class MetaAdmin(TranslationAdmin):
     model = Meta
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 80, })},
+    }
     list_filter = ('page_name',)
     list_display = ('page_name', 'title', 'description', 'keywords')
 

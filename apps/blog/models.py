@@ -63,7 +63,6 @@ class Files(models.Model):
     file = models.ImageField(upload_to=file_category, blank=True, null=True, validators=[validate_image],
                              help_text=_('Maximum file size allowed is 1Mb'), verbose_name=_('فایل'))
     title = models.CharField(null=True, max_length=256, verbose_name=_('عنوان'))
-    note = models.CharField(null=True, max_length=256,blank=True, verbose_name=_('یادداشت'))
     active = models.SmallIntegerField(choices=FLAG,null=False, default=0, verbose_name=_('فعال'))
     date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
     date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
@@ -81,4 +80,4 @@ class Files(models.Model):
         verbose_name = _("فایل های بلاگ")
 
     def __str__(self):
-        return str(self.note)
+        return str(self.title)

@@ -27,8 +27,17 @@
   }
 }
 @media (max-width: 767px) {
+  #_choose_room select {
+    padding: 6px;
+  }
+  ._coupon_container_ {
+    width: 95% !important;
+  }
   .filterSortingRooms .w-25-date-picker {
     width: 49%;
+  }
+  #forgotPassConfirm div {
+    width: 100%;
   }
   #_confirmation ._confirmation_container {
     width: 100% !important;

@@ -35,7 +35,6 @@ class Slider(models.Model):
 
     file = models.ImageField(upload_to=file_category, blank=True, null=True, validators=[validate_image],
                              help_text=_("حداکثر حجم فایل 1MB"))
-    title = models.CharField(max_length=255, verbose_name=_('عنوان'))
     active = models.SmallIntegerField(null=False, default=0, verbose_name=_('فعال'))
     date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
     date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
@@ -48,7 +47,7 @@ class Slider(models.Model):
         verbose_name = _('اسلایدر')
 
     def __str__(self):
-        return self.title
+        return self.pk
 
 
 class Forgot_password(models.Model):

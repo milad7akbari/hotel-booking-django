@@ -13,9 +13,11 @@
     }
   }
 }
-#_confirmation ._confirmation_container{
+
+#_confirmation ._confirmation_container {
   width: 75% !important;
 }
+
 .timeline li {
   list-style: none;
   float: left;
@@ -95,6 +97,7 @@ ul:nth-child(1) {
   height: 500px;
   float: right;
 }
+
 #policy {
   direction: rtl;
   margin: 20px auto;
@@ -104,50 +107,58 @@ ul:nth-child(1) {
   justify-content: space-around;
   display: flex;
 
-.active-p-s-l {
-  margin-left: 20px !important;
-  transition: all ease-in-out 2s !important;
-}
-.policy-title {
-  display: table;
-  width: 25%;
-  float: right;
-  height: 100%;
-  border-left: 10px solid;
-}
-.policy-title p {
-  display: table-cell;
-  vertical-align: middle;
-}
-.policy-title p span {
-  font-weight: bolder;
-}
-.policy-description {
-  width: 65%;
-  float: left;
-  height: 100%;
-}
-.policy-description p {
-  font-size: 14px;
-  text-align: justify;
-  direction: rtl;
-  line-height: 2.4;
-  padding: 10px;
-  margin-top: 25px;
-}
+  .active-p-s-l {
+    margin-left: 20px !important;
+    transition: all ease-in-out 2s !important;
+  }
+
+  .policy-title {
+    display: table;
+    width: 25%;
+    float: right;
+    height: 100%;
+    border-left: 10px solid;
+  }
+
+  .policy-title p {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .policy-title p span {
+    font-weight: bolder;
+  }
+
+  .policy-description {
+    width: 65%;
+    float: left;
+    height: 100%;
+  }
+
+  .policy-description p {
+    font-size: 14px;
+    text-align: justify;
+    direction: rtl;
+    line-height: 2.4;
+    padding: 10px;
+    margin-top: 25px;
+  }
+
   .span-margin-left {
-  margin-left: -70px !important;
-  transition: all ease-in-out 2s !important;
+    margin-left: -70px !important;
+    transition: all ease-in-out 2s !important;
+  }
 }
-}
+
 #about-us #about-us-container {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+
   .item-col {
-  width: 50%;
-  height: 500px;
-}
+    width: 50%;
+    height: 500px;
+  }
 }
 
 #about-us #about-us-container .titleContainerAbout {
@@ -300,7 +311,9 @@ ul:nth-child(1) {
     cursor: pointer;
   }
 }
-
+#forgotPassConfirm div{
+  width: 420px;
+}
 .col-right-pg-login-reset-password {
   width: 40%;
   height: 100%;
@@ -463,6 +476,71 @@ ul:nth-child(1) {
     border-radius: 15px;
     padding: 0 10px;
     transition: all ease-in-out .5s;
+  }
+}
+
+.coupon-card {
+  background: linear-gradient(135deg, #7158fe, #9d4de6);
+  color: #fff;
+  text-align: center;
+  padding: 20px 10px;
+  width: 350px;
+  border-radius: 15px;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
+  position: relative;
+
+  .coupon-card h3 {
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 40px;
+
+  }
+
+  .coupon-card p {
+    font-size: 15px;
+
+  }
+
+  .coupon-row {
+    display: flex;
+    align-items: center;
+    margin: 25px auto;
+    width: fit-content;
+
+  }
+
+  .cpnCode {
+    border: 1px dashed #fff;
+    padding: 10px 20px;
+    border-right: 0;
+
+  }
+
+  .cpnBtn {
+    border: 1px solid #fff;
+    background: #fff;
+    padding: 10px 20px;
+    color: #7158fe;
+    cursor: pointer;
+  }
+
+  .circle1, .circle2 {
+    background: #fff;
+    width: 38px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+  }
+
+  .circle1 {
+    left: -25px;
+  }
+
+  .circle2 {
+    right: -25px;
   }
 }
 

@@ -20,6 +20,10 @@
         <label class="fs-17 w-100 text-center">{% trans 'خروج' %}</label>
         <span class="fs-15 text-muted">{{ check_out|to_jalali:"%Y-%m-%d" }}</span>
     </div>
+    <div class="inputContainer d-flex flex-wrap justify-content-center w-50 ">
+        <label class="fs-17 w-100 text-center">{% trans 'مدت اقامت' %}</label>
+        <span class="fs-15 text-muted">{{ cart|diffDays }}</span>
+    </div>
 </div>
 <div class="display-flex bg-white p-4 justify-content-evenly  w-100 m-auto ">
     <div class="w-100 d-flex text-center">
@@ -37,6 +41,7 @@
     <div class="roomsListHotel">
         <div class="p-0 d-flex flex-wrap m-0">
             {% for r in cart.cart_detail.all %}
+
                 <div class="w-100 my-3 roomListContainer border-bottom pb-1 d-flex flex-wrap"
                      style="min-height: 150px">
                     <div class="imgCover roomListItem overflow-hidden  border-radius-5 position-relative w-25">
@@ -148,34 +153,26 @@
                             <input type="hidden" name="extra_person_flag" value="0">
                         {% endif %}
                     </div>
-                    <div class="w-100" style="">
+                {% with ''|center:r.quantity as range %}
+                    {% for i in range %}
+                        <div class="w-100" style="">
                         <h6 class="text-right fs-15 pt-3 pr-3">{% trans 'مشخصات مسافر:' %}</h6>
                         <div class="d-flex pb-3 flex-wrap _guest_container_form justify-content-between w-100" style="">
                             {% for field in form_1 %}
-                                {% if field.auto_id == 'id_room' %}
-                                {% elif field.auto_id == 'id_cart_detail' %}
-                                {% elif field.auto_id == 'id_fullname' %}
+                                {% if field.auto_id == 'id_fullname' %}
                                     <div class="mx-2 display-flex" style="width: 30%">
-                                        <label style="width: 75px" class=" fs-13 p-2"
-                                               for="{{ field.auto_id }}">{{ field.label }}</label>
-                                        <input type="text" name="fullname"
-                                               class=" fs-14 py-1 w-100 id_fullname inpReservation_"
-                                               placeholder="{{ field.label }}" maxlength="256" required="" id="">
+                                        <label style="width: 75px" class=" fs-13 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                                        <input type="text" name="fullname[{{ r.room.pk }}]" class=" fs-14 py-1 w-100 id_fullname inpReservation_" placeholder="{{ field.label }}" maxlength="256" required="" id="">
                                     </div>
                                 {% elif field.auto_id == 'id_mobile' %}
                                     <div class="mx-2 display-flex" style="width: 30%">
-                                        <label style="width: 75px" class=" fs-13 p-2"
-                                               for="{{ field.auto_id }}">{{ field.label }}</label>
-                                        <input type="number" name="mobile"
-                                               class=" fs-14 py-1 w-100 id_mobile inpReservation_"
-                                               placeholder="{{ field.label }}" maxlength="256" required="" id="">
+                                        <label style="width: 75px" class=" fs-13 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                                        <input type="number" name="mobile[{{ r.room.pk }}]" class=" fs-14 py-1 w-100 id_mobile inpReservation_" placeholder="{{ field.label }}" maxlength="256" required="" id="">
                                     </div>
                                 {% elif field.auto_id == 'id_nationality' %}
                                     <div class="mx-2 display-flex" style="width: 30%">
-                                        <label style="width: 75px" class=" fs-13 p-2"
-                                               for="{{ field.auto_id }}">{{ field.label }}</label>
-                                        <select name="nationality" style="border: 1px solid #e2e2ea "
-                                                class="w-100 bg-white id_nationality inpReservation_" required>
+                                        <label style="width: 75px" class=" fs-13 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                                        <select name="nationality[{{ r.room.pk }}]" style="border: 1px solid #e2e2ea " class="w-100 bg-white id_nationality inpReservation_" required>
                                             <option value="1">{% trans 'ایرانی' %}</option>
                                             <option value="2">{% trans 'غیر ایرانی' %}</option>
                                         </select>
@@ -184,6 +181,8 @@
                             {% endfor %}
                         </div>
                     </div>
+                    {% endfor %}
+                {% endwith %}
                 </div>
             {% endfor %}
         </div>

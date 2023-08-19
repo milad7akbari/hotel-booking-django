@@ -1,12 +1,15 @@
 from django.db.models import Prefetch
 from django.shortcuts import render
 
-from apps.front.models import Order
+from apps.front.models import Order, Cart_rule
 from django.views.generic.detail import DetailView
 
 # Create your views here.
 def voucher(request):
-    context = {}
+    voucher = Cart_rule.objects.filter(user=request.user).select_related('user').all()
+    context = {
+        'vouchers' : voucher
+    }
     return render(request, 'customer/voucher.html', context)
 
 def panelOrders(request):

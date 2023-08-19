@@ -18,6 +18,11 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
             $('#id_password').addClass('border-red-err text-danger');
             return false
         }
+        let pattern = /^9\d{9}$/i
+        if(!pattern.test($('#registerNewCustomers #id_username').val())) {
+            $('#registerNewCustomers #id_username').addClass('border-red-err text-danger');
+            return false
+        }
         $.ajax({
             url: $(this).attr("action"),
             type: 'POST',
@@ -27,20 +32,20 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
                 if (data.err) {
                     let msg = '';
                     for (var error in data.result){
-                        if (error == 'username'){
+                        if (error === 'username'){
                             msg = data.result.username
                         }
-                        if (error == 'email'){
+                        if (error === 'email'){
                             msg = data.result.email
                         }
-                        if (error == 'mobile'){
+                        if (error === 'mobile'){
                             msg = data.result.mobile
                         }
-                        if (error == 'password'){
+                        if (error === 'password'){
                             msg = data.result.password
                         }
-                        $('#id_'+error).prev().append('<sup class="text-danger sup">'+msg+'</sup>');
-                        $('#id_'+error).addClass('border-red-err box-shadow-red-err text-danger')
+                        $('#registerNewCustomers #id_'+error).prev().append('<sup class="text-danger sup">'+msg+'</sup>');
+                        $('#registerNewCustomers #id_'+error).addClass('border-red-err box-shadow-red-err text-danger')
                     }
                 } else {
                     $('.errMsg').addClass('d-block alert-success').removeClass('d-none alert-danger').html(data.result)
@@ -128,23 +133,24 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
         });
     });
     $(document).on('submit', '#formLoginUser', function (e) {
-        $('.errMsg').removeClass('d-block').addClass('d-none').html('');
-        if ($('#id_password').val().length < 1){
-            $('.errMsg').removeClass('d-none').addClass('d-block').html('پسورد را به درستی وارد کنید')
+
+        $('#formLoginUser .errMsg').removeClass('d-block').addClass('d-none').html('');
+        if ($('#formLoginUser #id_password').val().length < 1){
+            $('#formLoginUser .errMsg').removeClass('d-none').addClass('d-block').html('پسورد را به درستی وارد کنید')
             $('#id_password').addClass('border-red-err text-danger');
             return false
         }
         if ($('#formLoginUser #id_username').val().length >= 1){
             if($('#formLoginUser #id_username').val().indexOf('@') != -1){
-                let pattern = /^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b$/i
-                if(!pattern.test($('#id_username').val())) {
-                    $('.errMsg').removeClass('d-none').addClass('d-block').html($('#id_username').val());
+                let pattern = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/i
+                if(!pattern.test($('#formLoginUser #id_username').val())) {
+                    $('#formLoginUser .errMsg').removeClass('d-none').addClass('d-block').html('ایمیل را به درستی وارد کنید');
                     return false
                 }
             }else {
                 let pattern = /^09\d{9}$/i
                 if(!pattern.test($('#formLoginUser #id_username').val())) {
-                    $('.errMsg').removeClass('d-none').addClass('d-block').html('موبایل را به درستی وارد کنید');
+                    $('#formLoginUser .errMsg').removeClass('d-none').addClass('d-block').html('موبایل را به درستی وارد کنید');
                     return false
                 }
             }
@@ -161,11 +167,11 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
                     $("#registerLoginModal").remove();
                     $("._reservation_user_form_container").remove();
                 } else if (data.status == 0 ||data.status == -1) {
-                    $('.errMsg').removeClass('d-none').addClass('d-block').html('کاربری با این مشخصات پیدا نشد')
+                    $('#formLoginUser .errMsg').removeClass('d-none').addClass('d-block').html('کاربری با این مشخصات پیدا نشد')
                 }
             },
             error: function (xhr, desc, err) {
-                $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
+                $('#formLoginUser .errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
             }
         });
     });
@@ -184,6 +190,8 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
             success: function (data) {
                 if (data.status == 1) {
                     $('.errMsg').addClass('d-block alert-success').removeClass('d-none alert-danger').html(data.msg)
+                    window.location.replace("https://hoteltik.com");
+                    $('#forgotPassConfirm').attr('action' , '');
                 }
             },
             error: function (xhr, desc, err) {

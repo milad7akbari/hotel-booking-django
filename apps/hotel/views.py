@@ -55,7 +55,10 @@ def hotelCategory(request):
 
     for i in hotel:
         discount = i.hotel_discount.first()
-        price = i.room_set.first().price
+        if i.room_set.first() is not None:
+            price = i.room_set.first().price
+        else:
+            price = -1
         if discount is not None:
             reduction_type = discount.reduction_type
             reduction = discount.reduction
@@ -99,6 +102,7 @@ def hotelCategory(request):
 
 # Discount.objects.filter(active=True, start_date__lt=datetime.datetime.now() , end_date__gt=datetime.datetime.now()).values('reduction')
 def hotelPage(request, ref, title):
+
     diff = request.GET.get('diff')
     hotel = Hotel.objects.filter(active=1, reference=ref).select_related('default_cover', 'city').prefetch_related(Prefetch(
                 'hotel_discount',

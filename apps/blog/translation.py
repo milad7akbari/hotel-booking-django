@@ -12,7 +12,7 @@ class MainTranslationOptions(TranslationOptions):
 
 @register(Files)
 class FilesTranslationOptions(TranslationOptions):
-    fields = ('title', 'note',)
+    fields = ('title',)
     required_languages = ('en', 'fa')
 
 

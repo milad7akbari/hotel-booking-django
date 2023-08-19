@@ -5,6 +5,13 @@
 {% load i18n %}
 {% load static %}
 {% block customer_main %}
+{% if order.current_state == 2 %}
+    <label class="d-flex justify-content-between">
+        <p class="fs-14 my-3">کد ووچر شما جهت ارائه به هتل:</p>
+        <a href="{% url 'pdfRender' %}" class="fs-13 my-3 btn btn-customize ">پرینت کردن ووچر</a>
+    </label>
+    <p class="alert-success alert fs-15">HT324HGF65</p>
+{% endif %}
 <div class="d-flex justify-content-between flex-wrap">
     <div class="headerOrders w-100">
         <ul class="py-3 bg-muted w-100 mb-2 p-0 d-flex justify-content-between">

@@ -66,22 +66,36 @@
                         <p class="alert alert-warning fs-13 w-100">{% trans 'لطفا تاریخ ورود و خروج را بررسی کنید' %}</p>
                     {% endif %}
                 </div>
-               <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3" id="_app">
-                    <div class="d-flex w-100 filterRooms align-items-center flex-wrap justify-content-center border-radius-25 px-3 py-3"
-                         style="border-bottom: 1px solid #ccc">
-                        <p class="fs-14 w-100 mb-3 text-center">{% trans 'ورود و خروج را انتخاب کنید' %}</p>
-                        <date-picker @open="open" @close="close" @submit="submit" color="green" :auto-submit="true" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{% trans 'تاریخ ورود و خروج' %}" locale="fa,en" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="date_from_to" :modal="true" />
-                    </div>
-               </div>
                 <div class="roomsListHotel" id="roomsListContainer">
                     <form method="post" id="frmAddToCart" action="{% url 'addToCart' hotel.reference %}" class="p-0 d-flex flex-wrap m-0">
+                        <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3" id="_app">
+                            <div class="d-flex w-100 filterRooms align-items-center flex-wrap justify-content-center border-radius-25 px-3 py-3"
+                                 style="border-bottom: 1px solid #ccc">
+                                <p class="fs-14 w-100 mb-3 text-center">{% trans 'ورود و خروج را انتخاب کنید' %}</p>
+                                <p class="fs-14 w-100 d-none text-color-customize diff_front_ text-center" data-lang="{% trans 'مدت اقامت' %}"></p>
+                                <div class="w-100 _container_room_ flex-wrap d-flex justify-content-center">
+                                    <div id="_app_start" class="mx-2">
+                                        <date-picker required @open="open" @close="close" @submit="submit" color="green" :auto-submit="true" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{% trans 'تاریخ ورود' %}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="check-in" :modal="true" />
+                                    </div>
+                                    <div id="_app_to" class="mx-2" style="display: none">
+                                        <date-picker required @open="open" @close="close" @submit="submit" color="green" :auto-submit="true" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{% trans 'تاریخ خروج' %}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="check-out" :modal="true" />
+                                    </div>
+                                    <div id="_choose_room" class="d-none">
+                                        <select id="_filter_rooms_">
+                                            <option value="0">{% trans 'انتخاب اتاق' %}</option>
+                                            <option value="1">{% trans 'اتاق یک نفره' %}</option>
+                                            <option value="2">{% trans 'اتاق دو نفره' %}</option>
+                                            <option value="3">{% trans 'اتاق سه نفره و بیشتر' %}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {% csrf_token %}
-                            <input type="hidden" id="check-out-inp" class="alt-field-check-out-inp" name="check-out" readonly value="0">
-                            <input type="hidden" id="check-in-inp" class="alt-field-check-in-inp" name="check-in" readonly value="0">
                         {% for r in room %}
-                            <input type="hidden" value="{{ r.pk }}" name="room[]">
-                            <div class="w-100 my-3 roomListContainer border-bottom pb-1 d-flex flex-wrap"
+                            <div data-capacity="{{ r.capacity }}" class="w-100 my-3 roomListContainer border-bottom pb-1 d-flex flex-wrap"
                                  style="min-height: 150px">
+                                <input type="hidden" value="{{ r.pk }}" name="room[]">
                                 <div  class="imgCover roomListItem overflow-hidden  border-radius-5 position-relative w-25">
                                     {% if r.room_images_set.all.count > 0 %}
                                         <span  data-get="r" data-ref="{{ r.pk }}" class="icon-images btnShowImages fs-25  position-absolute text-white " style="top: 10px;right: 10px"></span>
@@ -141,7 +155,7 @@
                                             <span class="_price_per_night">{{ r.price|floatformat:"0"|intcomma:False }}</span>&nbsp;
                                             <span class="text-muted fs-12">{% trans 'تومان' %}</span>
                                         </p>
-                                        <span class="w-100 text-center text-muted my-2 fs-14">{% trans 'هر شب' %}</span>
+                                        <span class="w-100 text-center text-muted d-none my-2 fs-14">{% trans 'هر شب' %}</span>
                                     </label>
                                     <div class="w-100 text-center d-flex justify-content-between">
                                         <label class="fs-14 m-auto">{% trans 'تعداد' %}</label>
