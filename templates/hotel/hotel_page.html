@@ -3,7 +3,8 @@
 {% block meta_desc %} {{ hotel.description }} {% endblock %}
 {% block meta_keywords %} {{ h.name.split|join:"," }} {% endblock %}
 {% load function %}
-{% load humanize %}
+{% load humanize %}{% load jalali_tags %}
+
 {% load i18n %}
 {% load static %}
 {% block css %}
@@ -12,9 +13,10 @@
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "/js/swiper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "/js/hotel-page.js" %}"></script>
     <script src="{% static 'js/vue.min.js' %}"></script>
     <script src="{% static 'js/date-picker.min.js' %}"></script>
-    <script type="text/javascript" src="{% static "/js/hotel-page.js" %}"></script>
+    <script src="{% static 'js/date-picker-vue.js' %}"></script>
 {% endblock %}
 {% block main %}
     <div class="m-auto hotelPageContainer" style="width: 90%">
@@ -61,36 +63,39 @@
         <div class="hotel-page-services  mt-4">
             <h1 class="fs-18 mx-4">{% trans 'لیست اتاق ها' %}</h1>
             <div class="formReservation flex-wrap py-1 mt-3 m-auto d-flex" style="width: 85%">
-                <div data-msg-lang="{% trans 'لطفا تاریخ ورود و خروج را بررسی کنید' %}" class="w-100 containerMsgDiv">
-                    {% if diff is not None %}
-                        <p class="alert alert-warning fs-13 w-100">{% trans 'لطفا تاریخ ورود و خروج را بررسی کنید' %}</p>
-                    {% endif %}
-                </div>
                 <div class="roomsListHotel" id="roomsListContainer">
-                    <form method="post" id="frmAddToCart" action="{% url 'addToCart' hotel.reference %}" class="p-0 d-flex flex-wrap m-0">
-                        <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3" id="_app">
-                            <div class="d-flex w-100 filterRooms align-items-center flex-wrap justify-content-center border-radius-25 px-3 py-3"
-                                 style="border-bottom: 1px solid #ccc">
-                                <p class="fs-14 w-100 mb-3 text-center">{% trans 'ورود و خروج را انتخاب کنید' %}</p>
-                                <p class="fs-14 w-100 d-none text-color-customize diff_front_ text-center" data-lang="{% trans 'مدت اقامت' %}"></p>
-                                <div class="w-100 _container_room_ flex-wrap d-flex justify-content-center">
-                                    <div id="_app_start" class="mx-2">
-                                        <date-picker required @open="open" @close="close" @submit="submit" color="green" :auto-submit="true" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{% trans 'تاریخ ورود' %}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="check-in" :modal="true" />
-                                    </div>
-                                    <div id="_app_to" class="mx-2" style="display: none">
-                                        <date-picker required @open="open" @close="close" @submit="submit" color="green" :auto-submit="true" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{% trans 'تاریخ خروج' %}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="check-out" :modal="true" />
-                                    </div>
-                                    <div id="_choose_room" class="d-none">
-                                        <select id="_filter_rooms_">
-                                            <option value="0">{% trans 'انتخاب اتاق' %}</option>
-                                            <option value="1">{% trans 'اتاق یک نفره' %}</option>
-                                            <option value="2">{% trans 'اتاق دو نفره' %}</option>
-                                            <option value="3">{% trans 'اتاق سه نفره و بیشتر' %}</option>
-                                        </select>
-                                    </div>
+                    <div class="m-auto filterSortingRooms w-100 justify-content-around d-flex my-3" id="_app">
+                        <form  method="get" id="getCapacityRoom" class="d-flex w-100 filterRooms align-items-center flex-wrap justify-content-center border-radius-25 px-3 py-3" style="border-bottom: 1px solid #ccc">
+                            <p class="fs-14 w-100 {% if diff is None %} d-none {% endif %} text-color-customize diff_front_ text-center" data-lang="">
+                                {% trans 'مدت اقامت ' %}{{ diff }}{% trans ' روز' %}
+                            </p>
+                            <div class="w-100 _container_room_ flex-wrap d-flex justify-content-center">
+                                <div id="_app_start" class="my-2">
+                                    <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'تاریخ ورود' %}</label>
+                                    <date-picker required @open="open" @submit="submit" color="green" :auto-submit="true" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{{ checkIn|to_jalali:"%Y-%m-%d" }}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="check-in-" :modal="true" />
+                                </div>
+                                <div id="_app_to" class="my-2">
+                                    <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'تاریخ خروج' %}</label>
+                                    <date-picker required @open="open" @submit="submit" color="green" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{{ checkOut|to_jalali:"%Y-%m-%d" }}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="check-out-" :modal="true" />
+                                </div>
+                                <div id="_app_submit" class="my-2">
+                                    <label class="w-100 fs-13 pb-2 px-2  textRight">&nbsp;&nbsp;&nbsp;</label>
+                                    <button type="submit" class="btn btn-customize w-100" style="padding: 6px !important;width: 100%  !important">{% trans 'مشاهده هتل ها' %}</button>
+                                </div>
+                                <div id="_choose_room" class="d-none">
+                                    <select id="_filter_rooms_">
+                                        <option value="0">{% trans 'انتخاب اتاق' %}</option>
+                                        <option value="1">{% trans 'اتاق یک نفره' %}</option>
+                                        <option value="2">{% trans 'اتاق دو نفره' %}</option>
+                                        <option value="3">{% trans 'اتاق سه نفره و بیشتر' %}</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
+                        </form>
+                    </div>
+                    <form method="post" id="frmAddToCart" action="{% url 'addToCart' hotel.reference %}" class="p-0 d-flex flex-wrap m-0">
+                        <input type="hidden" name="check-in" value="{{ checkInStr }}">
+                        <input type="hidden" name="check-out" value="{{ checkOutStr }}">
                         {% csrf_token %}
                         {% for r in room %}
                             <div data-capacity="{{ r.capacity }}" class="w-100 my-3 roomListContainer border-bottom pb-1 d-flex flex-wrap"
@@ -158,6 +163,8 @@
                                         <span class="w-100 text-center text-muted d-none my-2 fs-14">{% trans 'هر شب' %}</span>
                                     </label>
                                     <div class="w-100 text-center d-flex justify-content-between">
+                                    {% if r.price > 0 %}
+                                        {% if r.qty %}
                                         <label class="fs-14 m-auto">{% trans 'تعداد' %}</label>
                                         <select name="qty[]" autocomplete="off" data-price="{{ r.price }}"  data-price-lang="{% trans 'تومان' %}"  class="form-select countOrderRoomPerson w-50 mx-auto text-center form-select-sm">
                                             <option selected value="0">0</option>
@@ -167,6 +174,10 @@
                                                 {% endfor %}
                                             {% endwith %}
                                         </select>
+                                            {% else %}
+                                            <label class="fs-14 m-auto text-danger">{% trans 'تکمیل ظرفیت' %}</label>
+                                        {% endif %}
+                                    {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -238,8 +249,8 @@
             <div class="w-100 d-flex align-items-center mapAndRearLocation justify-content-around">
                 <div class="w-100 d-flex align-items-center justify-content-around" style="min-height: 250px">
                     <div class="map-location-hotel h-100" style="width: 40%;">
-                        <iframe class="w-100 h-100"
-                                src="//maps.google.com/maps?q={{ hotel.latitude }},{{ hotel.longitude }}&z=15&output=embed"></iframe>
+{#                        <iframe class="w-100 h-100"#}
+{#                                src="//maps.google.com/maps?q={{ hotel.latitude }},{{ hotel.longitude }}&z=15&output=embed"></iframe>#}
                     </div>
                     <div class="w-50 h-100 nearLocation overflow-auto">
                         <ul class="p-0">
@@ -265,9 +276,9 @@
                     <div class="w-100 display-flex justify-content-end">
                         <button type="button" class="btn btnAddReviews btn-primary m-2" style="width: 150px">{% trans 'ثبت نظر' %}</button>
                     </div>
-                    <div class="w-50 reviewsContainer mx-auto mb-3 border border-radius-15 p-3 display-flex justify-content-end">
+                    <div class="w-100 reviewsContainer mx-auto mb-3 border border-radius-15 p-3 display-flex justify-content-end">
 
-                    <form id="reviewsSubmit" action="{% url 'reviewsSubmit' %}" method="post" class="row g-3 dir-rtl">{% csrf_token %}
+                    <form id="reviewsSubmit" action="{% url 'reviewsSubmit' %}" method="post" class="row w-50 m-auto g-3 dir-rtl">{% csrf_token %}
                         <input type="hidden" name="hotel_ref" value="{{ hotel.reference }}">
                         <p class="alert-danger alert errMsg d-none" ></p>
                         <div class="col-md-12">

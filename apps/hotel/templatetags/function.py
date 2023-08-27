@@ -1,11 +1,17 @@
+from django import template
+register = template.Library()
 from datetime import datetime
 
-from django import template
 from django.utils.translation import gettext_lazy as _
 from jalali_date import datetime2jalali
 from jdatetime import timedelta
 
-register = template.Library()
+
+@register.simple_tag()
+def multiply(qty, unit_price, *args, **kwargs):
+    return qty * unit_price
+
+
 
 
 @register.filter(name='calcPrice')

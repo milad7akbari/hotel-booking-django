@@ -1,6 +1,7 @@
+import random
 import re
 import secrets
-import uuid
+import string
 from smtplib import SMTPException
 
 from django.contrib.auth import login
@@ -13,20 +14,137 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-from datetime import datetime
+import datetime
 from django.contrib.auth.models import User
 from jdatetime import timedelta
 
 from Hotel_Test import settings
 from apps.base.models import Forgot_password, Slider, Meta, Cities, Pages, Configuration
 from apps.blog.models import Main
+from apps.front.classes.login_register import SendSms
 from apps.front.forms import forgotPasswordForm, trackingForm, registerUserFromReservationForm, loginUserForm, \
     forgotPasswordConfirmForm, registerGuestFromReservationForm, registerUser, placeOrderForm
 from django.utils.translation import gettext_lazy as _
 
 from apps.front.models import Cart, Cart_detail, Cart_guest, Step, Order_detail, Order, Cart_rule, Cart_cart_rule, \
     Order_cart_rule, Order_detail_guest
-from apps.hotel.models import Hotel, Room, Discount, Check_in_out_rate, Extra_person_rate
+from apps.hotel.models import Hotel, Room, Discount, Check_in_out_rate, Extra_person_rate, Room_pricing, Discount_room
+
+
+def _hotels():
+    pass
+    # hotel = Hotel.objects.filter(active=1, hotel_discount__active=1, hotel_discount__end_date__gt=timezone.now(),
+    #                              hotel_discount__start_date__lt=timezone.now()).select_related(
+    #     'default_cover').prefetch_related(Prefetch(
+    #     'room_set',
+    #     queryset=Room.objects.filter(
+    #         Q(active=1, price__isnull=False)).order_by('price')
+    # ), 'hotel_discount').order_by('?')[:6]
+    # for i in hotel:
+    #     discount = i.hotel_discount.first()
+    #     if i.room_set.first() is not None:
+    #         price = i.room_set.order_by('price').first().price
+    #     else:
+    #         price = -1
+    #     if discount is not None:
+    #         reduction_type = discount.reduction_type
+    #         reduction = discount.reduction
+    #         i.reduction = discount.reduction
+    #         i.reduction_type = reduction_type
+    #         i.price_bef = price
+    #         if reduction_type == 2:
+    #             i.price = price - reduction
+    #         if reduction_type == 1:
+    #             i.price = ((100 - reduction) / 100) * price
+    #     else:
+    #         i.price = price
+    # return hotel
+
+
+def newHotel():
+    diff = Configuration.objects.filter(name='new').first()
+    if diff is None:
+        diff = 2
+    else:
+        diff = diff.value
+    new_date = datetime.datetime.today() - timedelta(days=int(diff))
+    hotel = Hotel.objects.filter(active=1, room__active=1, date_add__gt=new_date, room__room_pricing__board__gt=0).select_related('default_cover').prefetch_related(Prefetch('hotel_discount', queryset=Discount.objects.filter(Q(active=1) & Q(start_date__lt=timezone.now()) & Q(
+            end_date__gt=timezone.now()))),
+        Prefetch('room_set__room_pricing', queryset=Room_pricing.objects.filter(calender_pricing__start_date__lt=datetime.date.today(), calender_pricing__end_date__gt=datetime.date.today())
+                 .order_by('board'))).annotate(Count('pk')).order_by('?')[:6].all()
+    for i in hotel:
+        discount = i.hotel_discount.all()
+        room = i.room_set.all()
+        try:
+            discount = discount[0]
+        except IndexError:
+            discount = None
+        try:
+            flag = True
+            room = room[0]
+        except IndexError:
+            flag = False
+            room = None
+
+        if flag:
+            pricing = room.room_pricing.all()
+        try:
+            if flag:
+                pricing = pricing[0]
+            else:
+                pricing = None
+        except IndexError:
+            pricing = None
+        if pricing is not None:
+            price = pricing.board
+        else:
+            price = 0
+        if discount is not None:
+            reduction_type = discount.reduction_type
+            reduction = discount.reduction
+            i.reduction = discount.reduction
+            i.reduction_type = reduction_type
+            i.price_bef = price
+            if reduction_type == 2:
+                i.price = price - reduction
+            if reduction_type == 1:
+                i.price = ((100 - reduction) / 100) * price
+        else:
+            i.price = price
+    return hotel
+
+
+def _blogs():
+    blogs_related = Main.objects.filter(active=1).select_related('default_image').values(
+        'pk',
+        'title',
+        'desc',
+        'date_upd',
+        'default_image__file').order_by('?')[:7]
+    return blogs_related
+
+
+def _cities():
+    city = Cities.objects.filter(hotel__isnull=False).annotate(Count('pk' , distinct=True)).order_by('?')[:6]
+    return city
+
+
+def home_page(request):
+    slider = Slider.objects.filter(active=1).order_by('?')[:3]
+    hotel = _hotels()
+    hotels_new = newHotel()
+    blogs_related = _blogs()
+    city = _cities()
+    meta = Meta.objects.filter(page_name='home_page').first()
+    context = {
+        'blogs_related': blogs_related,
+        'city': city,
+        'hotels_new': hotels_new,
+        'hotel': hotel,
+        'slider': slider,
+        'meta': meta,
+    }
+    return render(request, 'pages/home.html', context)
 
 
 def forgotPassword(request):
@@ -122,7 +240,8 @@ def forgotPasswordConfirm(request):
             form = forgotPasswordConfirmForm(request.POST, instance=user)
             if form.is_valid():
                 user = form.save(commit=False)
-                user.password = make_password(request.POST.get('password'), salt="Argon2PasswordHasher", hasher="default")
+                user.password = make_password(request.POST.get('password'), salt="Argon2PasswordHasher",
+                                              hasher="default")
                 user.save()
                 status = 1
                 user_token.update(status=1)
@@ -137,51 +256,33 @@ def forgotPasswordConfirm(request):
         }
         return JsonResponse(context)
 
-#
-# def createUserFromReservation(request, ref, id_cart):
-#     if request.method == 'POST':
-#         form = registerUserFromReservationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             hotel = get_object_or_404(Hotel, reference=ref)
-#             cart = Cart.objects.filter(hotel_id=hotel.pk, pk=id_cart)
-#             if cart.exists():
-#                 cart.update(user_id=request.user.pk)
-#             context = {
-#                 "result": _('ورود اطلاعات موفقیت آمیز بود'),
-#                 "err": False,
-#             }
-#             return JsonResponse(context)
-#         else:
-#             if 'err' in form.errors:
-#                 err = True
-#                 context = {
-#                     "result": form.errors,
-#                     "err": err,
-#                 }
-#                 return JsonResponse(context)
-
 
 def getInfoFromCart_(cart_pk, hotel_pk):
     cart = Cart.objects.filter(pk=cart_pk).select_related('user', 'hotel', 'hotel__extra_person_rate',
-                                                          'hotel__check_in_out_rate').prefetch_related(Prefetch(
-        'hotel__hotel_discount',
-        queryset=Discount.objects.filter(
-            Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
-    ),
-        Prefetch(
-            'cart_detail',
-            queryset=Cart_detail.objects.filter(flag=1).prefetch_related('room', 'cart_guest')
-        )).first()
-
+                                                          'hotel__check_in_out_rate').prefetch_related(Prefetch('cart_detail',
+                queryset=Cart_detail.objects.filter(flag=1).select_related('room').prefetch_related(Prefetch('room__discount_room',
+                queryset=Discount_room.objects.select_related('discount').filter(discount__active=1, discount__start_date__lt=datetime.date.today(), discount__end_date__gt=datetime.date.today())),
+                    'cart_guest', Prefetch(
+                        'room__room_pricing', queryset=Room_pricing.objects.filter(
+                            Q(calender_pricing__start_date__lt=datetime.date.today()) & Q(
+                                calender_pricing__end_date__gt=datetime.date.today()))
+                    )))).first()
     extra_person = Extra_person_rate.objects.filter(hotel_id=hotel_pk).first()
     check_in_out = Check_in_out_rate.objects.filter(hotel_id=hotel_pk).first()
     total_amount = 0
     diff = (cart.check_out - cart.check_in).days
     for i in cart.cart_detail.all():
-        discount = cart.hotel.hotel_discount.first()
-        price = i.room.price
+        pricing = i.room.room_pricing.all()
+        try:
+            pricing = pricing[0]
+            price = pricing.board
+        except IndexError:
+            price = 0
+        discount = i.room.discount_room.all()
+        try:
+            discount = discount[0]
+        except IndexError:
+            discount = None
         if extra_person is not None and i.extra_person_quantity > 0:
             total_amount += (extra_person.rate * i.extra_person_quantity)
         if check_in_out is not None:
@@ -190,16 +291,16 @@ def getInfoFromCart_(cart_pk, hotel_pk):
             if i.check_out_flag == 1:
                 total_amount += check_in_out.rate
         if discount is not None:
-            reduction_type = discount.reduction_type
+            reduction_type = discount.discount.reduction_type
             reduction = discount.reduction
             i.room.reduction = discount.reduction
             i.room.reduction_type = reduction_type
             i.room.price_bef = ((diff * price) * i.quantity)
             if reduction_type == 2:
-                i.room.price = ((diff * price) * i.quantity) - reduction
+                i.room.board = ((diff * price) * i.quantity) - reduction
                 total_amount += ((diff * price) * i.quantity) - reduction
             if reduction_type == 1:
-                i.room.price = ((100 - reduction) / 100) * ((diff * price) * i.quantity)
+                i.room.board = ((100 - reduction) / 100) * ((diff * price) * i.quantity)
                 total_amount += ((100 - reduction) / 100) * ((diff * price) * i.quantity)
         else:
             i.price = price * diff
@@ -227,7 +328,9 @@ def addToCartDetails(request, ref, id_cart):
             form_user = registerUserFromReservationForm(request.POST)
             if form_user.is_valid():
                 user = form_user.save(commit=False)
-                user.password = make_password('123', salt="Argon2PasswordHasher", hasher="default")
+                letters = string.ascii_letters
+                password_ = ''.join(random.choice(letters) for i in range(7))
+                user.password = make_password(password_, salt="Argon2PasswordHasher", hasher="default")
                 user.save()
                 cart = Cart.objects.filter(hotel_id=hotel.pk, pk=id_cart, flag=1)
                 if cart.exists():
@@ -264,12 +367,14 @@ def addToCartDetails(request, ref, id_cart):
                         'ref': hotel.reference,
                         'cart': cart,
                     }
-                    html = render_to_string('cart/_reservation_payment_form.html', context=context_render, request=request)
+                    html = render_to_string('cart/_reservation_payment_form.html', context=context_render,
+                                            request=request)
                     context = {
                         'status': status,
                         'html': html,
                     }
                     login(request, user)
+                    SendSms(password_, 'password', request.user.username)
                     return JsonResponse(context)
             else:
                 status = -4
@@ -304,7 +409,8 @@ def addToCartDetails(request, ref, id_cart):
                         fullname = request.POST.getlist(f"fullname[{c.room_id}]")[x]
                         mobile = request.POST.getlist(f"mobile[{c.room_id}]")[x]
                         nationality = request.POST.getlist(f"nationality[{c.room_id}]")[x]
-                        obj = Cart_guest(room=c.room, cart_detail=c, fullname=fullname, mobile=mobile, nationality=nationality)
+                        obj = Cart_guest(room=c.room, cart_detail=c, fullname=fullname, mobile=mobile,
+                                         nationality=nationality)
                         obj.save()
                 stepChangeStatus(cart.pk, 2)
                 status = 1
@@ -327,92 +433,13 @@ def addToCartDetails(request, ref, id_cart):
         return redirect(reverse('hotelCategory'))
 
 
-def _hotels():
-    hotel = Hotel.objects.filter(active=1, hotel_discount__active=1, hotel_discount__end_date__gt=timezone.now(), hotel_discount__start_date__lt=timezone.now()).select_related(
-        'default_cover').prefetch_related(Prefetch(
-        'room_set',
-        queryset=Room.objects.filter(
-            Q(active=1, price__isnull=False)).order_by('price')
-    ),'hotel_discount').order_by('?')[:6]
-    for i in hotel:
-        discount = i.hotel_discount.first()
-        if i.room_set.first() is not None:
-            price = i.room_set.order_by('price').first().price
-        else:
-            price = -1
-        if discount is not None:
-            reduction_type = discount.reduction_type
-            reduction = discount.reduction
-            i.reduction = discount.reduction
-            i.reduction_type = reduction_type
-            i.price_bef = price
-            if reduction_type == 2:
-                i.price = price - reduction
-            if reduction_type == 1:
-                i.price = ((100 - reduction) / 100) * price
-        else:
-            i.price = price
-    return hotel
-
-
-def newHotel():
-    diff = Configuration.objects.filter(name='new').first()
-    if diff is None:
-        diff = 2
-    else:
-        diff = diff.value
-    new_date = datetime.today() - timedelta(days=int(diff))
-    hotel = Hotel.objects.filter(active=1,date_add__gt=new_date).select_related(
-        'default_cover').prefetch_related(Prefetch(
-        'room_set',
-        queryset=Room.objects.filter(
-            Q(active=1, price__isnull=False)).order_by('price')
-    ),Prefetch('hotel_discount',
-                queryset=Discount.objects.filter(
-                    Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now())))).order_by('?')[:6]
-    for i in hotel:
-        discount = i.hotel_discount.first()
-        if i.room_set.first() is not None:
-            price = i.room_set.order_by('price').first().price
-        else:
-            price = -1
-        if discount is not None:
-            reduction_type = discount.reduction_type
-            reduction = discount.reduction
-            i.reduction = discount.reduction
-            i.reduction_type = reduction_type
-            i.price_bef = price
-            if reduction_type == 2:
-                i.price = price - reduction
-            if reduction_type == 1:
-                i.price = ((100 - reduction) / 100) * price
-        else:
-            i.price = price
-    return hotel
-
-
-def _blogs():
-    blogs_related = Main.objects.filter(active=1).select_related('default_image').values(
-        'pk',
-        'title',
-        'desc',
-        'date_upd',
-        'default_image__file').order_by('?')[:7]
-    return blogs_related
-
-
-def _cities():
-    city = Cities.objects.filter(hotel__isnull=False).order_by('?')[:6]
-    return city
-
-
 def general_policy(request):
     meta = Meta.objects.filter(page_name='general_policy_page').first()
     general_policy_page = Pages.objects.filter(page_name='general_policy_page').first()
 
     context = {
         'general_policy_page': general_policy_page,
-        'meta' : meta
+        'meta': meta
     }
     return render(request, 'pages/general_policy.html', context)
 
@@ -472,6 +499,7 @@ def trackingSubmit(request):
             }
             return JsonResponse(context)
 
+
 @login_required()
 def addCouponToCart(request, cart_id):
     if request.method == 'POST':
@@ -481,10 +509,11 @@ def addCouponToCart(request, cart_id):
         msg = _('کد وارد شده صحیح نیست.')
         coupon = request.POST.get('coupon')
         if len(coupon) > 5:
-            check = Cart_rule.objects.filter(code=coupon, user=request.user, quantity__gt=0, active=1, start_date__lt=timezone.now(), end_date__gt=timezone.now())
+            check = Cart_rule.objects.filter(code=coupon, user=request.user, quantity__gt=0, active=1,
+                                             start_date__lt=timezone.now(), end_date__gt=timezone.now())
             if check.exists():
                 check = check.first()
-                cart = Cart.objects.filter(flag=1, pk=cart_id , user=request.user)
+                cart = Cart.objects.filter(flag=1, pk=cart_id, user=request.user)
                 cart_first = cart.first()
                 count = Cart_cart_rule.objects.filter(cart_id=cart_id)
                 amount = getInfoFromCart_(cart_first.pk, cart_first.hotel_id)
@@ -494,7 +523,6 @@ def addCouponToCart(request, cart_id):
                 if check.minimum_amount < amount.total_amount:
                     if not count.exists():
                         total = Cart_cart_rule.objects.filter(cart_rule_id=check.pk)
-                        print(total.count())
                         if total.count() < check.quantity and cart.exists():
                             obj = Cart_cart_rule()
                             obj.cart_id = cart_id
@@ -515,7 +543,6 @@ def addCouponToCart(request, cart_id):
                 else:
                     msg = _(f"حداقل مقدار سبد خرید برای اعمال کد تخفیف {cart_amount:,} تومان  می باشد.")
 
-
         context = {
             'cart_amount_bef': f'{round(cart_amount_bef):,}',
             'cart_amount': f'{round(cart_amount):,}',
@@ -524,27 +551,10 @@ def addCouponToCart(request, cart_id):
         }
         return JsonResponse(context)
 
-def home_page(request):
-    slider = Slider.objects.filter(active=1).order_by('?')[:3]
-    hotel = _hotels()
-    hotels_new = newHotel()
-    blogs_related = _blogs()
-    city = _cities()
-    meta = Meta.objects.filter(page_name='home_page').first()
-    context = {
-        'blogs_related': blogs_related,
-        'city': city,
-        'hotels_new': hotels_new,
-        'hotel': hotel,
-        'slider': slider,
-        'meta': meta,
-    }
-    return render(request, 'pages/home.html', context)
-
 
 def confirmation(request, reference):
     context = {
-        'reference' : reference
+        'reference': reference
     }
     return render(request, 'pages/confirmation.html', context)
 
@@ -560,24 +570,30 @@ def cart(request, ref):
             cart = cart.filter(secure_key=session_key)
         if cart.exists():
             cart = cart.select_related('hotel__check_in_out_rate', 'hotel__breakfast_rate',
-                                       'hotel__extra_person_rate').prefetch_related(Prefetch(
-                'hotel__hotel_discount',
-                queryset=Discount.objects.filter(
-                    Q(active=1) & Q(start_date__lt=timezone.now()) & Q(end_date__gt=timezone.now()))
-            ), Prefetch(
-                'cart_detail',
-                queryset=Cart_detail.objects.filter(flag=1).select_related('room',
-                                                                           'room__default_cover').prefetch_related(
-                    'room__room_facility_set', 'room__room_images_set'))).first()
+                                       'hotel__extra_person_rate').prefetch_related(Prefetch('cart_detail',
+                queryset=Cart_detail.objects.filter(flag=1).select_related('room', 'room__default_cover').prefetch_related(
+                    'room__room_facility_set', 'room__room_images_set',Prefetch(
+                        'room__room_pricing', queryset=Room_pricing.objects.filter(
+                    Q(calender_pricing__start_date__lt=datetime.date.today()) & Q(calender_pricing__end_date__gt=datetime.date.today()))
+                    ),Prefetch('room__discount_room', queryset=Discount_room.objects.select_related('discount').filter(discount__active=1, discount__start_date__lt=datetime.date.today(), discount__end_date__gt=datetime.date.today()))))).first()
         else:
             return redirect(reverse('hotelCategory'))
         if cart.cart_detail.all().count() > 0:
+            diff = (cart.check_out - cart.check_in).days
             for i in cart.cart_detail.all():
-                diff = (cart.check_out - cart.check_in).days
-                discount = cart.hotel.hotel_discount.first()
-                price = i.room.price
+                pricing = i.room.room_pricing.all()
+                try:
+                    pricing = pricing[0]
+                    price = pricing.board
+                except IndexError:
+                    price = 0
+                discount = i.room.discount_room.all()
+                try:
+                    discount = discount[0]
+                except IndexError:
+                    discount = None
                 if discount is not None:
-                    reduction_type = discount.reduction_type
+                    reduction_type = discount.discount.reduction_type
                     reduction = discount.reduction
                     i.room.reduction = discount.reduction
                     i.room.reduction_type = reduction_type
@@ -589,13 +605,13 @@ def cart(request, ref):
                 else:
                     i.room.price = price * diff
             step = Step.objects.filter(cart_id=cart.pk).first()
-            info = None
-            if step is not None and step.step == 2:
-                info = getInfoFromCart_(cart.pk, cart.hotel_id)
+            # info = None
+            # if step is not None and step.step == 2:
+            #     info = getInfoFromCart_(cart.pk, cart.hotel_id)
             meta = Meta.objects.filter(page_name='cart_page').first()
             context = {
                 'meta': meta,
-                'info': info,
+                # 'info': info,
                 'step': step,
                 'ref': ref,
                 'cart': cart,
@@ -622,11 +638,10 @@ def addToCart(request, ref):
             cart_check = Cart.objects.filter(secure_key=session_key, hotel_id=hotel.pk, flag=1).first()
 
         try:
-            d1 = datetime.strptime(request.POST.get('check-in'), "%Y-%m-%d")
-            d2 = datetime.strptime(request.POST.get('check-out'), "%Y-%m-%d")
+            d1 = datetime.datetime.strptime(request.POST.get('check-in'), "%Y-%m-%d")
+            d2 = datetime.datetime.strptime(request.POST.get('check-out'), "%Y-%m-%d")
         except ValueError:
             return redirect(reverse('hotelPage', kwargs={'ref': ref, 'title': hotel.name}) + '?diff=false')
-
 
         diff = d2 - d1
         checkInDate = request.POST.get('check-in')
@@ -782,19 +797,24 @@ def calcOrderInfo(cart, hotel, extra_person, check_in_out):
         check_in_flag = detail.check_in_flag
         check_out_flag = detail.check_out_flag
         cart.hotel.hotel_discount.first()
+        cale = detail.room.room_pricing.first()
+        if cale is not None:
+            price = cale.board
+        else:
+            price = 0
         if hotel_discount.hotel_discount.all().count() > 0:
             first = hotel_discount.hotel_discount.all()[0]
             if first.reduction_type == 2:
-                price = detail.room.price - first.reduction
+                price = price - first.reduction
             elif first.reduction_type == 1:
-                price = ((100 - first.reduction) / 100) * detail.room.price
+                price = ((100 - first.reduction) / 100) * price
             else:
-                price = detail.room.price
+                price = price
         else:
-            price = detail.room.price
+            price = price
         total_amount_dis_incl += nights * price
         total_amount_dis_incl *= detail.quantity
-        total_amount_dis_excl += detail.room.price * nights
+        total_amount_dis_excl += price * nights
         total_amount_dis_excl *= detail.quantity
         if check_in_flag == 1:
             total_amount_dis_incl += check_in_out_rate
@@ -830,17 +850,17 @@ def calcOrderInfo(cart, hotel, extra_person, check_in_out):
     return context
 
 
-def _total_price_dis_incl(cart_detail, hotel_discount):
+def _total_price_dis_incl(cart_detail, hotel_discount , calc_price):
     if hotel_discount.hotel_discount.all().count() > 0:
         first = hotel_discount.hotel_discount.all()[0]
         if first.reduction_type == 2:
-            price = cart_detail.room.price - first.reduction
+            price = calc_price - first.reduction
         elif first.reduction_type == 1:
-            price = ((100 - first.reduction) / 100) * cart_detail.room.price
+            price = ((100 - first.reduction) / 100) * calc_price
         else:
-            price = cart_detail.room.price
+            price = calc_price
     else:
-        price = cart_detail.room.price
+        price = calc_price
     return price
 
 
@@ -852,7 +872,11 @@ def placeOrders(request, ref, cart_id):
         if request.method == 'POST':
             form = placeOrderForm(request.POST)
             if form.is_valid():
-                cart_exists = Cart.objects.filter(user_id=request.user.pk, hotel_id=hotel.pk, pk=cart_id, flag=1)
+                cart_exists = Cart.objects.filter(user_id=request.user.pk, hotel_id=hotel.pk, pk=cart_id, flag=1).prefetch_related(Prefetch('cart_detail',
+                queryset=Cart_detail.objects.filter(flag=1).select_related('room').prefetch_related(Prefetch(
+                        'room__room_pricing', queryset=Room_pricing.objects.filter(
+                    Q(calender_pricing__start_date__lt=datetime.date.today()) & Q(calender_pricing__end_date__gt=datetime.date.today()))
+                    ))))
                 cart_obj = cart_exists.first()
                 extra_person = Extra_person_rate.objects.filter(hotel_id=hotel.pk)
                 cart_obj.extra_person = extra_person.exists()
@@ -864,6 +888,8 @@ def placeOrders(request, ref, cart_id):
                     order_obj.user = cart_obj.user
                     order_obj.cart = cart_obj
                     order_obj.hotel = cart_obj.hotel
+                    order_obj.check_in = cart_obj.check_in
+                    order_obj.check_out = cart_obj.check_out
                     order_obj.current_state = 1
                     order_obj.check_in_out_rate = info['check_in_out_rate']
                     order_obj.extra_person_rate = info['extra_person_rate']
@@ -871,20 +897,30 @@ def placeOrders(request, ref, cart_id):
                     order_obj.total_amount_dis_incl = info['total_amount_dis_incl']
                     order_obj.total_amount_dis_excl = info['total_amount_dis_excl']
                     order_obj.total_room = info['total_products']
-                    order_obj.reference = str(cart_obj.user.pk) + str(uuid.uuid1())[:7] + str(cart_obj.pk)
+                    order_obj.reference = str(cart_obj.user.pk) + str(cart_obj.pk)
                     order_obj.save()
-                    obj_cart_detail = Cart_detail.objects.filter(cart=cart_obj).select_related('room', 'cart').all()
+                    obj_cart_detail = Cart_detail.objects.filter(cart=cart_obj).select_related('room', 'cart').prefetch_related(Prefetch(
+                        'room__room_pricing', queryset=Room_pricing.objects.filter(
+                    Q(calender_pricing__start_date__lt=datetime.date.today()) & Q(calender_pricing__end_date__gt=datetime.date.today()))
+                    )).all()
                     for detail in obj_cart_detail:
+                        cale = detail.room.room_pricing.first()
+                        if cale is not None:
+                            base_price = cale.price
+                            price = cale.board
+                        else:
+                            price = 0
+                            base_price = 0
                         obj_order_detail = Order_detail()
                         obj_order_detail.name = detail.room.title
                         obj_order_detail.quantity = detail.quantity
                         obj_order_detail.check_in_flag = detail.check_in_flag
                         obj_order_detail.check_out_flag = detail.check_out_flag
                         obj_order_detail.extra_person_quantity = detail.extra_person_quantity
-                        obj_order_detail.base_price = detail.room.base_price
-                        obj_order_detail.total_price_dis_incl = _total_price_dis_incl(detail, info['hotel_discount'])
+                        obj_order_detail.base_price = base_price
+                        obj_order_detail.total_price_dis_incl = _total_price_dis_incl(detail, info['hotel_discount'], price)
                         obj_order_detail.room = detail.room
-                        obj_order_detail.total_price_dis_excl = detail.room.price
+                        obj_order_detail.total_price_dis_excl = price
                         obj_order_detail.order = order_obj
                         obj_order_detail.save()
 
@@ -906,6 +942,8 @@ def placeOrders(request, ref, cart_id):
                         obj_coupon.save()
                     _partial = _partial_hotel(hotel)
                     cart_exists.update(flag=2)
+                    if hotel.type == 2:
+                        SendSms('10', 'PlaceOrder', request.user.username)
                     url = reverse('confirmation', kwargs={'reference': order_obj.reference}),
                     status = 1
                 else:
@@ -927,6 +965,7 @@ def _partials(check_in_out, _partial, person_flag=False):
         return _partial.check_in_out_rate.rate
     else:
         return 0
+
 
 def _partial_hotel(hotel):
     return Hotel.objects.select_related('extra_person_rate', 'check_in_out_rate').get(pk=hotel.pk)

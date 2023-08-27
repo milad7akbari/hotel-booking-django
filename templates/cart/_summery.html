@@ -167,7 +167,7 @@
                                 {% elif field.auto_id == 'id_mobile' %}
                                     <div class="mx-2 display-flex" style="width: 30%">
                                         <label style="width: 75px" class=" fs-13 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
-                                        <input type="number" name="mobile[{{ r.room.pk }}]" class=" fs-14 py-1 w-100 id_mobile inpReservation_" placeholder="{{ field.label }}" maxlength="256" required="" id="">
+                                        <input type="text" name="mobile[{{ r.room.pk }}]" class=" fs-14 py-1 w-100 id_mobile inpReservation_" placeholder="{{ field.label }}" maxlength="256" required="" id="">
                                     </div>
                                 {% elif field.auto_id == 'id_nationality' %}
                                     <div class="mx-2 display-flex" style="width: 30%">

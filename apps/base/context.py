@@ -57,7 +57,7 @@ def header(request):
 
 
 def footer(request):
-    city = Cities.objects.filter(hotel__isnull=False).annotate(count=Count('name')).all()[:10]
+    city = Cities.objects.filter(hotel__isnull=False).annotate(Count('pk', distinct=True)).distinct()[:10]
     footer = Footer.objects.all()
     postal_code = 0
     phone = 0

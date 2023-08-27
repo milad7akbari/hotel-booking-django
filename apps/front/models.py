@@ -97,6 +97,8 @@ class Order(models.Model):
     current_state = models.SmallIntegerField(choices=CURRENTSTATE,null=False, default=1,verbose_name=_('وضعیت فعلی'))
     payment_type = models.SmallIntegerField(choices=PTYPE,null=False, default=1,verbose_name=_('نوع پرداخت'))
     total_paid = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=2,verbose_name=_('مبلغ پرداخت شده'))
+    check_in = models.DateField(default=None, null=True, blank=True,verbose_name=_('ورود'))
+    check_out = models.DateField(default=None, null=True, blank=True,verbose_name=_('خروج'))
     check_in_out_rate = models.DecimalField(null=True, max_digits=12, decimal_places=2,verbose_name=_('مبلغ ورود و خروح'))
     extra_person_rate = models.DecimalField(null=True, max_digits=12, decimal_places=2,verbose_name=_('مبلغ نفر اضافه'))
     total_amount_dis_excl = models.DecimalField(null=True, max_digits=12, decimal_places=2,verbose_name=_('قیمت بدون تخفیف'))

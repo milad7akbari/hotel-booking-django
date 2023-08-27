@@ -1,23 +1,53 @@
 {% extends 'customer/base/base.html' %}
+{% load func_customer %}
 {% load i18n %}
 {% load static %}
 {% block customer_main %}
-    <ul class="p-0 flex-wrap cursor-pointer w-75 mx-auto align-items-center my-4 border-radius-5 d-flex justify-content-between">
-        <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
-            <label class="fs-13 fw-bold" style="width: 150px">{% trans 'نام:' %}</label>
-            <label class="fs-14" style="width: 150px">{{ request.user.first_name|default:'وارد نشده' }}</label>
-        </li>
-        <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
-            <label class="fs-13 fw-bold" style="width: 150px">{% trans 'نام خانوادگی:' %}</label>
-            <label class="fs-14" style="width: 150px">{{ request.user.last_name|default:'وارد نشده' }}</label>
-        </li>
-        <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
-            <label class="fs-13 fw-bold" style="width: 150px">{% trans 'شماره تلفن:' %}</label>
-            <label class="fs-14" style="width: 150px">{{ request.user.username }}</label>
-        </li>
-        <li class="d-flex justify-content-between w-100 my-1 border-bottom py-2 px-3">
-            <label class="fs-13 fw-bold" style="width: 150px">{% trans 'ایمیل:' %}</label>
-            <label class="fs-14" style="width: 150px">{{ request.user.email }}</label>
-        </li>
-    </ul>
+    {% if messages %}
+    <ul class="messages">
+            {% for message in messages %}
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+                <p class="alert fs-14 alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}">{{ message }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form action="{% url 'editPersonality' %}" method="post">
+        {% csrf_token %}
+
+        <ul class="p-0 flex-wrap cursor-pointer w-75 mx-auto align-items-center my-4 border-radius-5 d-flex justify-content-between">
+            {% for field in form %}
+                <li class="d-flex justify-content-between w-100 my-1 py-2 px-3">
+                    <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                    {% if field.name == 'username' %}
+                        <input readonly disabled type="text" value="{% if field.name != 'password' %}{{ request.user|get_obj_attr:field.name }}{% endif %}" name="{{ field.name }}" class=" border-radius-5 fs-13 w-75" placeholder="{{ field.label }}" maxlength="150" id="{{ field.auto_id }}">
+                        {% else %}
+                        <input type="{{ field.field.widget.input_type }}" value="{% if field.name != 'password' %}{{ request.user|get_obj_attr:field.name }}{% endif %}" name="{{ field.name }}" class=" border-radius-5 fs-13 w-75" placeholder="{{ field.label }}" maxlength="150" id="{{ field.auto_id }}">
+                    {% endif %}
+                </li>
+            {% endfor %}
+            <li class="d-flex justify-content-between w-100 my-1 py-2 px-3">
+                <button type="submit" class="border-radius-5 fs-13 w-100  py-2 btn btn-customize">ارسال درخواست</button>
+            </li>
+        </ul>
+    </form>
+    <form id="changePasswordFrm" action="{% url 'editPersonalityPassword' %}" method="post" class="border-top">
+        {% csrf_token %}
+        <p class="err_pass alert alert-danger fs-14" style="display: none"></p>
+        <ul class="p-0 flex-wrap cursor-pointer w-75 mx-auto align-items-center my-4 border-radius-5 d-flex justify-content-between">
+            {% for field in form_1 %}
+                <li class="d-flex justify-content-between w-100 my-1 py-2 px-3">
+                    <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class=" border-radius-5 fs-13 w-75" placeholder="{{ field.label }}" maxlength="150" id="{{ field.auto_id }}">
+                </li>
+            {% endfor %}
+            <li class="d-flex justify-content-between w-100 my-1 py-2 px-3">
+                <label class=" fs-13 mt-2 p-2" for="re_password">{% trans "تکرار پسورد" %}</label>
+                <input type="password" name="re_password" class=" border-radius-5 fs-13 w-75" placeholder="تکرار پسورد" maxlength="150" id="id_re_password">
+            </li>
+            <li class="d-flex justify-content-between w-100 my-1 py-2 px-3">
+                <button type="submit" class="border-radius-5 fs-13 w-100  py-2 btn btn-customize">تغییر پسورد</button>
+            </li>
+        </ul>
+    </form>
 {% endblock %}

@@ -11,13 +11,11 @@
 .filterSortingRooms .w-25-date-picker {
   width: 25%;
 }
-#_app_start {
-  width: 250px !important;
-  margin-top: 5px;
-}
-#_app_to {
-  width: 250px !important;
-  margin-top: 5px;
+#_app_start,
+#_app_hotel,
+#_app_to,
+#_app_submit {
+  width: 24% !important;
 }
 #_choose_room {
   width: 250px !important;

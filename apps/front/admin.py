@@ -1,12 +1,13 @@
 from smtplib import SMTPException
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from jalali_date import datetime2jalali
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from Hotel_Test import settings
+from apps.front.classes.login_register import SendSms
 from apps.front.models import Order, Order_detail, Cart, Cart_detail, PendingOrder, AcceptOrder
 from modeltranslation.admin import TranslationAdmin
 
@@ -24,7 +25,6 @@ class Order_detailInline(admin.TabularInline):
     readonly_fields = (
         'room', 'name', 'quantity', 'check_in_flag', 'check_out_flag', 'extra_person_quantity', 'base_price',
         'total_price_dis_excl', 'total_price_dis_incl')
-    show_change_link = True
 
     def has_delete_permission(self, request, obj=None):
         return True
@@ -46,7 +46,6 @@ class Cart_detailInline(admin.TabularInline):
         'cart', 'room', 'quantity', 'check_in_flag', 'check_out_flag', 'extra_person_quantity', 'flag', 'date_add')
     readonly_fields = (
         'cart', 'room', 'quantity', 'check_in_flag', 'check_out_flag', 'extra_person_quantity', 'flag', 'date_add')
-    show_change_link = True
 
     def has_delete_permission(self, request, obj=None):
         return True
@@ -89,11 +88,6 @@ class CartAdmin(admin.ModelAdmin):
         return datetime2jalali(obj.check_out).strftime('%Y-%m-%d')
 
     j_to.short_description = _('خروج شمسی')
-
-
-
-
-
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -143,26 +137,66 @@ class PendingOrderAdmin(OrderAdmin):
     change_form_template = ''
 
     @admin.action(description=_("تایید کردن"))
-    def current_status_2(modeladmin, request, queryset):
-        queryset.update(current_state=2)
+    def current_status_2(self, request, queryset):
+        for obj in queryset:
+            SendSms(obj.user.first_name, 'RequestApproved', obj.user.username)
+        updated = queryset.update(current_state=2)
+        self.message_user(
+            request,
+            ngettext(
+                "%d سفارش تایید شده اند",
+                "%d سفارش تایید شده اند",
+                updated,
+            )
+            % updated,
+            messages.SUCCESS,
+        )
+
     list_display = (
-        'reference', 'user', 'user_fullname', 'has_breakfast_', 'total_amount_dis_incl', 'total_amount_dis_excl',
+        'reference', 'user', 'user_fullname', 'check_in_', 'check_out_', 'has_breakfast_', 'total_amount_dis_incl', 'total_amount_dis_excl',
         'total_paid', 'hotel', 'cart', 'current_state', 'status','status_2', 'total_room',
         'has_invoice', 'agree_rule', 'j_date_add')
+
     def status(self, obj):
         return False
     status.boolean = True
     status.short_description = _('تایید شد؟')
     def status_2(self, obj):
         return False
+
+    def check_in_(self, obj):
+        if len(str(obj.check_in)) > 5:
+            return datetime2jalali(obj.check_in).strftime('%Y-%m-%d')
+        return obj.check_in
+    def check_out_(self, obj):
+        if len(str(obj.check_out)) > 5:
+            return datetime2jalali(obj.check_out).strftime('%Y-%m-%d')
+        return obj.check_out
     status_2.boolean = True
     status_2.short_description = _('رسید بانکی؟')
+    check_in_.short_description = _('تاریخ ورود')
+    check_out_.short_description = _('تاریخ خروج')
     def get_queryset(self, request):
         return self.model.objects.filter(current_state__lte=1)
 class AcceptOrderAdmin(OrderAdmin):
     actions = ["current_status_3",]
+
+    def check_in_(self, obj):
+        if len(str(obj.check_in)) > 5:
+            return datetime2jalali(obj.check_in).strftime('%Y-%m-%d')
+        return obj.check_in
+
+    def check_out_(self, obj):
+        if len(str(obj.check_out)) > 5:
+            return datetime2jalali(obj.check_out).strftime('%Y-%m-%d')
+        return obj.check_out
+
+    check_in_.short_description = _('تاریخ ورود')
+    check_out_.short_description = _('تاریخ خروج')
+
     @admin.action(description=_("ارسال رسید به هتل ها"))
-    def current_status_3(modeladmin, request, queryset):
+    def current_status_3(self, request, queryset):
+
         subject = 'فراموشی پسورد هتل تیک'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = ('milad07akbari@gmail.com',)
@@ -170,13 +204,35 @@ class AcceptOrderAdmin(OrderAdmin):
         html_message = render_to_string(html_version, {'link': 'link', })
         message = EmailMessage(subject, html_message, email_from, recipient_list)
         message.content_subtype = 'html'  # this is required because there is no plain text email version
+        updated = 0
         try:
             message.send()
-            queryset.update(current_state=3)
+            updated = queryset.update(current_state=3)
+            self.message_user(
+                request,
+                ngettext(
+                    "%d ارسال رسید به هتل ها انجام شد",
+                    "%d ارسال رسید به هتل ها انجام شد",
+                    updated,
+                )
+                % updated,
+                messages.SUCCESS,
+            )
         except SMTPException as e:
+            self.message_user(
+                request,
+                ngettext(
+                    "%d ارسال رسید به هتل ها انجام نشد",
+                    "%d ارسال رسید به هتل ها انجام نشد",
+                    updated,
+                )
+                % updated,
+                messages.ERROR,
+            )
             return False
+
     list_display = (
-        'reference', 'user', 'user_fullname', 'has_breakfast_', 'total_amount_dis_incl', 'total_amount_dis_excl',
+        'reference', 'user', 'user_fullname', 'check_in_', 'check_out_', 'has_breakfast_', 'total_amount_dis_incl', 'total_amount_dis_excl',
         'total_paid', 'hotel', 'cart', 'current_state', 'status', 'status_2', 'total_room',
         'has_invoice', 'agree_rule', 'j_date_add')
 

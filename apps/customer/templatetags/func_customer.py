@@ -10,3 +10,7 @@ def currentState(state):
         return _('در انتظار تایید')
     else:
         return _('تایید شد')
+
+@register.filter
+def get_obj_attr(obj, attr):
+    return getattr(obj, attr)

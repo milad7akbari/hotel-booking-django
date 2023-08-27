@@ -199,7 +199,7 @@ class registerGuestFromReservationForm(forms.ModelForm):
         widgets = {
             'fullname': forms.TextInput(attrs={"class": ' fs-14 py-1 w-100',
                                                    "placeholder": _('نام کامل')}),
-            'mobile': forms.NumberInput(attrs={"class": ' fs-14 py-1 w-100',
+            'mobile': forms.TextInput(attrs={"class": ' fs-14 py-1 w-100',
                                                   "placeholder": _('تلفن')}),
             'username': forms.Select(choices=CHOICES,attrs={"class": ' fs-14 py-1 w-100',
                                                  "placeholder": _('ملیت')}),

@@ -28,7 +28,7 @@
                     <div class="w-100 m-auto display-flex _summery_step_details justify-content-evenly">
                         <div class="w-25 text-center flex-wrap display-flex">
                             <label class="fs-13 w-100 text-muted">{% trans 'نام اتاق: ' %}</label>
-                            <label class="fs-15 text-black w-100">{{ detail.room.title }}</label>
+                            <label class="fs-15 text-black w-100">{{ detail.room.title }} </label>
                         </div>
                         <div class="w-25 text-center flex-wrap display-flex">
                             <label class="fs-13 w-100 text-muted">{% trans 'تعداد درخواستی: ' %}</label>
@@ -97,6 +97,7 @@
 </div>
 {% if not info.coupon %}
 <form id="addCouponToCart" action="{% url 'addCouponToCart' cart.pk %}" method="post" class="my-5">
+{% csrf_token %}
     <div class="bg-white px-1 pt-3  w-100 m-auto " style=" ">
         <div class="inputContainer my-2 d-flex flex-wrap w-100">
             <label class="fs-13 mb-2 text-center w-100">{% trans 'قابل پرداخت' %}</label>

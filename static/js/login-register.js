@@ -70,6 +70,15 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
     $(document).on('click' , '.btnRegisterNewUser' , function () {
         modalRegisterForm('register-new')
     })
+    $(document).on('submit' , '#changePasswordFrm' , function (e) {
+        $(this).find('.err_pass').hide()
+        if ($('#id_password').val() != $('#id_re_password').val() || $('#id_re_password').val().length <= 1){
+            console.log('S')
+            e.preventDefault()
+            $(this).find('.err_pass').html('پسورد ها مساوی نیست و حداقل 6 کارکتر').show();
+            return false
+        }
+    })
     $(document).on('click' , '.btnCloseModal' , function () {
         $("#registerLoginModal").remove();
     })

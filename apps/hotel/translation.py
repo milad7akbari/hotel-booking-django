@@ -14,7 +14,8 @@ class HotelTranslationOptions(TranslationOptions):
         'address',
         'meta_keywords',
     )
-    required_languages = ('en', 'fa')
+    required_languages = {'en': ('name', ) ,'default': ('name',)}
+
 
 
 @register(Facility)
@@ -22,7 +23,6 @@ class FacilityTranslationOptions(TranslationOptions):
     fields = (
         'title',
     )
-    required_languages = ('en', 'fa')
 
 
 @register(Close_spots)
@@ -30,7 +30,6 @@ class Close_spotsTranslationOptions(TranslationOptions):
     fields = (
         'short_desc',
     )
-    required_languages = ('en', 'fa')
 
 @register(Room)
 class RoomTranslationOptions(TranslationOptions):

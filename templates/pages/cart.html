@@ -42,9 +42,7 @@
             {% if step.step == 1 %}
                 {% include 'cart/_summery.html' with room=room ref=ref form=form %}
             {% elif step.step == 2 %}
-                {% include 'cart/_reservation_payment_form.html' with info=info form_pay=form_pay ref=ref cart=cart %}
-            {% elif step.step == 3 %}
-                واچر
+                {% include 'cart/_reservation_payment_form.html' with info=cart form_pay=form_pay ref=ref cart=cart %}
             {% endif %}
             </div>
         </div>

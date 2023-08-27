@@ -1,8 +1,14 @@
-from django.db.models import Prefetch
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
+from apps.customer.forms import editUser, editUserPassword
 from apps.front.models import Order, Cart_rule
-from django.views.generic.detail import DetailView
 
 # Create your views here.
 def voucher(request):
@@ -31,5 +37,44 @@ def quickReserve(request):
     return render(request, 'customer/quick-reservation.html', context)
 
 def personality(request):
-    context = {}
+    context = {
+        'form' : editUser,
+        'form_1' : editUserPassword,
+    }
     return render(request, 'customer/personality.html', context)
+
+def editPersonality(request):
+    if request.method == 'POST':
+        user = User.objects.get(pk=request.user.pk)
+        form = editUser(instance=user, data=request.POST, user=request.user)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            messages.success(request, _('تغییر اطلاعات موفقیت آمیز بود.'))
+        else:
+            for i in form.errors:
+                msg = form.errors[i]
+                messages.error(request, msg)
+        return HttpResponseRedirect(reverse("personality"))
+    else:
+        return HttpResponseRedirect(reverse("personality"))
+
+
+def editPersonalityPassword(request):
+    if request.method == 'POST':
+        user = User.objects.get(pk=request.user.pk)
+        form = editUserPassword(instance=user, data=request.POST, user=request.user)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.set_password(request.POST.get('password'))
+            instance.save()
+            update_session_auth_hash(request, instance)
+            messages.success(request, _('تغییر پسورد موفقیت آمیز بود.'))
+        else:
+            for i in form.errors:
+                msg = form.errors[i]
+                messages.error(request, msg)
+        return HttpResponseRedirect(reverse("personality"))
+    else:
+        return HttpResponseRedirect(reverse("personality"))
+

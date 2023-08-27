@@ -103,6 +103,24 @@ class Provinces(models.Model):
     def __str__(self):
         return str(self.name)
 
+class Sms_log(models.Model):
+    code = models.CharField(null=True, max_length=128, verbose_name=_('کد'))
+    receiver = models.CharField(null=True, max_length=128, verbose_name=_('دریافت کننده'))
+    type = models.CharField(null=True, max_length=128, verbose_name=_('نوع'))
+    message = models.TextField(null=True, verbose_name=_('متن'))
+    status_code = models.SmallIntegerField(null=True, verbose_name=_('کد برگشتی'))
+    date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
+
+    def __unicode__(self):
+        return str(self.code)
+
+    class Meta:
+        verbose_name = _('پیامک ها')
+        verbose_name_plural = _('پیامک ها')
+
+    def __str__(self):
+        return str(self.code)
+
 
 class Cities(models.Model):
     def validate_image(self):

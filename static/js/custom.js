@@ -1,4 +1,25 @@
 $(document).ready(function () {
+
+
+    function checkCalcDiff(diff) {
+        let final = 0
+        if (diff > 0) {
+            $('.countOrderRoomPerson').each(function () {
+                const base_price = $(this).parents('.hotelPricing').attr('data-price')
+                final = diff * base_price
+                $(this).attr('data-price', final)
+                $(this).parents('.hotelPricing').find('._price_per_night').html(Math.round(final).toLocaleString())
+                $('.containerMsgDiv').empty();
+            });
+        } else {
+            $('.containerMsgDiv').html('<p class="alert alert-warning fs-13 w-100">' + $('.containerMsgDiv').attr('data-msg-lang') + '</p>')
+            $('.countOrderRoomPerson').each(function () {
+                const base_price = $(this).parents('.hotelPricing').attr('data-price')
+                $(this).parents('.hotelPricing').find('._price_per_night').html(Math.round(base_price).toLocaleString())
+            });
+        }
+    }
+
     $(document).on('click', '.btnShowMenuMain', function (e) {
         $(this).parents('.header_top_container').next().slideToggle(0)
     });
@@ -144,11 +165,12 @@ $(document).ready(function () {
                         scrollTop: $("#addToCartDetails").offset().top
                     }, 2000);
                 } else if (data.status == 1) {
-                    $('._step_2').toggleClass('pending-tl active-tl')
-                    $('._step_3').addClass('pending-tl')
-                    $('.errMsg').html('')
-                    $('._reservation_form_main').empty().html(data.html)
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    location.reload();
+                    //$('._step_2').toggleClass('pending-tl active-tl')
+                    //$('._step_3').addClass('pending-tl')
+                    //$('.errMsg').html('')
+                    // $('._reservation_form_main').empty().html(data.html)
+                    // window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             },
             error: function (xhr, desc, err) {
