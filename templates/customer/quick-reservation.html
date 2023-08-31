@@ -1,40 +1,48 @@
 {% extends 'customer/base/base.html' %}
+{% load function %}
 {% load i18n %}
+{% load function %}
+{% load jalali_tags %}
 {% load static %}
+{% block js %}
+    <script src="{% static 'js/vue.min.js' %}"></script>
+    <script src="{% static 'js/date-picker.min.js' %}"></script>
+    <script src="{% static 'js/date-picker-vue.js' %}"></script>
+{% endblock %}
 {% block customer_main %}
     <div class="w-100">
         <h6 class="text-center my-3">{% trans 'در فرم زیر میتوانید بدون درگیری با صفحات مختلف هتل مورد نظر خود را رزرو کنید!' %}</h6>
+
         <form class="mt-3 w-100">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label for="" class="fs-13 form-label">تعداد</label>
-                    <select type="text" class="form-control" required>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                    </select>
+
+            <div class="d-flex w-100">
+                <div id="_app_start" class="my-2">
+                    <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'تاریخ ورود' %}</label>
+                    <date-picker required @open="open" @submit="submit" color="green" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{% trans 'تاریخ ورود' %}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ request.LANGUAGE_CODE|currentDate }}" readonly alt-name="check-in-" :modal="true" />
                 </div>
-                <div class="col-md-4">
-                    <label for="" class="fs-13 form-label">{% trans 'تاریخ ورود' %}</label>
-                    <input type="text" class="form-control" required>
+                <div id="_app_to" class="my-2">
+                    <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'تاریخ خروج' %}</label>
+                    <date-picker required @open="open" @submit="submit" color="green" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{% trans 'تاریخ خروج' %}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ request.LANGUAGE_CODE|currentDate }}" readonly alt-name="check-out-" :modal="true" />
                 </div>
-                <div class="col-md-4">
-                    <label for="" class="fs-13 form-label">{% trans 'تاریخ خروج' %}</label>
-                    <input type="text" class="form-control" required>
+                <div id="_app_submit" class="my-2">
+                    <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'مدت اقامت ' %}</label>
+                    <p class="fs-14 w-100 d-none text-color-customize diff_front_ text-center" data-lang="">
+                        {% trans ' روز' %}
+                    </p>
                 </div>
             </div>
-            <div class="row mt-3 g-3">
-                <div class="col-md-4">
-                    <label for="" class="fs-13 form-label">نام شهر</label>
-                    <input type="text" class="form-control" required>
-                </div>
-                <div class="col-md-4">
+            <div class="d-flex mt-3 g-3">
+                <div class="col-md-4 position-relative">
                     <label for="" class="fs-13 form-label">نام هتل</label>
-                    <input type="text" class="form-control" required>
+                    <input type="text" class="form-control" id="hotel_name_q" required>
+                    <ul class="w-100 flex-wrap roomContainerQ bg-white display-flex position-absolute" style="z-index: 1;display: none;padding: unset;box-shadow: -1px 5px 3px 2px #eee;">
+                    </ul>
                 </div>
                 <div class="col-md-4">
                     <label for="" class="fs-13 form-label">اتاق</label>
-                    <input type="text" class="form-control" required>
+                    <select class="roomsContainerQ">
+
+                    </select>
                 </div>
             </div>
         </form>

@@ -36,7 +36,6 @@ $(document).ready(function () {
     })
 
 
-
     new Vue({
         el: '#_app_to',
         components: {
@@ -53,7 +52,7 @@ $(document).ready(function () {
                 const diffTime = date2 - date1;
                 this.dayCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-                $('.diff_front_').removeClass('d-none').html($('.diff_front_').attr('data-lang') + ' ' + this.dayCount + ' شب ')
+                $('.diff_front_').removeClass('d-none').html($('.diff_front_').attr('data-lang') + ' ' + this.dayCount + ' 記蚓 ')
                 if (this.dayCount > 0){
                     checkCalcDiff(this.dayCount)
                 }else $('.containerMsgDiv').empty().append('<p class="alert alert-warning fs-13 w-100">'+$('.containerMsgDiv').attr('data-msg-lang')+'</p>')
@@ -68,7 +67,4 @@ $(document).ready(function () {
             },
         }
     })
-    $('.pdp-group .pdp-pointer').remove()
-
-
 })

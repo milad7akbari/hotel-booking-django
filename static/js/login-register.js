@@ -107,11 +107,7 @@ $(document).on('submit', '#registerNewCustomers', function (e) {
                         $('#id_'+error).addClass('border-red-err box-shadow-red-err text-danger')
                     }
                 } else {
-                    $('.errMsg').addClass('d-block alert-success').removeClass('d-none alert-danger').html(data.result)
-                    $('.btnRegisterLoginPasswd').find('label').html('<a href="/panel">حساب کاربری</a>').removeClass('btnRegisterLoginPasswd')
-                    setTimeout(function () {
-                        $("#registerLoginModal").remove();
-                    } , 1000)
+                    $('#reviewsSubmit').parent().empty().append('<p class="alert-success fs-14 w-100 alert">'+data.result+'</p>')
                 }
             },
             error: function (xhr, desc, err) {

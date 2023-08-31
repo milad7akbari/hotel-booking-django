@@ -23,11 +23,58 @@ $(document).ready(function () {
     $(document).on('click', '.btnShowMenuMain', function (e) {
         $(this).parents('.header_top_container').next().slideToggle(0)
     });
+
+    $(document).on('keyup', '#hotel_name_q', function (e) {
+        const hotel_name = $(this).val()
+        $.ajax({
+            url: '/get/hotel-city/' + hotel_name,
+            type: 'GET',
+            dataType: "JSON",
+            success: function (data) {
+                var records = data.hotel;
+                var out = '';
+                for (const i in records) {
+                    const record = records[i];
+                    out += '<li class="w-100 my-2 fs-13" data-id="'+record.pk+'">'+record.name+'</li>';
+                }
+                $('.roomContainerQ').show().empty().html(out);
+            },
+            error: function (xhr, desc, err) {
+                $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
+            }
+        });
+    });
+
+    $(document).on('click', '.roomContainerQ li', function (e) {
+        const hotel_id = $(this).attr('data-id')
+        const checkIn = $('input[name=check-in-]').val()
+        const checkOut = $('input[name=check-out-]').val()
+        $.ajax({
+            url: '/get/hotel-rooms/' + hotel_id + '/' + checkIn + '/' + checkOut,
+            type: 'GET',
+            dataType: "JSON",
+            success: function (data) {
+                var records = data.room;
+                var out = '';
+                for (const i in records) {
+                    const record = records[i];
+                    out += '<option class="w-100 my-2 fs-13" value="'+record.id+'">'+record.name+'</option>';
+                }
+                $('.roomsContainerQ').show().empty().html(out);
+            },
+            error: function (xhr, desc, err) {
+                $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
+            }
+        });
+    });
+
     $(document).on('click', '.btnShowRooms', function (e) {
         $([document.documentElement, document.body]).animate({
             scrollTop: $(".formReservation").offset().top
         }, 2000);
     });
+
+
 
     function en_digit(thiss) {
         const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
@@ -36,6 +83,7 @@ $(document).ready(function () {
         final = a2e(final)
         thiss.val(final)
     }
+
     $(document).on('keyup', 'input', function (e) {
         en_digit($(this))
     });
@@ -86,11 +134,9 @@ $(document).ready(function () {
     });
 
 
-
-
     $(document).on('submit', '#addToCartDetails', function (e) {
         let flag = false
-        if ($(this).attr('data-auth') === 1){
+        if ($(this).attr('data-auth') === 1) {
             $('.__frm_user_reservation').find('sup').remove();
             $('.__frm_user_reservation').find('input').removeClass('border-red-err box-shadow-red-err text-danger');
             if ($('#id_first_name').val().length <= 2) {
@@ -181,9 +227,6 @@ $(document).ready(function () {
     });
 
 
-
-
-
     $(document).on('submit', '#placeOrders', function (e) {
         if (!$('#id_agree_rule').is(':checked')) {
             $('#id_agree_rule').next().addClass('text-danger');
@@ -209,7 +252,7 @@ $(document).ready(function () {
 
     $(document).on('submit', '#addCouponToCart', function (e) {
         $('.errMsgCoupon').html('')
-        if ($('#coupon').val().length <= 5){
+        if ($('#coupon').val().length <= 5) {
             $('#coupon').addClass('border-red-err box-shadow-red-err text-danger');
             return false
         }

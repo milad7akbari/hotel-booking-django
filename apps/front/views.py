@@ -18,7 +18,7 @@ import datetime
 from django.contrib.auth.models import User
 from jdatetime import timedelta
 
-from Hotel_Test import settings
+from hotel import settings
 from apps.base.models import Forgot_password, Slider, Meta, Cities, Pages, Configuration
 from apps.blog.models import Main
 from apps.front.classes.login_register import SendSms

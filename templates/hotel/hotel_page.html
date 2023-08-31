@@ -3,7 +3,8 @@
 {% block meta_desc %} {{ hotel.description }} {% endblock %}
 {% block meta_keywords %} {{ h.name.split|join:"," }} {% endblock %}
 {% load function %}
-{% load humanize %}{% load jalali_tags %}
+{% load humanize %}
+{% load jalali_tags %}
 
 {% load i18n %}
 {% load static %}
@@ -72,11 +73,11 @@
                             <div class="w-100 _container_room_ flex-wrap d-flex justify-content-center">
                                 <div id="_app_start" class="my-2">
                                     <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'تاریخ ورود' %}</label>
-                                    <date-picker required @open="open" @submit="submit" color="green" :auto-submit="true" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{{ checkIn|to_jalali:"%Y-%m-%d" }}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="check-in-" :modal="true" />
+                                    <date-picker required @open="open" @submit="submit" color="green" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{{ checkIn|to_jalali:"%Y-%m-%d" }}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ request.LANGUAGE_CODE|currentDate }}" readonly alt-name="check-in-" :modal="true" />
                                 </div>
                                 <div id="_app_to" class="my-2">
                                     <label class="w-100 fs-13 pb-2 px-2  textRight">{% trans 'تاریخ خروج' %}</label>
-                                    <date-picker required @open="open" @submit="submit" color="green" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{{ checkOut|to_jalali:"%Y-%m-%d" }}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ 'date'|currentDate }}" readonly alt-name="check-out-" :modal="true" />
+                                    <date-picker required @open="open" @submit="submit" color="green" to="{{ 'date'|currentDatePlusMonth }}" placeholder="{{ checkOut|to_jalali:"%Y-%m-%d" }}" locale="{% if request.LANGUAGE_CODE == 'fa' %}fa{% else %}en{% endif %}" :column="1" mode="single" input-format="jYYYY-jMM-jDD" from="{{ request.LANGUAGE_CODE|currentDate }}" readonly alt-name="check-out-" :modal="true" />
                                 </div>
                                 <div id="_app_submit" class="my-2">
                                     <label class="w-100 fs-13 pb-2 px-2  textRight">&nbsp;&nbsp;&nbsp;</label>
@@ -277,39 +278,37 @@
                         <button type="button" class="btn btnAddReviews btn-primary m-2" style="width: 150px">{% trans 'ثبت نظر' %}</button>
                     </div>
                     <div class="w-100 reviewsContainer mx-auto mb-3 border border-radius-15 p-3 display-flex justify-content-end">
-
-                    <form id="reviewsSubmit" action="{% url 'reviewsSubmit' %}" method="post" class="row w-50 m-auto g-3 dir-rtl">{% csrf_token %}
-                        <input type="hidden" name="hotel_ref" value="{{ hotel.reference }}">
-                        <p class="alert-danger alert errMsg d-none" ></p>
-                        <div class="col-md-12">
-                            <div class="review-container" id="id_star_container">
-                              <label data-val="1" class="star"><span class="stararea">★</span></label>
-                              <label data-val="2" class="star"><span class="stararea">★</span></label>
-                              <label data-val="3" class="star"><span class="stararea">★</span></label>
-                              <label data-val="4" class="star"><span class="stararea">★</span></label>
-                              <label data-val="5" class="star"><span class="stararea">★</span></label>
+                        <form id="reviewsSubmit" action="{% url 'reviewsSubmit' hotel.reference %}" method="post" class="row w-50 m-auto g-3 dir-rtl">{% csrf_token %}
+                            <input type="hidden" name="hotel_ref" value="{{ hotel.reference }}">
+                            <div class="col-md-12">
+                                <div class="review-container" id="id_star_container">
+                                  <label data-val="1" class="star"><span class="stararea">★</span></label>
+                                  <label data-val="2" class="star"><span class="stararea">★</span></label>
+                                  <label data-val="3" class="star"><span class="stararea">★</span></label>
+                                  <label data-val="4" class="star"><span class="stararea">★</span></label>
+                                  <label data-val="5" class="star"><span class="stararea">★</span></label>
+                                </div>
                             </div>
-                        </div>
-                        {% for field in form %}
-                            {% if field.auto_id == 'id_stars' %}
-                                {{ field }}
-                            {% elif field.auto_id == 'id_short_desc' %}
-                                <div class="col-md-12">
-                                    <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                            {% for field in form %}
+                                {% if field.auto_id == 'id_stars' %}
                                     {{ field }}
-                                </div>
-                            {% else %}
-                                <div class="col-md-6">
-                                    <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
-                                    {{ field }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        <div class="col-md-6">
-                             <button type="submit" class="btn w-100 btn-primary">{% trans 'ثبت نظر' %}</button>
-                        </div>
-                    </form>
-                </div>
+                                {% elif field.auto_id == 'id_short_desc' %}
+                                    <div class="col-md-12">
+                                        <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                                        {{ field }}
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-6">
+                                        <label class=" fs-13 mt-2 p-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                                        {{ field }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <div class="col-md-6">
+                                 <button type="submit" class="btn w-100 btn-primary">{% trans 'ثبت نظر' %}</button>
+                            </div>
+                        </form>
+                    </div>
                 {% endif %}
                 {% include '_partial/_reviews.html' with reviews=reviews %}
                 </div>

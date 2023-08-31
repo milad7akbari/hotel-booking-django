@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from jalali_date import datetime2jalali
 from django.utils.translation import gettext_lazy as _, ngettext
 
-from Hotel_Test import settings
+from hotel import settings
 from apps.front.classes.login_register import SendSms
 from apps.front.models import Order, Order_detail, Cart, Cart_detail, PendingOrder, AcceptOrder
 from modeltranslation.admin import TranslationAdmin

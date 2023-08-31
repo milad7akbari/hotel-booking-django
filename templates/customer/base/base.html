@@ -3,8 +3,8 @@
 {% load static %}
 {% block main %}
 <div id="_main" class="w-100 bg-light m-auto">
-    <div id="customersMain" class=" w-100 overflow-hidden">
-        <div class="row justify-content-evenly">
+    <div id="customersMain" class="w-100">
+        <div class="justify-content-evenly d-flex">
             <div class="col-xl-3 col-md-3">
                 <div class="customer-category-content bg-white my-2 p-2 border-radius-5">
                     <h6 class="mt-2 fs-13 text-center">{% trans 'شما با این شماره تلفن وارد شده اید' %}</h6>
@@ -26,7 +26,11 @@
                         </li>
                         <li class="w-100 cursor-pointer justify-content-between position-relative display-flex align-items-center fs-13">
                             <label class="icon-checkmark position-absolute" style="right: 5px"></label>
-                            <a href="{% url 'panelOrders' %}" class="px-4">سفارشات من</a>
+                            <a href="{% url 'panelOrders' 'Pending' %}" class="px-4">سفارشات در انتظار تکمیل</a>
+                        </li>
+                        <li class="w-100 cursor-pointer justify-content-between position-relative display-flex align-items-center fs-13">
+                            <label class="icon-checkmark position-absolute" style="right: 5px"></label>
+                            <a href="{% url 'panelOrders' 'Done' %}" class="px-4">سفارشات تکمیل تکمیل شده</a>
                         </li>
                         <li class="w-100 cursor-pointer justify-content-between position-relative display-flex align-items-center fs-13">
                             <label class="icon-gift position-absolute" style="right: 5px"></label>
