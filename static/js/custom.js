@@ -23,19 +23,23 @@ $(document).ready(function () {
     $(document).on('click', '.btnShowMenuMain', function (e) {
         $(this).parents('.header_top_container').next().slideToggle(0)
     });
+    $(document).on('click', '.btnAddNewRows', function (e) {
+        $(this).parents('.quickRowItemContainer').append('<div class="d-flex quickRowItem mt-3 g-3">'+$('.quickRowItem:last-child').html()+'</div>')
+        $(this).remove()
+    });
 
     $(document).on('keyup', '#hotel_name_q', function (e) {
-        const hotel_name = $(this).val()
         $.ajax({
-            url: '/get/hotel-city/' + hotel_name,
+            url: '/get/hotel-city',
             type: 'GET',
+            data: {'hotel_name' : $(this).val()},
             dataType: "JSON",
             success: function (data) {
                 var records = data.hotel;
                 var out = '';
                 for (const i in records) {
                     const record = records[i];
-                    out += '<li class="w-100 my-2 fs-13" data-id="'+record.pk+'">'+record.name+'</li>';
+                    out += '<li class="w-100 my-2 fs-13" data-id="'+record.pk+'" data-ref="'+record.reference+'">'+record.name+ ' - ' +record.city__name+'</li>';
                 }
                 $('.roomContainerQ').show().empty().html(out);
             },
@@ -46,26 +50,39 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.roomContainerQ li', function (e) {
+        $('#reference_hotel').val($(this).attr('data-ref'))
         const hotel_id = $(this).attr('data-id')
         const checkIn = $('input[name=check-in-]').val()
         const checkOut = $('input[name=check-out-]').val()
+        $('#hotel_name_q').val($(this).text())
+        $('.roomContainerQ').hide()
         $.ajax({
             url: '/get/hotel-rooms/' + hotel_id + '/' + checkIn + '/' + checkOut,
             type: 'GET',
             dataType: "JSON",
             success: function (data) {
                 var records = data.room;
-                var out = '';
+                var out = '<option class="w-100 my-2 fs-13" value="0">انتخاب کنید</option>';
                 for (const i in records) {
                     const record = records[i];
-                    out += '<option class="w-100 my-2 fs-13" value="'+record.id+'">'+record.name+'</option>';
+                    out += '<option class="w-100 my-2 fs-13" data-capacity="'+record.capacity+'" value="'+record.id+'">'+record.name+'</option>';
                 }
                 $('.roomsContainerQ').show().empty().html(out);
+
             },
             error: function (xhr, desc, err) {
                 $('.errMsg').removeClass('d-none').addClass('d-block').html('خطایی در درخواست شما روی داد لطفا دوباره تلاش کنید')
             }
         });
+    });
+    $(document).on('click', '.roomsContainerQ option', function (e) {
+        const thiss = $(this);
+        const capacity = $(this).attr('data-capacity')
+        var out = '<option class="w-100 my-2 fs-13" value="0">انتخاب کنید</option>';
+        for (let i =1; i <= capacity; i++){
+            out += '<option class="w-100 my-2 fs-13" value="'+i+'">'+i+'</option>';
+        }
+        thiss.parents('div').next().find('.roomsContainerQtyQ').show().empty().html(out);
     });
 
     $(document).on('click', '.btnShowRooms', function (e) {

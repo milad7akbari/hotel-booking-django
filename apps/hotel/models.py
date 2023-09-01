@@ -329,14 +329,14 @@ class Room_facility(models.Model):
 class Reviews(models.Model):
     TYPE_TRUE = ((1, 'نمایان'), (0, 'مخفی'),)
     TYPE_STARS = ((1, '1'), (2, '2'), (4, '3'), (4, '4'), (5, '5'),)
-    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("نام هتل"))
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_("مشتری"))
+    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, verbose_name=_("نام هتل"))
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name=_("مشتری"))
     stars = models.SmallIntegerField(choices=TYPE_STARS, null=False, default=0, verbose_name=_("ستاره"))
     title = models.CharField(null=False, default=None, max_length=255, verbose_name=_("عنوان"))
     short_desc = models.TextField(null=True, blank=True, default=None, verbose_name=_("توضیحات کوتاه"))
     desc_good = models.TextField(null=True, blank=True, verbose_name=_("نکات مثبت"))
     desc_bad = models.TextField(null=True, blank=True, verbose_name=_("نکات منفی"))
-    active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("فعال"))
+    active = models.SmallIntegerField(choices=TYPE_TRUE, null=False, default=0, verbose_name=_("وضعیت مشاهده"))
     date_upd = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ آپدیت'))
     date_add = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_('تاریخ ایجاد'))
 
@@ -453,14 +453,15 @@ class Room_pricing(models.Model):
         return str(self.room)
 
     def save(self, *args, **kwargs):
-        reduction_type = self.calender_pricing.reduction_type
-        reduction = self.calender_pricing.reduction
-        if reduction_type == 1: #perc
-            price = self.board * int(reduction) / 100
-        else:
-            price = self.board - int(reduction)
-        self.price = round(price)
-        super(Room_pricing, self).save(*args, **kwargs)
+        if self.calender_pricing is not None:
+            reduction_type = self.calender_pricing.reduction_type
+            reduction = self.calender_pricing.reduction
+            if reduction_type == 1: #perc
+                price = self.board * int(reduction) / 100
+            else:
+                price = self.board - int(reduction)
+            self.price = round(price)
+            super(Room_pricing, self).save(*args, **kwargs)
 
 class Calender_pricing(models.Model):
     TYPE_REDUCTION = ((1, 'درصد'), (2, 'مقدار'),)

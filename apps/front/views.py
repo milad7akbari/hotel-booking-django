@@ -631,41 +631,45 @@ def addToCart(request, ref):
         if not request.session.session_key:
             request.session.save()
         session_key = request.session.session_key
-        hotel = get_object_or_404(Hotel, reference=ref)
+        if ref == 'quick':
+            ref = request.POST.get('ref')
+            hotel = get_object_or_404(Hotel, reference=ref)
+            ref = hotel.reference
+        else:
+            hotel = get_object_or_404(Hotel, reference=ref)
+
         if request.user.is_authenticated:
             cart_check = Cart.objects.filter(user_id=request.user.pk, hotel_id=hotel.pk, flag=1).first()
         else:
             cart_check = Cart.objects.filter(secure_key=session_key, hotel_id=hotel.pk, flag=1).first()
-
-        try:
-            d1 = datetime.datetime.strptime(request.POST.get('check-in'), "%Y-%m-%d")
-            d2 = datetime.datetime.strptime(request.POST.get('check-out'), "%Y-%m-%d")
-        except ValueError:
-            return redirect(reverse('hotelPage', kwargs={'ref': ref, 'title': hotel.name}) + '?diff=false')
-
-        diff = d2 - d1
         checkInDate = request.POST.get('check-in')
         checkOutDate = request.POST.get('check-out')
+
+        try:
+            d1 = datetime.datetime.strptime(checkInDate, "%Y-%m-%d")
+            d2 = datetime.datetime.strptime(checkOutDate, "%Y-%m-%d")
+        except ValueError:
+            return redirect(reverse('hotelPage', kwargs={'ref': ref, 'title': hotel.name}) + '?diff=fwqdqwdalse')
+
+        diff = d2 - d1
+
         if diff.days > 0:
             if cart_check is not None:
                 obj_cart = Cart.objects.get(pk=cart_check.pk)
                 obj_cart.flag = 3
                 obj_cart.save()
             if request.user.is_authenticated:
-                cart_check = Cart(hotel_id=hotel.pk, check_in=checkInDate, check_out=checkOutDate,
-                                  user_id=request.user.pk, secure_key=session_key)
+                cart_check = Cart(hotel_id=hotel.pk, check_in=checkInDate, check_out=checkOutDate, user_id=request.user.pk, secure_key=session_key)
             else:
-                cart_check = Cart(hotel_id=hotel.pk, check_in=checkInDate, check_out=checkOutDate,
-                                  secure_key=session_key)
+                cart_check = Cart(hotel_id=hotel.pk, check_in=checkInDate, check_out=checkOutDate, secure_key=session_key)
             cart_check.save()
             Cart_detail.objects.filter(cart_id=cart_check.pk).update(flag=3)
             flag = False
-            if request.POST.getlist('qty[]') and request.POST.getlist('room[]'):
-
-                for idx, qty in enumerate(request.POST.getlist('qty[]')):
+            if request.POST.getlist('qty') and request.POST.getlist('room'):
+                for idx, qty in enumerate(request.POST.getlist('qty')):
                     if qty.isdigit() and int(qty) > 0:
 
-                        room_id = request.POST.getlist('room[]')[idx]
+                        room_id = request.POST.getlist('room')[idx]
                         if room_id.isdigit() and int(room_id) > 0:
                             check = Room.objects.filter(pk=room_id, hotel_id=hotel.pk).exists()
                             if check:
@@ -924,14 +928,15 @@ def placeOrders(request, ref, cart_id):
                         obj_order_detail.order = order_obj
                         obj_order_detail.save()
 
-                        obj_cart_detail_guest = Cart_guest.objects.filter(cart_detail=detail, flag=1).first()
-                        obj_order_detail_guest = Order_detail_guest()
-                        obj_order_detail_guest.room = obj_cart_detail_guest.room
-                        obj_order_detail_guest.order_detail = obj_order_detail
-                        obj_order_detail_guest.fullname = obj_cart_detail_guest.fullname
-                        obj_order_detail_guest.mobile = obj_cart_detail_guest.mobile
-                        obj_order_detail_guest.nationality = obj_cart_detail_guest.nationality
-                        obj_order_detail_guest.save()
+                        obj_cart_detail_guest = Cart_guest.objects.filter(cart_detail=detail, flag=1).all()
+                        for gu_ in obj_cart_detail_guest:
+                            obj_order_detail_guest = Order_detail_guest()
+                            obj_order_detail_guest.room = gu_.room
+                            obj_order_detail_guest.order_detail = obj_order_detail
+                            obj_order_detail_guest.fullname = gu_.fullname
+                            obj_order_detail_guest.mobile = gu_.mobile
+                            obj_order_detail_guest.nationality = gu_.nationality
+                            obj_order_detail_guest.save()
 
                     stepChangeStatus(cart_obj.pk, 3)
                     if info['coupon_exists']:

@@ -161,7 +161,7 @@ class Order_detail_guest(models.Model):
     FLAG = ((2, 'Done'), (3, 'Delete'),)
     NATIONALITY = ((1, _('ایرانی')), (2, _('غیر ایرانی')),)
     room = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True, related_name='order_detail_guest',verbose_name=_('اتاق'))
-    order_detail = models.OneToOneField(Order_detail, on_delete=models.SET_NULL, blank=True, null=True, related_name='order_detail_guest',verbose_name=_('جزئیات سفارش'))
+    order_detail = models.ForeignKey(Order_detail, on_delete=models.SET_NULL, blank=True, null=True, related_name='order_detail_guest',verbose_name=_('جزئیات سفارش'))
     fullname = models.CharField(default=None, null=True, max_length=255,verbose_name=_('نام کامل'))
     mobile = models.CharField(default=None, null=True, max_length=255,verbose_name=_('موبایل'))
     nationality = models.SmallIntegerField(choices=NATIONALITY, null=True,verbose_name=_('ملیت'))

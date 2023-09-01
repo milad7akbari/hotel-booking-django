@@ -139,9 +139,6 @@ def hotelPage(request, ref, title):
     check_in = datetime.datetime.strptime(checkIn, "%Y-%m-%d")
     check_out = datetime.datetime.strptime(checkOut, "%Y-%m-%d")
     delta = check_out - check_in
-    year, month, day = str(checkIn).split('-')
-    day_name = datetime.date(int(year), int(month), int(day))
-    weekname = lower(day_name.strftime("%A"))
     hotel = Hotel.objects.filter(active=1, reference=ref).select_related('default_cover', 'city').prefetch_related(
         Prefetch(
             'hotel_discount',
@@ -209,14 +206,17 @@ def hotelPage(request, ref, title):
         return render(request, 'hotel/hotel_page.html', context)
 
 
-def reviewsSubmit(request):
+def reviewsSubmit(request, ref):
     if request.method == 'POST':
-        user = request.user
-        form = reviewsForm(request.POST, user)
+        hotel = Hotel.objects.filter(reference=ref).first()
+        form = reviewsForm(data=request.POST, hotel=hotel)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.hotel = hotel
+            instance.user = request.user
+            instance.save()
             context = {
-                "result": _('ثبت نام موفقیت آمیز بود!'),
+                "result": _('ثبت دیدگاه موفقیت آمیز بود!'),
                 "err": False,
             }
             return JsonResponse(context)

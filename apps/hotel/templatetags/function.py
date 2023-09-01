@@ -32,8 +32,10 @@ def getDiscount(room):
         return first
 
 @register.filter(name='currentDate')
-def currentDate(date):
-    return datetime2jalali(datetime.now()).strftime('%Y-%m-%d')
+def currentDate(lang):
+    if lang == 'fa':
+        return datetime2jalali(datetime.now()).strftime('%Y-%m-%d')
+    return datetime.now().date()
 
 @register.filter(name='currentDatePlusMonth')
 def currentDatePlusMonth(date):

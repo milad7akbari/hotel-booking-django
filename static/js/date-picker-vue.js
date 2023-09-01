@@ -19,13 +19,15 @@ $(document).ready(function () {
             });
         }
     }
-
+    let start = 0
+    let end = 0
     new Vue({
         el: '#_app_start',
         components: {
             datePicker
         }, methods: {
             submit(date) {
+                start = date;
             },
             open() {
                 $('.countOrderRoomPerson option:first-child').each(function () {
@@ -42,18 +44,10 @@ $(document).ready(function () {
             datePicker
         }, methods: {
             submit(date) {
-                const start = $('input[name="check-in-"]').val();
-                $('input[name="check-in"]').val(start);
-                const end = date.toDate().toISOString().split('T')[0];
-                $('input[name="check-out"]').val(end);
-                const date1 = new Date(start);
-                const date2 = new Date(end);
-
-                const diffTime = date2 - date1;
-                this.dayCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-                $('.diff_front_').removeClass('d-none').html($('.diff_front_').attr('data-lang') + ' ' + this.dayCount + ' 記蚓 ')
+                end = date;
+                this.dayCount = end.diff(start, 'date')
                 if (this.dayCount > 0){
+                    $('.diff_front_').removeClass('d-none').html($('.diff_front_').attr('data-lang') + ' ' + this.dayCount + ' روز ')
                     checkCalcDiff(this.dayCount)
                 }else $('.containerMsgDiv').empty().append('<p class="alert alert-warning fs-13 w-100">'+$('.containerMsgDiv').attr('data-msg-lang')+'</p>')
             },
@@ -62,9 +56,14 @@ $(document).ready(function () {
                     $(this).prop('selected', true)
                 });
             },
-            close() {
-                $('#getCapacityRoom').submit();
-            },
+        }
+    })
+    $(document).on('click' , '.btnAddToCart_' , function () {
+        if ($('input[name="check-in"]').val().length < 5 || $('input[name="check-out"]').val().length < 5){
+            const start = $('input[name="check-in-"]').val();
+            const end = $('input[name="check-out-"]').val();
+            $('input[name="check-in"]').val(start);
+            $('input[name="check-out"]').val(end);
         }
     })
 })

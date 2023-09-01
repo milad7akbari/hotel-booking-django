@@ -44,7 +44,10 @@ class RoomInline(TranslationTabularInline):
 class CoverAdmin(admin.ModelAdmin):
     model = Cover
     list_display = ('pk', 'file', 'date_add')
-
+    def has_module_permission(self, request):
+        return False
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 class HotelAdmin(TranslationAdmin):
     formfield_overrides = {
@@ -224,7 +227,15 @@ class ReviewsAdmin(admin.ModelAdmin):
     list_select_related = ('hotel', 'user',)
     search_fields = ['hotel__name', 'title']
     list_filter = ('active', 'stars',)
+    autocomplete_fields = ('hotel',)
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ReviewsAdmin, self).get_form(request, obj, **kwargs)
+        field = form.base_fields["hotel"]
+        field.widget.can_add_related = False
+        field.widget.can_change_related = False
+        field.widget.can_delete_related = False
+        return form
     def hotel(self, obj):
         return obj.hotel.name
 
@@ -305,13 +316,13 @@ class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
 admin.site.register(Calender_pricing, Calender_pricingAdmin)
 admin.site.register(Calender_quantity, Calender_quantityAdmin)
-# admin.site.register(Cover, CoverAdmin)
+admin.site.register(Cover, CoverAdmin)
 admin.site.register(Room_cover, Room_coverAdmin)
 # admin.site.register(Room_images, Room_imagesAdmin)
 admin.site.register(Room, RoomAdmin)
 admin.site.register(Discount, DiscountAdmin)
 
-# admin.site.register(Reviews, ReviewsAdmin)
+admin.site.register(Reviews, ReviewsAdmin)
 admin.site.register(Images, ImagesAdmin)
 admin.site.register(Close_spots, Close_spotsAdmin)
 admin.site.register(Room_facility, Room_facilityAdmin)

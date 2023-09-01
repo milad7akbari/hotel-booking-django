@@ -14,6 +14,7 @@ from jdatetime import timedelta
 
 from apps.customer.forms import editUser, editUserPassword
 from apps.front.models import Order, Cart_rule
+# from wkhtmltopdf.views import PDFTemplateView
 
 from apps.hotel.models import Hotel, Room, Discount_room, Room_quantity, Room_pricing
 
@@ -47,8 +48,9 @@ def panelOrders(request, type = None):
     }
     return render(request, 'customer/orders.html', context)
 
-def searchHotelCityQuick(request, name):
-    hotel_name = Hotel.objects.filter(name__contains=name).select_related('city').values('name','city__name','pk')
+def searchHotelCityQuick(request):
+    hotel = request.GET.get("hotel_name")
+    hotel_name = Hotel.objects.filter(name__contains=hotel, active=1).select_related('city').values('name','city__name','pk', 'reference')
     context = {
         'hotel' : list(hotel_name)
     }
@@ -93,8 +95,10 @@ def searchHotelRoomsQuick(request, hotel_id, checkIn , checkOut):
         except IndexError:
             room_quantity = None
         dict[idx]['qty'] = True
+        dict[idx]['capacity'] = i.capacity
         if room_quantity is not None:
-            dict[idx]['qty']  = 1
+            dict[idx]['capacity'] = 0
+            dict[idx]['qty']  = 0
         if room_pricing is not None:
             price = room_pricing.board
             if discount is not None:

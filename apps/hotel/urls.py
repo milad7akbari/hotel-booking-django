@@ -18,7 +18,7 @@ from django.urls import path
 from apps.hotel.views import hotelCategory, hotelPage, reviewsSubmit
 
 urlpatterns = [
-    path('reviews', reviewsSubmit, name='reviewsSubmit'),
+    path('reviews/<str:ref>', reviewsSubmit, name='reviewsSubmit'),
     path('filter', hotelCategory, name='hotelCategory'),
     path('<str:ref>/<str:title>', hotelPage, name="hotelPage"),
 ]
